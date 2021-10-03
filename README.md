@@ -20,3 +20,6 @@ iv) Download expoGo app in your mobile phone (available in IOS and Android Play 
 -> In your command prompt/terminal, go into the directory where the expo project is stored in your local machine. Then run the command 'expo start'
 
 -> From  there, scan the qr code and open the project in your expoGo app in your phone.
+
+-> Once you are finished creating changes (make sure you are in your personal branch). Go to Github repo and on the upper tabs,
+click "Pull requests." Then merge your branch, into main branch.
