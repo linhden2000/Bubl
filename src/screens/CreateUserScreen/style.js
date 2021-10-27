@@ -21,10 +21,10 @@ export default StyleSheet.create({
     },
     inputView: {
         backgroundColor: "#FFC0CB",
-        width: "70%",
+        width: "85%",
         height: 45,
         marginBottom: 20,
         marginTop: 20,
-        alignItems: "center",
+        alignSelf: "center",
     },
 })

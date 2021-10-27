@@ -34,13 +34,15 @@ export default function CreateUserScreen({navigation}) {
                     onChangeText={nextValue => setValue(nextValue)}
                 />
             </View>
-            <Datepicker
-                label='Birthday'
-                placeholder='Pick Date'
-                date={date}
-                onSelect={nextDate => setDate(nextDate)}
-                accessoryRight={CalendarIcon}
-            />
+            <View style={style.inputView}>
+                <Datepicker
+                    label='Birthday'
+                    placeholder='Pick Date'
+                    date={date}
+                    onSelect={nextDate => setDate(nextDate)}
+                    accessoryRight={CalendarIcon}
+                />
+            </View>
             <View style={style.inputView}>
                 <Input
                     label = 'Birthday'
