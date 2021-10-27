@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, SafeAreaView, View, Button, TouchableOpaci
 
 export default function RegistrationScreen({navigation}) {
     const onSignUp = () => {
-        navigation.navigate('Login')
+        navigation.navigate('CreateUser')
     }
     const onLogin = () => {
         navigation.navigate('Dashboard')

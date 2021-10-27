@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
-import { LoginScreen, RegistrationScreen, DashboardScreen } from "./src/screens";
+import { LoginScreen, RegistrationScreen, DashboardScreen, CreateUserScreen} from "./src/screens";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +14,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Registration" component={RegistrationScreen}/>
         <Stack.Screen name="Dashboard" component={DashboardScreen}/>
+        <Stack.Screen name="CreateUser" component={CreateUserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
