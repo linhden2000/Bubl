@@ -14,7 +14,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Registration" component={RegistrationScreen}/>
         <Stack.Screen name="Dashboard" component={DashboardScreen}/>
-        <Stack.Screen name="CreateUser" component={CreateUserScreen}/>
+        <Stack.Screen name="Create User" component={CreateUserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
