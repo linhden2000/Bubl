@@ -1,22 +1,22 @@
-// Style for dashboard goes here
+// Style for message goes here
 import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
 
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 
-  navbar:{
-    flexDirection: 'row',
-    backgroundColor: "#f2f2f2",
-    height: 50,
-    marginTop: 600,
-  },
+    navbar:{
+      flexDirection: 'row',
+      backgroundColor: "#f2f2f2",
+      height: 50,
+      marginTop: 600,
+    },
 
-  logoutBtn: {
+    logoutBtn: {
     width: "80%",
     borderRadius: 25,
     height: 50,

@@ -1,10 +1,10 @@
 import React from 'react'
 import style from './style';
-import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHome, faComment, faUser} from '@fortawesome/free-solid-svg-icons'
 
-export default function DashboardScreen({navigation}) {
+export default function MessageScreen({navigation}) {
     const onLogout = () => {
         navigation.navigate('Login')
     }
@@ -20,6 +20,7 @@ export default function DashboardScreen({navigation}) {
     const onDashBoard = () => {
         navigation.navigate('Dashboard')
     }
+    
 
     return (
         <View style={style.container}>
@@ -41,9 +42,7 @@ export default function DashboardScreen({navigation}) {
               <TouchableOpacity style={style.profileBtn} onPress={onProfile}>
                 <FontAwesomeIcon icon={faUser} />
               </TouchableOpacity> 
-            </View>      
+            </View>       
         </View>
     )
 }
-
-
