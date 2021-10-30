@@ -29,7 +29,7 @@ export default function LoginScreen({navigation}) {
                     placeholderTextColor="#003f5c"
                 />
             </View>
-
+            
             <TouchableOpacity>
                 <Text style={style.forgot_button} onPress={onLogin}>Forgot Password?</Text>
             </TouchableOpacity>
@@ -42,7 +42,7 @@ export default function LoginScreen({navigation}) {
                 <Text style={style.forgot_button} onPress={onRegistration}>Don't have account? Sign up</Text>
             </TouchableOpacity>
 
-            
+
         </View>
         
     )
