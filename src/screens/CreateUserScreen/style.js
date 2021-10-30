@@ -1,10 +1,27 @@
 import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
-    title:{
-        marginTop: 50,
-        backgroundColor: "#FF1493",
+    form:{
+        backgroundColor: "#FFC0CB",
     },
-    logoutBtn: {
+    card:{
+        marginTop: 150,
+        backgroundColor: "#FFFFFF",
+        borderRadius: 25,
+    },
+    container:{
+        marginTop: 100,
+    },
+    profilePicContainer:{
+        zIndex: 100,
+        position: "absolute",
+        marginTop: 50,
+        marginHorizontal: 80,
+    },
+    profilePic:{
+        height: 200,
+        width: 200,
+    },
+    submitBtn: {
         width: "80%",
         borderRadius: 25,
         height: 50,
@@ -12,6 +29,7 @@ export default StyleSheet.create({
         justifyContent: "center",
         marginTop: 40,
         backgroundColor: "#FF1493",
+        alignSelf: "center",
     },
     TextInput: {
         height: 50,
@@ -20,11 +38,10 @@ export default StyleSheet.create({
         marginLeft: 20,
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
         width: "85%",
         height: 45,
         marginBottom: 20,
-        marginTop: 20,
+        marginTop: 25,
         alignSelf: "center",
     },
 })
