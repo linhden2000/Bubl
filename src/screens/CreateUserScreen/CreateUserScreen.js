@@ -1,11 +1,16 @@
 import React from 'react'
 import style from './style';
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
-import { Input, Datepicker, Icon, Card, Avatar, Layout} from '@ui-kitten/components';
+import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
-  );
+);
+const states= [
+    'Kansas',
+    'Missouri',
+    'Colorado',
+];
 
 export default function CreateUserScreen({navigation}) {
     const onLogout = () => {
@@ -16,7 +21,11 @@ export default function CreateUserScreen({navigation}) {
     }
     const [value, setValue] = React.useState('');
     const [date, setDate] = React.useState(new Date());
-
+    const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+    const displayValue = states[selectedIndex.row];
+    const renderOption = (title) => (
+        <SelectItem title={title}/>
+    );
 
     return (
         <View style={style.form}>
@@ -79,11 +88,22 @@ export default function CreateUserScreen({navigation}) {
                 </View>
                 <View style={style.inputView}>
                     <Input
-                        label = 'ZipCode'
+                        label = 'Zip Code'
                         placeholder='Place your Text'
                         value={value}
                         onChangeText={nextValue => setValue(nextValue)}
                     />
+                </View>
+                <View style={style.inputView}>
+                <Select
+                    label="States"
+                    style={style.select}
+                    placeholder='Default'
+                    value={displayValue}
+                    selectedIndex={selectedIndex}
+                    onSelect={index => setSelectedIndex(index)}>
+                    {states.map(renderOption)}
+                </Select>
                 </View>
                 <TouchableOpacity style={style.submitBtn} onPress={onSubmit}>
                     <Text>Submit</Text>

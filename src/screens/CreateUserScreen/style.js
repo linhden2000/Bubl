@@ -38,10 +38,14 @@ export default StyleSheet.create({
         marginLeft: 20,
     },
     inputView: {
-        width: "85%",
+        width: "90%",
         height: 45,
         marginBottom: 20,
         marginTop: 25,
         alignSelf: "center",
+    },
+    select: {
+        flex: 1,
+        margin: 2,
     },
 })
