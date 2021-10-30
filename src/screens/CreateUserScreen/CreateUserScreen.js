@@ -44,10 +44,25 @@ export default function CreateUserScreen({navigation}) {
                         onChangeText={nextValue => setValue(nextValue)}
                     />    
                 </View>
-                
                 <View style={style.inputView}>
                     <Input
                         label = 'Last Name'
+                        placeholder='Place your Text'
+                        value={value}
+                        onChangeText={nextValue => setValue(nextValue)}
+                    />
+                </View>
+                <View style={style.inputView}>
+                    <Input
+                        label = 'KU ID'
+                        placeholder='Place your Text'
+                        value={value}
+                        onChangeText={nextValue => setValue(nextValue)}
+                    />
+                </View>
+                <View style={style.inputView}>
+                    <Input
+                        label = 'Email'
                         placeholder='Place your Text'
                         value={value}
                         onChangeText={nextValue => setValue(nextValue)}
@@ -64,7 +79,15 @@ export default function CreateUserScreen({navigation}) {
                 </View>
                 <View style={style.inputView}>
                     <Input
-                        label = 'Birthday'
+                        label = 'Gender'
+                        placeholder='Place your Text'
+                        value={value}
+                        onChangeText={nextValue => setValue(nextValue)}
+                    />
+                </View>
+                <View style={style.inputView}>
+                    <Input
+                        label = 'Sexual Orientation'
                         placeholder='Place your Text'
                         value={value}
                         onChangeText={nextValue => setValue(nextValue)}
