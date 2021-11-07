@@ -13,25 +13,44 @@ const states= [
     'Colorado',
 ];
 const statesProp=()=> {
+    var tempArr =  USStatesProp.split(',');
+    var USStates = []
+    tempArr.forEach(element => {
+        USStates.push(element.split('-'))
+    });
     return USStates;
 };
 
 export default function CreateUserScreen({navigation}) {
+    //List of variables
+    const [firstName, setFirstName] = React.useState('')
+    const [lastName, setLastName] = React.useState('')
+    const [KUID, setKUID] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [date, setDate] = React.useState(new Date());
+    const [gender, setGender] = React.useState('')
+    const [genderPreference, setGenderPreference] = React.useState('')
+    const [address, setAddress] = React.useState('')
+    const [city, setCity] = React.useState('')
+    const [zipCode, setZipCode] = React.useState('')
+
+    const [value, setValue] = React.useState('')
     const onLogout = () => {
         navigation.navigate('Registration')
     }
     const onSubmit = () => {
         navigation.navigate('Dashboard')
     }
-    const [value, setValue] = React.useState('');
-    const [date, setDate] = React.useState(new Date());
+    
+    
     const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-    const displayValue = states[selectedIndex.row];
+    const displayStateValue = states[selectedIndex.row];
     const renderOption = (title) => (
         <SelectItem key="{title}" title={title}/>
     );
     console.log("TESTTZ")
-    console.log(statesProp)
+    console.log(statesProp())
+    console.log(value)
     return (
         <View style={style.form}>
             <ScrollView>
@@ -45,32 +64,32 @@ export default function CreateUserScreen({navigation}) {
                     <Input
                         label = 'First Name'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={firstName}
+                        onChangeText={nextValue => setFirstName(nextValue)}
                     />    
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Last Name'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={lastName}
+                        onChangeText={nextValue => setLastName(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'KU ID'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={KUID}
+                        onChangeText={nextValue => setKUID(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Email'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={email}
+                        onChangeText={nextValue => setEmail(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
@@ -86,40 +105,40 @@ export default function CreateUserScreen({navigation}) {
                     <Input
                         label = 'Gender'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={gender}
+                        onChangeText={nextValue => setGender(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
-                        label = 'Sexual Orientation'
+                        label = 'Gender Preference'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={genderPreference}
+                        onChangeText={nextValue => setGenderPreference(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Address'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={address}
+                        onChangeText={nextValue => setAddress(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'City'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={city}
+                        onChangeText={nextValue => setCity(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Zip Code'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={zipCode}
+                        onChangeText={nextValue => setZipCode(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
@@ -127,7 +146,7 @@ export default function CreateUserScreen({navigation}) {
                     label="States"
                     style={style.select}
                     placeholder='Default'
-                    value={displayValue}
+                    value={displayStateValue}
                     selectedIndex={selectedIndex}
                     onSelect={index => setSelectedIndex(index)}>
                     {states.map(renderOption)}
