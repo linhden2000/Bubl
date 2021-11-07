@@ -1,5 +1,6 @@
 import React from 'react'
 import style from './style';
+import {USStatesProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
@@ -11,6 +12,9 @@ const states= [
     'Missouri',
     'Colorado',
 ];
+const statesProp=()=> {
+    return USStates;
+};
 
 export default function CreateUserScreen({navigation}) {
     const onLogout = () => {
@@ -24,9 +28,10 @@ export default function CreateUserScreen({navigation}) {
     const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
     const displayValue = states[selectedIndex.row];
     const renderOption = (title) => (
-        <SelectItem title={title}/>
+        <SelectItem key="{title}" title={title}/>
     );
-
+    console.log("TESTTZ")
+    console.log(statesProp)
     return (
         <View style={style.form}>
             <ScrollView>
