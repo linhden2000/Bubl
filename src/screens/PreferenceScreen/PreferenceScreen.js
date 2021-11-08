@@ -21,48 +21,26 @@ export default function ProfileScreen({navigation}) {
     const onDashBoard = () => {
         navigation.navigate('Dashboard')
     }
-
-    const onMyProfile = () => {
-        navigation.navigate('MyProfile')
-    }
-
-    const onPreference = () => {
-      navigation.navigate('Preference')
-    }
-
-    const onSettings = () => {
-      navigation.navigate('AccountSettings')
-    }
     
     return (
       <View style={style.container}>
         {/* Logo Img here
           <Image style={styles.image} source={require("../assets/logo.png")} />*/} 
-        <Image style={style.image} source={require("../../../assets/sky.png")} />
-        <Image style={style.profile} source={require("../../../assets/profile.png")} /> 
-        <Text style={{fontSize: 20, fontWeight: "bold"}}>Sherk</Text>
-        <Text style={{left: 45, fontSize: 15}}>Looking for my Fiona</Text>
           
         <View style={style.content}>
-          <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
-            <Text style={style.text}>My Profile</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onPreference}>
-            <Text style={style.text}>Preference</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onSettings}>
-            <Text style={style.text}>Account Settings</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn}>
-            <Text style={style.text}>Customer Service</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.Btn}>
-            <Text style={style.text}>What Works</Text>
-          </TouchableOpacity> 
-
-          <TouchableOpacity onPress={onLogout}>
-            <Text>LOGOUT</Text>
-          </TouchableOpacity>
+            <Text style={style.topic}>Sexual Orientation</Text>
+            <Text style={style.text}>Male</Text>
+            
+            <Text style={style.topic}>Location</Text>
+            <Text style={style.text}>Lawrence, Kansas</Text>
+           
+            <Text style={style.topic}>Age Range</Text>
+            <Text style={style.text}>20-30</Text>
+          
+            <TouchableOpacity onPress={onLogout}>
+                <Text>LOGOUT</Text>
+            </TouchableOpacity>
+          
         </View>
             
         <View style={style.navbar}>

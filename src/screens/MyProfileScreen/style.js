@@ -12,21 +12,31 @@ export default StyleSheet.create({
 
     navbar:{
       flexDirection: 'row',
-      backgroundColor: "#f2f2f2",
+      backgroundColor: "#F4BCD9",
       height: 50,
-      marginTop: 615,
-      backgroundColor: "#F4BCD9"
+      marginTop: 50,
     },
 
-    logoutBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#FF1493",
-    backgroundColor: "#FFFFFF"
+    content: {
+      marginTop: 20,
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+
+    },
+
+    Btn: {
+      marginTop: 10,
+      width: 350,
+      borderRadius: 25,
+      height: 60,
+      textAlign: "left",
+      justifyContent: "center",
+      backgroundColor: "#FFFFFF",
+  },
+
+  text:{
+    left: 30, fontSize: 20
   },
 
   messageBtn: {

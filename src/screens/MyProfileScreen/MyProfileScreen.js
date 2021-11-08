@@ -21,43 +21,27 @@ export default function ProfileScreen({navigation}) {
     const onDashBoard = () => {
         navigation.navigate('Dashboard')
     }
-
-    const onMyProfile = () => {
-        navigation.navigate('MyProfile')
-    }
-
-    const onPreference = () => {
-      navigation.navigate('Preference')
-    }
-
-    const onSettings = () => {
-      navigation.navigate('AccountSettings')
-    }
     
     return (
       <View style={style.container}>
         {/* Logo Img here
           <Image style={styles.image} source={require("../assets/logo.png")} />*/} 
-        <Image style={style.image} source={require("../../../assets/sky.png")} />
-        <Image style={style.profile} source={require("../../../assets/profile.png")} /> 
-        <Text style={{fontSize: 20, fontWeight: "bold"}}>Sherk</Text>
-        <Text style={{left: 45, fontSize: 15}}>Looking for my Fiona</Text>
           
         <View style={style.content}>
           <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
-            <Text style={style.text}>My Profile</Text>
+            <Text style={style.text}>Question</Text>
           </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onPreference}>
-            <Text style={style.text}>Preference</Text>
+          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+            <Text style={style.text}>Name</Text>
           </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onSettings}>
-            <Text style={style.text}>Account Settings</Text>
+          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+            <Text style={style.text}>Email</Text>
           </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn}>
-            <Text style={style.text}>Customer Service</Text>
+          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+            <Text style={style.text}>Password</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={style.Btn}>
-            <Text style={style.text}>What Works</Text>
+          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+            <Text style={style.text}>Age</Text>
           </TouchableOpacity> 
 
           <TouchableOpacity onPress={onLogout}>
