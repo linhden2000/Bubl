@@ -37,17 +37,23 @@ export default function CreateUserScreen({navigation}) {
     );
     //** Gender drop down **/
     const [selectedGenderIndex, setSelectedGenderIndex] = React.useState(new IndexPath(0));
-    const displayGenderValue = USStatesProp[selectedGenderIndex.row];
+    const displayGenderValue = genderProp[selectedGenderIndex.row];
     const renderGenderOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
-    //** Gender Preference drop down **/
-    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = React.useState(new IndexPath(0));
-    const displaySexualPrefValue = sexualPrefProp[selectedSexualPrefIndex.row];
+    //** Gender Preference drop down (Multi Select)**/
+    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = React.useState([
+        new IndexPath(0),
+        new IndexPath(1),
+    ]);
+    const groupDisplayValues = selectedSexualPrefIndex.map(index => {
+        return sexualPrefProp[index.row];
+    });
     const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
-
+  
+    // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
             <ScrollView>
@@ -110,15 +116,21 @@ export default function CreateUserScreen({navigation}) {
                     </Select>
                 </View>
                 <View style={style.inputView}>
-                <Select
-                        label="Sexual Preference"
-                        style={style.select}
-                        placeholder='Default'
 
-                        value={displaySexualPrefValue}
-                        onSelect={index => setSelectedSexualPrefIndex(index)}>
-                        {sexualPrefProp.map(renderSexualPrefOption)}
-                    </Select>
+                <Select
+                    label="Sexual Preference"
+                    style={style.select}
+                    placeholder='You may select multiple options'
+
+                    multiSelect={true}
+                    value={groupDisplayValues.join(', ')}
+                    selectedIndex={selectedSexualPrefIndex}
+
+                    onSelect={index => setSelectedSexualPrefIndex(index)}>
+                    {sexualPrefProp.map(renderSexualPrefOption)}
+                </Select>
+
+                
                 </View>
                 <View style={style.inputView}>
                     <Input
