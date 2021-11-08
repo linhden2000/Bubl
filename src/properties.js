@@ -1,0 +1,65 @@
+import { MarkerUnits } from "react-native-svg";
+
+export const USStatesProp = [
+    "Alabama", 
+    "Alaska", 
+    "Arizona", 
+    "Arkansas", 
+    "California", 
+    "Colorado", 
+    "Connecticut", 
+    "Delaware", 
+    "Florida", 
+    "Georgia", 
+    "Hawaii", 
+    "Idaho", 
+    "Illinois",
+    "Indiana", 
+    "Iowa", 
+    "Kansas", 
+    "Kentucky", 
+    "Louisiana",
+    "Maine", 
+    "Maryland", 
+    "Massachusetts", 
+    "Michigan", 
+    "Minnesota", 
+    "Mississippi", 
+    "Missouri", 
+    "Montana", 
+    "Nebraska", 
+    "Nevada", 
+    "New Hapshire", 
+    "New Jersey", 
+    "New Mexico", 
+    "New York", 
+    "North Carolina", 
+    "North Dakota", 
+    "Ohio", 
+    "Oklahoma", 
+    "Oregon", 
+    "Pennsylvania", 
+    "Rhode Island", 
+    "South Carolina", 
+    "South Dakota", 
+    "Tennessee", 
+    "Texas", 
+    "Utah", 
+    "Vermont", 
+    "Virginia", 
+    "Washington", 
+    "West Virginia",
+    "Wisconsin", 
+    "Wyoming"
+]
+export const genderProp = [
+    "Man", 
+    "Woman", 
+    "Non-Binary"
+]
+export const sexualPrefProp = [
+    "Man", 
+    "Woman", 
+    "Non-Binary"
+]
+

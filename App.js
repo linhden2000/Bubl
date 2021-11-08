@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import { LoginScreen, RegistrationScreen, DashboardScreen, CreateUserScreen} from "./src/screens";
+import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ProfileScreen, CreateUserScreen } from "./src/screens";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +20,8 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Registration" component={RegistrationScreen}/>
         <Stack.Screen name="Dashboard" component={DashboardScreen}/>
+        <Stack.Screen name="Message" component={MessageScreen}/>
+        <Stack.Screen name="Profile" component={ProfileScreen}/>
         <Stack.Screen name="Create User" component={CreateUserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>

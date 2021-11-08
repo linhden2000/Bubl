@@ -1,32 +1,59 @@
 import React from 'react'
 import style from './style';
+import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
-const states= [
-    'Kansas',
-    'Missouri',
-    'Colorado',
-];
-
 export default function CreateUserScreen({navigation}) {
+    //Navigation
     const onLogout = () => {
         navigation.navigate('Registration')
     }
     const onSubmit = () => {
         navigation.navigate('Dashboard')
     }
-    const [value, setValue] = React.useState('');
-    const [date, setDate] = React.useState(new Date());
-    const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-    const displayValue = states[selectedIndex.row];
-    const renderOption = (title) => (
-        <SelectItem title={title}/>
-    );
 
+    //List of user input data
+    // The following are inputted to input fields
+    const [firstName, setFirstName] = React.useState('')
+    const [lastName, setLastName] = React.useState('')
+    const [KUID, setKUID] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [date, setDate] = React.useState(new Date());
+    const [gender, setGender] = React.useState('')
+    const [genderPreference, setGenderPreference] = React.useState('')
+    const [address, setAddress] = React.useState('')
+    const [city, setCity] = React.useState('')
+    const [zipCode, setZipCode] = React.useState('')
+    //The following are inputted by dropdown
+    //** States drop down **/
+    const [selectedStateIndex, setSelectedStateIndex] = React.useState(new IndexPath(0));
+    const displayStateValue = USStatesProp[selectedStateIndex.row];
+    const renderStateOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+    //** Gender drop down **/
+    const [selectedGenderIndex, setSelectedGenderIndex] = React.useState(new IndexPath(0));
+    const displayGenderValue = genderProp[selectedGenderIndex.row];
+    const renderGenderOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+    //** Gender Preference drop down (Multi Select)**/
+    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = React.useState([
+        new IndexPath(0),
+        new IndexPath(1),
+    ]);
+    const groupDisplayValues = selectedSexualPrefIndex.map(index => {
+        return sexualPrefProp[index.row];
+    });
+    const renderSexualPrefOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+  
+    // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
             <ScrollView>
@@ -40,32 +67,32 @@ export default function CreateUserScreen({navigation}) {
                     <Input
                         label = 'First Name'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={firstName}
+                        onChangeText={nextValue => setFirstName(nextValue)}
                     />    
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Last Name'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={lastName}
+                        onChangeText={nextValue => setLastName(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'KU ID'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={KUID}
+                        onChangeText={nextValue => setKUID(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Email'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={email}
+                        onChangeText={nextValue => setEmail(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
@@ -78,43 +105,55 @@ export default function CreateUserScreen({navigation}) {
                     />
                 </View>
                 <View style={style.inputView}>
-                    <Input
-                        label = 'Gender'
-                        placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
-                    />
+                    <Select
+                        label="Gender"
+                        style={style.select}
+                        placeholder='Default'
+
+                        value={displayGenderValue}
+                        onSelect={index => setSelectedGenderIndex(index)}>
+                        {genderProp.map(renderGenderOption)}
+                    </Select>
                 </View>
                 <View style={style.inputView}>
-                    <Input
-                        label = 'Sexual Orientation'
-                        placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
-                    />
+
+                <Select
+                    label="Sexual Preference"
+                    style={style.select}
+                    placeholder='You may select multiple options'
+
+                    multiSelect={true}
+                    value={groupDisplayValues.join(', ')}
+                    selectedIndex={selectedSexualPrefIndex}
+
+                    onSelect={index => setSelectedSexualPrefIndex(index)}>
+                    {sexualPrefProp.map(renderSexualPrefOption)}
+                </Select>
+
+                
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Address'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={address}
+                        onChangeText={nextValue => setAddress(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'City'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={city}
+                        onChangeText={nextValue => setCity(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Zip Code'
                         placeholder='Place your Text'
-                        value={value}
-                        onChangeText={nextValue => setValue(nextValue)}
+                        value={zipCode}
+                        onChangeText={nextValue => setZipCode(nextValue)}
                     />
                 </View>
                 <View style={style.inputView}>
@@ -122,10 +161,10 @@ export default function CreateUserScreen({navigation}) {
                     label="States"
                     style={style.select}
                     placeholder='Default'
-                    value={displayValue}
-                    selectedIndex={selectedIndex}
-                    onSelect={index => setSelectedIndex(index)}>
-                    {states.map(renderOption)}
+
+                    value={displayStateValue}
+                    onSelect={index => setSelectedStateIndex(index)}>
+                    {USStatesProp.map(renderStateOption)}
                 </Select>
                 </View>
                 <TouchableOpacity style={style.submitBtn} onPress={onSubmit}>
