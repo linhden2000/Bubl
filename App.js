@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
-import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ProfileScreen, MyProfileScreen, PreferenceScreen, CreateUserScreen} from "./src/screens";
+import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ProfileScreen, MyProfileScreen, PreferenceScreen, AccountSettingsScreen, CreateUserScreen} from "./src/screens";
 import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
@@ -24,6 +24,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={ProfileScreen}/>
         <Stack.Screen name="MyProfile" component={MyProfileScreen}/>
         <Stack.Screen name="Preference" component={PreferenceScreen}/>
+        <Stack.Screen name="AccountSettings" component={AccountSettingsScreen}/>
         <Stack.Screen name="Create User" component={CreateUserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
