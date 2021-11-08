@@ -57,4 +57,9 @@ export const genderProp = [
     "Woman", 
     "Non-Binary"
 ]
+export const sexualPrefProp = [
+    "Man", 
+    "Woman", 
+    "Non-Binary"
+]
 

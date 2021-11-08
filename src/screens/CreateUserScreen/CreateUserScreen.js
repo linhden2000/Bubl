@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './style';
-import {USStatesProp, genderProp} from '../../properties'
+import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
@@ -39,6 +39,12 @@ export default function CreateUserScreen({navigation}) {
     const [selectedGenderIndex, setSelectedGenderIndex] = React.useState(new IndexPath(0));
     const displayGenderValue = USStatesProp[selectedGenderIndex.row];
     const renderGenderOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+    //** Gender Preference drop down **/
+    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = React.useState(new IndexPath(0));
+    const displaySexualPrefValue = sexualPrefProp[selectedSexualPrefIndex.row];
+    const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
 
@@ -104,12 +110,15 @@ export default function CreateUserScreen({navigation}) {
                     </Select>
                 </View>
                 <View style={style.inputView}>
-                    <Input
-                        label = 'Gender Preference'
-                        placeholder='Place your Text'
-                        value={genderPreference}
-                        onChangeText={nextValue => setGenderPreference(nextValue)}
-                    />
+                <Select
+                        label="Sexual Preference"
+                        style={style.select}
+                        placeholder='Default'
+
+                        value={displaySexualPrefValue}
+                        onSelect={index => setSelectedSexualPrefIndex(index)}>
+                        {sexualPrefProp.map(renderSexualPrefOption)}
+                    </Select>
                 </View>
                 <View style={style.inputView}>
                     <Input
