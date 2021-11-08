@@ -28,25 +28,19 @@ export default function ProfileScreen({navigation}) {
           <Image style={styles.image} source={require("../assets/logo.png")} />*/} 
           
         <View style={style.content}>
-          <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
-            <Text style={style.text}>Question</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
-            <Text style={style.text}>Name</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
-            <Text style={style.text}>Email</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
-            <Text style={style.text}>Password</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
-            <Text style={style.text}>Age</Text>
-          </TouchableOpacity> 
-
-          <TouchableOpacity onPress={onLogout}>
-            <Text>LOGOUT</Text>
-          </TouchableOpacity>
+            <Text style={style.topic}>Sexual Orientation</Text>
+            <Text style={style.text}>Male</Text>
+            
+            <Text style={style.topic}>Location</Text>
+            <Text style={style.text}>Lawrence, Kansas</Text>
+           
+            <Text style={style.topic}>Age Range</Text>
+            <Text style={style.text}>20-30</Text>
+          
+            <TouchableOpacity onPress={onLogout}>
+                <Text>LOGOUT</Text>
+            </TouchableOpacity>
+          
         </View>
             
         <View style={style.navbar}>

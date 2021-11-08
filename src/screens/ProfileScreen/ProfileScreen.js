@@ -25,6 +25,10 @@ export default function ProfileScreen({navigation}) {
     const onMyProfile = () => {
         navigation.navigate('MyProfile')
     }
+
+    const onPreference = () => {
+      navigation.navigate('Preference')
+  }
     
     return (
       <View style={style.container}>
@@ -39,16 +43,16 @@ export default function ProfileScreen({navigation}) {
           <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
             <Text style={style.text}>My Profile</Text>
           </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+          <TouchableOpacity style={style.Btn} onPress={onPreference}>
             <Text style={style.text}>Preference</Text>
           </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+          <TouchableOpacity style={style.Btn}>
             <Text style={style.text}>Account</Text>
           </TouchableOpacity> 
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+          <TouchableOpacity style={style.Btn}>
             <Text style={style.text}>Customer Service</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={style.Btn} onPress={onLogout}>
+          <TouchableOpacity style={style.Btn}>
             <Text style={style.text}>What Works</Text>
           </TouchableOpacity> 
 

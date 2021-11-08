@@ -4,4 +4,5 @@ export {default as DashboardScreen} from './DashboardScreen/DashboardScreen';
 export {default as ProfileScreen} from './ProfileScreen/ProfileScreen';
 export {default as MessageScreen} from './MessageScreen/MessageScreen';
 export {default as MyProfileScreen} from './MyProfileScreen/MyProfileScreen'
+export {default as PreferenceScreen} from './PreferenceScreen/PreferenceScreen'
 export {default as CreateUserScreen} from './CreateUserScreen/CreateUserScreen';
