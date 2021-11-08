@@ -1,28 +1,23 @@
 import React from 'react'
 import style from './style';
-import {USStatesProp} from '../../properties'
+import {USStatesProp, genderProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
-const states= [
-    'Kansas',
-    'Missouri',
-    'Colorado',
-];
-const statesProp=()=> {
-    var tempArr =  USStatesProp.split(',');
-    var USStates = []
-    tempArr.forEach(element => {
-        USStates.push(element.split('-'))
-    });
-    return USStates;
-};
-
 export default function CreateUserScreen({navigation}) {
-    //List of variables
+    //Navigation
+    const onLogout = () => {
+        navigation.navigate('Registration')
+    }
+    const onSubmit = () => {
+        navigation.navigate('Dashboard')
+    }
+
+    //List of user input data
+    // The following are inputted to input fields
     const [firstName, setFirstName] = React.useState('')
     const [lastName, setLastName] = React.useState('')
     const [KUID, setKUID] = React.useState('')
@@ -33,24 +28,20 @@ export default function CreateUserScreen({navigation}) {
     const [address, setAddress] = React.useState('')
     const [city, setCity] = React.useState('')
     const [zipCode, setZipCode] = React.useState('')
-
-    const [value, setValue] = React.useState('')
-    const onLogout = () => {
-        navigation.navigate('Registration')
-    }
-    const onSubmit = () => {
-        navigation.navigate('Dashboard')
-    }
-    
-    
-    const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-    const displayStateValue = states[selectedIndex.row];
-    const renderOption = (title) => (
-        <SelectItem key="{title}" title={title}/>
+    //The following are inputted by dropdown
+    //** States drop down **/
+    const [selectedStateIndex, setSelectedStateIndex] = React.useState(new IndexPath(0));
+    const displayStateValue = USStatesProp[selectedStateIndex.row];
+    const renderStateOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
     );
-    console.log("TESTTZ")
-    console.log(statesProp())
-    console.log(value)
+    //** Gender drop down **/
+    const [selectedGenderIndex, setSelectedGenderIndex] = React.useState(new IndexPath(0));
+    const displayGenderValue = USStatesProp[selectedGenderIndex.row];
+    const renderGenderOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+
     return (
         <View style={style.form}>
             <ScrollView>
@@ -102,12 +93,15 @@ export default function CreateUserScreen({navigation}) {
                     />
                 </View>
                 <View style={style.inputView}>
-                    <Input
-                        label = 'Gender'
-                        placeholder='Place your Text'
-                        value={gender}
-                        onChangeText={nextValue => setGender(nextValue)}
-                    />
+                    <Select
+                        label="Gender"
+                        style={style.select}
+                        placeholder='Default'
+
+                        value={displayGenderValue}
+                        onSelect={index => setSelectedGenderIndex(index)}>
+                        {genderProp.map(renderGenderOption)}
+                    </Select>
                 </View>
                 <View style={style.inputView}>
                     <Input
@@ -146,10 +140,10 @@ export default function CreateUserScreen({navigation}) {
                     label="States"
                     style={style.select}
                     placeholder='Default'
+
                     value={displayStateValue}
-                    selectedIndex={selectedIndex}
-                    onSelect={index => setSelectedIndex(index)}>
-                    {states.map(renderOption)}
+                    onSelect={index => setSelectedStateIndex(index)}>
+                    {USStatesProp.map(renderStateOption)}
                 </Select>
                 </View>
                 <TouchableOpacity style={style.submitBtn} onPress={onSubmit}>
