@@ -7,23 +7,51 @@ export default StyleSheet.create({
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#F4BCD9"
     },
 
     navbar:{
       flexDirection: 'row',
-      backgroundColor: "#f2f2f2",
+      backgroundColor: "#F4BCD9",
       height: 50,
-      marginTop: 600,
+      marginTop: 50,
     },
 
-    logoutBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#FF1493",
+    image:{
+      position: "relative",
+      height: 150,
+    },
+
+    profile:{
+      height: 100,
+      width: 100,
+      borderRadius: 50,
+      alignContent:"center",
+      position: "absolute",
+      left: 30,
+      bottom: 540
+    },
+
+    content: {
+      marginTop: 20,
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+
+    },
+
+    Btn: {
+      marginTop: 10,
+      width: 350,
+      borderRadius: 25,
+      height: 60,
+      textAlign: "left",
+      justifyContent: "center",
+      backgroundColor: "#FFFFFF",
+  },
+
+  text:{
+    left: 30, fontSize: 20
   },
 
   messageBtn: {
