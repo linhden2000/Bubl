@@ -1,14 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ProfileScreen, MyProfileScreen} from "./src/screens";
+import * as eva from '@eva-design/eva';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
+import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ProfileScreen, CreateUserScreen } from "./src/screens";
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  
   return (
+    <ApplicationProvider {...eva} theme={eva.light}>
+    <IconRegistry icons={EvaIconsPack} />
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: true}}>
         <Stack.Screen name="Login" component={LoginScreen}/>
@@ -17,8 +24,11 @@ export default function App() {
         <Stack.Screen name="Message" component={MessageScreen}/>
         <Stack.Screen name="Profile" component={ProfileScreen}/>
         <Stack.Screen name="MyProfile" component={MyProfileScreen}/>
+        <Stack.Screen name="Create User" component={CreateUserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </ApplicationProvider>
+    
   );
 }
 
