@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
@@ -18,31 +18,29 @@ export default function CreateUserScreen({navigation}) {
 
     //List of user input data
     // The following are inputted to input fields
-    const [firstName, setFirstName] = React.useState('')
-    const [lastName, setLastName] = React.useState('')
-    const [KUID, setKUID] = React.useState('')
-    const [email, setEmail] = React.useState('')
-    const [date, setDate] = React.useState(new Date());
-    const [gender, setGender] = React.useState('')
-    const [genderPreference, setGenderPreference] = React.useState('')
-    const [address, setAddress] = React.useState('')
-    const [city, setCity] = React.useState('')
-    const [zipCode, setZipCode] = React.useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [KUID, setKUID] = useState('')
+    const [email, setEmail] = useState('')
+    const [date, setDate] = useState(new Date());
+    const [address, setAddress] = useState('')
+    const [city, setCity] = useState('')
+    const [zipCode, setZipCode] = useState('')
     //The following are inputted by dropdown
     //** States drop down **/
-    const [selectedStateIndex, setSelectedStateIndex] = React.useState(new IndexPath(0));
+    const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
     const displayStateValue = USStatesProp[selectedStateIndex.row];
     const renderStateOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
     //** Gender drop down **/
-    const [selectedGenderIndex, setSelectedGenderIndex] = React.useState(new IndexPath(0));
+    const [selectedGenderIndex, setSelectedGenderIndex] = useState(new IndexPath(0));
     const displayGenderValue = genderProp[selectedGenderIndex.row];
     const renderGenderOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
     //** Gender Preference drop down (Multi Select)**/
-    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = React.useState([
+    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = useState([
         new IndexPath(0),
         new IndexPath(1),
     ]);
