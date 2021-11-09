@@ -14,7 +14,7 @@ export default function LoginScreen({navigation}) {
     useEffect(() =>{
         const unsubscribe = auth.onAuthStateChanged(user => {
             if(user) {
-                navigation.replace('Dashboard')
+                navigation.replace('DashboardNavigation')
             }
         })
         return unsubscribe

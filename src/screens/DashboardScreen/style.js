@@ -7,6 +7,7 @@ export default StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#F4BCD9"
   },
 
   navbar:{
@@ -14,6 +15,7 @@ export default StyleSheet.create({
     backgroundColor: "#f2f2f2",
     height: 50,
     marginTop: 600,
+    backgroundColor: "#F4BCD9"
   },
 
   logoutBtn: {
@@ -23,7 +25,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    backgroundColor: "#FF1493",
+    backgroundColor: "#FFFFFF",
   },
 
   messageBtn: {
