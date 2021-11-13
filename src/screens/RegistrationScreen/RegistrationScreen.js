@@ -24,7 +24,7 @@ export default function RegistrationScreen({navigation}) {
                 .doc(user.uid)
                 .set(data)
                 .then(() => {
-                    navigation.navigate('Create User')
+                    navigation.replace('Create User')
                 })
                 .catch(error => {
                     alert(error)
