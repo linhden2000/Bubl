@@ -7,7 +7,12 @@ export default function RegistrationScreen({navigation}) {
     const [email, setEmail] = useState('')
     const [password1, setPassword1] = useState('')
     const [password2, setPassword12] = useState('')
-
+    /*
+        - Create new user 
+        - If success, Then create new user in authentication, store user's email in firestore, 
+        and navigate to 'Create User'
+        - Otherwise, Throw an error and create alert
+    */
     const onSignUp = () => {
         if(password1 == password2) {
             auth
@@ -18,10 +23,12 @@ export default function RegistrationScreen({navigation}) {
                     id: user.uid,
                     email: user.email
                 }
-                // Get users collection from firestore
+                // Get 'users' collection from firestore
                 const usersRef = firestore.collection('users')
                 usersRef
+                // Get user document using user's uid
                 .doc(user.uid)
+                // Set user data in firestore
                 .set(data)
                 .then(() => {
                     navigation.replace('Create User')
@@ -37,6 +44,7 @@ export default function RegistrationScreen({navigation}) {
         }
     }
 
+    // Navigate to Login Screen
     const onLogin = () => {
         navigation.navigate('Login')
     }
