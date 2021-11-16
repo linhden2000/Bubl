@@ -3,8 +3,6 @@ import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
-import { useValidation } from 'react-native-form-validator';
-//import customValidationMessages from './customValidationMessages';
 
 
 const CalendarIcon = (props) => (
@@ -53,17 +51,7 @@ export default function CreateUserScreen({navigation}){
     const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
-    /*Validations*/
-    const { validate, getErrorsInField } = useValidation({
-        state: {firstName, lastName},
-        messages: "customValidationMessages",
-      });
-    const _validateForm = () => {
-        validate({
-            firstName: { required: true },
-            lastName: { required: true }
-        })
-    }
+
   
     // ******* Render input fields and drop downs ******///
     return (

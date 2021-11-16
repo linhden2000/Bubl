@@ -40,4 +40,9 @@ export default StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#FF1493",
   },
+  
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: 14,
+},
 })
