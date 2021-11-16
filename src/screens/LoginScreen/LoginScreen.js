@@ -12,10 +12,14 @@ export default function LoginScreen({navigation}) {
     const [isValidEmail, setValidEmail] = useState(true)
     const [isValidPassword, setValidPassword] = useState(true)
     
+    // Navigate to Registration Screen
     const onRegistration = () => {
         navigation.navigate('Registration')
     }
-
+    /*
+        - Listeen to authentication event
+        - if the event returns an user, navigate to 'DashboardNavigation'
+    */
     useEffect(() =>{
         const unsubscribe = auth.onAuthStateChanged(user => {
             if(user) {
@@ -24,7 +28,11 @@ export default function LoginScreen({navigation}) {
         })
         return unsubscribe
     }, [])
-
+    /*
+        - Login User
+        - If success, the useEffect function should navigate the app to 'DashboadNavigation'
+        - Otherwise, throws an error
+    */
     const onLogin = () => {
         auth
         .signInWithEmailAndPassword(email, password)
@@ -93,7 +101,6 @@ export default function LoginScreen({navigation}) {
                 <Text style={style.forgot_button} onPress={onRegistration}>Don't have account? Sign up</Text>
             </TouchableOpacity>
         </View>
-        
     )
 }
 
