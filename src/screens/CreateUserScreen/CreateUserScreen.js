@@ -4,16 +4,17 @@ import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
+
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
-export default function CreateUserScreen({navigation}) {
+export default function CreateUserScreen({navigation}){
     //Navigation
     const onLogout = () => {
-        navigation.navigate('Registration')
+        navigation.navigate('Registration');
     }
     const onSubmit = () => {
-        navigation.navigate('Dashboard')
+        navigation.navigate('Dashboard');
     }
 
     //List of user input data
@@ -50,6 +51,7 @@ export default function CreateUserScreen({navigation}) {
     const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
+
   
     // ******* Render input fields and drop downs ******///
     return (
