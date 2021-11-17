@@ -14,7 +14,7 @@ export default function CreateUserScreen({navigation}){
         navigation.navigate('Registration');
     }
     const onSubmit = () => {
-        navigation.navigate('Dashboard');
+        navigation.navigate('DashboardNavigation');
     }
 
     //List of user input data
