@@ -29,7 +29,8 @@ export default function CreateUserScreen({navigation}){
     //The following code is for the user birthday (datepicker)
     const [date, setDate] = useState(new Date());
     const now = new Date();
-    const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
+    const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
+    const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
     //The following are inputted by dropdown
     //** States drop down **/
     const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
@@ -54,7 +55,6 @@ export default function CreateUserScreen({navigation}){
     const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
-
   
     // ******* Render input fields and drop downs ******///
     return (
@@ -103,6 +103,7 @@ export default function CreateUserScreen({navigation}){
                         label='Birthday'
                         placeholder='Pick Date'
                         min={minDatePicker}
+                        max={maxDatePicker}
                         date={date}
                         onSelect={nextDate => setDate(nextDate)}
                         accessoryRight={CalendarIcon}
