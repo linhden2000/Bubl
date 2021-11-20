@@ -23,10 +23,13 @@ export default function CreateUserScreen({navigation}){
     const [lastName, setLastName] = useState('')
     const [KUID, setKUID] = useState('')
     const [email, setEmail] = useState('')
-    const [date, setDate] = useState(new Date());
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [zipCode, setZipCode] = useState('')
+    //The following code is for the user birthday (datepicker)
+    const [date, setDate] = useState(new Date());
+    const now = new Date();
+    const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
     //The following are inputted by dropdown
     //** States drop down **/
     const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
@@ -99,6 +102,7 @@ export default function CreateUserScreen({navigation}){
                     <Datepicker
                         label='Birthday'
                         placeholder='Pick Date'
+                        min={minDatePicker}
                         date={date}
                         onSelect={nextDate => setDate(nextDate)}
                         accessoryRight={CalendarIcon}
