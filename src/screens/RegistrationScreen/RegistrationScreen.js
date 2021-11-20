@@ -14,6 +14,7 @@ export default function RegistrationScreen({navigation}) {
         - Otherwise, Throw an error and create alert
     */
     const onSignUp = () => {
+        navigation.replace('Create User') //for development use only. bypass authnetication
         if(password1 == password2) {
             auth
             .createUserWithEmailAndPassword(email, password1)
