@@ -9,6 +9,14 @@ const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
 export default function CreateUserScreen({navigation}){
+    //Navigation
+    const onLogout = () => {
+        navigation.navigate('Registration');
+    }
+    const onSubmit = () => {
+        navigation.navigate('DashboardNavigation');
+    }
+
     //List of user input data
     // The following are inputted to input fields
     const [firstName, setFirstName] = useState('')

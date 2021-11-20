@@ -33,17 +33,20 @@ export default function LoginScreen({navigation}) {
         - If success, the useEffect function should navigate the app to 'DashboadNavigation'
         - Otherwise, throws an error
     */
-    const onLogin = () => {
-        auth
-        .signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            const user = userCredential.user
-        })
-        .catch(error => {
-            alert(error)
-        })        
-    }
+    // const onLogin = () => {
+    //     auth
+    //     .signInWithEmailAndPassword(email, password)
+    //     .then(userCredential => {
+    //         const user = userCredential.user
+    //     })
+    //     .catch(error => {
+    //         alert(error)
+    //     })        
+    // }
 
+    const onLogin = () => {
+        navigation.replace('DashboardNavigation')
+    }
     const handleEmailChange = (val) => {
         if( val.trim().length > 0 ) {
             setValidEmail(true)
