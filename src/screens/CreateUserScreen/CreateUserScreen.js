@@ -1,22 +1,14 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
-
+import RangeSlider, { Slider } from 'react-native-range-slider-expo';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
 export default function CreateUserScreen({navigation}){
-    //Navigation
-    const onLogout = () => {
-        navigation.navigate('Registration');
-    }
-    const onSubmit = () => {
-        navigation.navigate('Dashboard');
-    }
-
     //List of user input data
     // The following are inputted to input fields
     const [firstName, setFirstName] = useState('')
@@ -26,11 +18,31 @@ export default function CreateUserScreen({navigation}){
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [zipCode, setZipCode] = useState('')
+    const [fromValue, setFromValue] = useState(0);
+    const [toValue, setToValue] = useState(0);
+    const [value, setValue] = useState(0);
     //The following code is for the user birthday (datepicker)
     const [date, setDate] = useState(new Date());
     const now = new Date();
     const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
     const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
+    //Navigation
+    const onLogout = () => {
+        navigation.navigate('Registration');
+    }
+    const onSubmit = () => {
+        navigation.navigate('DashboardNavigation');
+        console.log(firstName)
+        console.log(lastName);
+        console.log(KUID);
+        console.log(email);
+        console.log(address);
+        console.log(city);
+        console.log(zipCode);
+        console.log(fromValue);
+        console.log(toValue);
+        console.log(date);
+    }
     //The following are inputted by dropdown
     //** States drop down **/
     const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
@@ -121,22 +133,29 @@ export default function CreateUserScreen({navigation}){
                     </Select>
                 </View>
                 <View style={style.inputView}>
+                    <Select
+                        label="Sexual Preference"
+                        style={style.select}
+                        placeholder='You may select multiple options'
 
-                <Select
-                    label="Sexual Preference"
-                    style={style.select}
-                    placeholder='You may select multiple options'
+                        multiSelect={true}
+                        value={groupDisplayValues.join(', ')}
+                        selectedIndex={selectedSexualPrefIndex}
 
-                    multiSelect={true}
-                    value={groupDisplayValues.join(', ')}
-                    selectedIndex={selectedSexualPrefIndex}
-
-                    onSelect={index => setSelectedSexualPrefIndex(index)}>
-                    {sexualPrefProp.map(renderSexualPrefOption)}
-                </Select>
-
-                
+                        onSelect={index => setSelectedSexualPrefIndex(index)}>
+                        {sexualPrefProp.map(renderSexualPrefOption)}
+                    </Select>
                 </View>
+                <View>
+                    <RangeSlider min={18} max={60}
+                         fromValueOnChange={value => setFromValue(value)}
+                         toValueOnChange={value => setToValue(value)}
+                         initialFromValue={18}
+                         initialToValue={30}
+                    />
+                    <Text>From Age:  {fromValue}</Text>
+                    <Text>To Age:  {toValue}</Text>
+               </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Address'
