@@ -6,6 +6,7 @@
 * React Navigation Library:
   * `npm install @react-navigation/native`
   * `npm install @react-navigation/stack`
+  * `npm i react-native-range-slider-expo`
   * `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`
  * Kitten UI
    * `npm i @ui-kitten/components @ui-kitten/eva-icons @eva-design/eva react-native-svg`
