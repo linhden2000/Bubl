@@ -3,20 +3,12 @@ import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
-import RangeSlider, { Slider } from 'react-native-range-slider-expo';
+import RangeSlider from 'react-native-range-slider-expo';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
 export default function CreateUserScreen({navigation}){
-    //Navigation
-    const onLogout = () => {
-        navigation.navigate('Registration');
-    }
-    const onSubmit = () => {
-        navigation.navigate('DashboardNavigation');
-    }
-
     //List of user input data
     // The following are inputted to input fields
     const [firstName, setFirstName] = useState('')
@@ -38,6 +30,7 @@ export default function CreateUserScreen({navigation}){
     const onLogout = () => {
         navigation.navigate('Registration');
     }
+    // Submit User Information
     const onSubmit = () => {
         navigation.navigate('DashboardNavigation');
         console.log(firstName)
@@ -154,15 +147,19 @@ export default function CreateUserScreen({navigation}){
                         {sexualPrefProp.map(renderSexualPrefOption)}
                     </Select>
                 </View>
-                <View>
-                    <RangeSlider min={18} max={60}
+                <View style={style.inputView}>
+                    <Text>Age Range: {fromValue} - {toValue}</Text>
+                    <RangeSlider min={18} max={100}
+                         inRangeBarColor={'#5e72e4'}
+                         fromKnobColor={'#5e72e4'}
+                         toKnobColor={'#5e72e4'}
+                         outOfRangeBarColor={'#C8C8C8'}
+                         showRangeLabels={false}
                          fromValueOnChange={value => setFromValue(value)}
                          toValueOnChange={value => setToValue(value)}
                          initialFromValue={18}
                          initialToValue={30}
                     />
-                    <Text>From Age:  {fromValue}</Text>
-                    <Text>To Age:  {toValue}</Text>
                </View>
                 <View style={style.inputView}>
                     <Input
@@ -216,6 +213,7 @@ Last Name
 Email
 KU ID
 Sexual Orientation
+Age Range Preference
 Gender
 Age
 Location
