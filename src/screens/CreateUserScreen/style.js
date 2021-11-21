@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet } from 'react-native';
+import { marginBottom } from 'styled-system';
 export default StyleSheet.create({
     form:{
         backgroundColor: "#FFC0CB",
@@ -48,4 +49,13 @@ export default StyleSheet.create({
         flex: 1,
         margin: 2,
     },
+    editButton: {
+        position: "absolute",
+        marginTop: 150,
+        marginLeft: 20,
+        borderRadius: 20,
+        borderColor: "#bdbdbd",
+        width: 10,
+        height: 10,
+      },
 })

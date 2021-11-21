@@ -1,12 +1,16 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
-import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
+import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, ScrollView, Platform, Image} from 'react-native'
+import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath, Button} from '@ui-kitten/components';
 import RangeSlider from 'react-native-range-slider-expo';
+import * as ImagePicker from 'expo-image-picker';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
+);
+const editIcon = (props) => (
+    <Icon {...props} name='edit-outline'/>
 );
 export default function CreateUserScreen({navigation}){
     //List of user input data
@@ -68,14 +72,40 @@ export default function CreateUserScreen({navigation}){
     const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
-  
+    //** Image Picker - Allows users to upload image from their device as their profile pic**/
+    //Source: https://docs.expo.dev/versions/latest/sdk/imagepicker/
+    const [profilePic, setImage] = useState("../../../assets/shrek.jpg");
+    useEffect(() => {
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if(status !== 'granted'){
+                    alert('Sorry, this app requires your permission to access cameral roll.');
+                }
+            }
+        })();
+    }, []);
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images, //allow image uploads only
+            allowEditing: false,
+            aspect: [4,3],
+            quality: 1,
+        })
+        console.log(result);
+        if(!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
     // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
             <ScrollView>
             <View style={style.profilePicContainer}>
-                <Avatar source={require("../../../assets/shrek.jpg")} 
+                <Avatar source={{ uri: profilePic }} style={{ width: 200, height: 200 }} 
                 style={style.profilePic}/>
+                <Button style={style.editButton} status="control" accessoryLeft={editIcon}
+                onPress={pickImage}/> 
             </View>
             <Card style={style.card}>
             <View style={style.container}>
