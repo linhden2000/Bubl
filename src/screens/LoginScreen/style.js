@@ -43,7 +43,7 @@ export default StyleSheet.create({
         borderRadius: 20,
     },
     socialElement:{
-        marginTop: 20,
+        marginTop: width/30,
         alignSelf:"center",
         justifyContent: "center",
         width: width / 1.25, 
@@ -64,8 +64,8 @@ export default StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: 10,
         width: "80%",
-        height: 45,
-        marginTop: 30,
+        height: width/10,
+        marginTop: width/30,
         alignSelf:"center",
         flexDirection: "row",
       },
@@ -80,11 +80,11 @@ export default StyleSheet.create({
     loginBtn: {
         width: "80%",
         borderRadius: 10,
-        height: 50,
+        height: width/10,
         alignItems: "center",
         alignSelf:"center",
         justifyContent: "center",
-        marginTop: 30,
+        marginTop: width/30,
         backgroundColor: '#5E72E4',
   },
   

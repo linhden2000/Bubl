@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import style from './style';
-import { StyleSheet, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import logo from '../../../assets/bublLogo.png';
 
@@ -70,6 +70,8 @@ export default function LoginScreen({navigation}) {
         }
     }
 
+    const { width, height } = Dimensions.get("screen");
+
     let [fontsLoaded] = useFonts({
         OleoScript_400Regular,
         OleoScript_700Bold,
@@ -84,8 +86,8 @@ export default function LoginScreen({navigation}) {
                 <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/bg.png")} />
                 <View style={style.box}>
                     <View style={style.logo}>
-                        <Image style= {{ alignSelf: "center", width: 180, height: 180}} source={logo} />
-                        <Text style={{marginTop: -90, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: 30 }}>Bubl</Text>
+                        <Image style= {{ alignSelf: "center", width: width/2, height: height/5}} source={logo} />
+                        <Text style={{marginTop: -width/5, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/15 }}>Bubl</Text>
                     </View>
                     
                     
@@ -136,15 +138,15 @@ export default function LoginScreen({navigation}) {
                         </Animatable.View>
                         }
                         <TouchableOpacity>
-                            <Text style={{marginTop: 30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}} onPress={onLogin}>Forgot Password?</Text>
+                            <Text style={{marginTop: width/30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}} onPress={onLogin}>Forgot Password?</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
                             <Text >LOGIN</Text>
                         </TouchableOpacity>
                         <View style={{ flexDirection: "row", justifyContent: "center"}}>
-                            <Text style={{marginTop: 30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}}> Don't have account? </Text>
+                            <Text style={{marginTop: width/30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}}> Don't have account? </Text>
                             <TouchableOpacity>
-                                <Text style={{marginTop: 30, textAlignVertical: "center",textAlign: "center", fontSize:15}} onPress={onRegistration}>Sign up</Text>
+                                <Text style={{marginTop: width/30, textAlignVertical: "center",textAlign: "center", fontSize:15}} onPress={onRegistration}>Sign up</Text>
                             </TouchableOpacity>
                         </View>
                         </View>
