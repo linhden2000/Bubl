@@ -1,7 +1,9 @@
 # Bubl
 1. Install dependencies:
 * node.js: https://nodejs.org/en/download/
-* expo: `npm install -g expo-cli`
+* expo: 
+  * `npm install -g expo-cli`
+  * `expo install expo-app-loading`
 * firebase: `npm install --save firebase@8.2.3`
 * React Navigation Library:
   * `npm install @react-navigation/native`
