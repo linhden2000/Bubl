@@ -83,16 +83,16 @@ export default function LoginScreen({navigation}) {
     else {
         return (
             <View style={style.container}>
-                <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/bg.png")} />
+                <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
+                {/* White box container */}
                 <View style={style.box}>
+                    {/* 1. The logo */}
                     <View style={style.logo}>
                         <Image style= {{ alignSelf: "center", width: width/2, height: height/5}} source={logo} />
                         <Text style={{marginTop: -width/5, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/15 }}>Bubl</Text>
                     </View>
-                    
-                    
+                    {/* 2. Login with social account */}
                     <View style={style.social}>
-                        {/* <Text style={{textAlignVertical: "center",textAlign: "center", fontSize: "15", color:"#8898AA"}}> Log in with</Text> */}
                         <View style={style.socialElement}>
                             <FontAwesome.Button name="facebook" backgroundColor="#3b5998" justifyContent="center">Login with Facebook </FontAwesome.Button>
                         </View>
@@ -100,11 +100,12 @@ export default function LoginScreen({navigation}) {
                             <FontAwesome.Button name="google" backgroundColor="#DB4437" justifyContent="center">Login with Google </FontAwesome.Button>
                         </View> 
                     </View>
-    
+                    {/* 3. Login with traditional way */}
                     <View style={style.login}>
-                        <Text style={{marginTop: 30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}}> Or log in the classic way</Text>
+                        <Text style={style.text}> Or log in the classic way</Text>
+                        {/* Email inputView */}
                         <View style={style.inputView}>
-                            <View style={{textAlign: 'center',alignItems:"center", justifyContent: "center",fontSize: 15, width: 45, height: 45}} >
+                            <View style={style.icon} >
                                 <FontAwesome name="envelope"/>
                             </View>
                             <TextInput
@@ -120,8 +121,9 @@ export default function LoginScreen({navigation}) {
                         <Text style={style.errorMsg}>Email is required .</Text>
                         </Animatable.View>
                         }
+                        {/* Password inputView */}
                         <View style={style.inputView}>
-                            <View style={{textAlign: 'center',alignItems:"center", justifyContent: "center",fontSize: 15, width: 45, height: 45}} >
+                            <View style={style.icon} >
                                 <FontAwesome name="unlock-alt"/>
                             </View>
                             <TextInput
@@ -137,16 +139,17 @@ export default function LoginScreen({navigation}) {
                         <Text style={style.errorMsg}>Password is required .</Text>
                         </Animatable.View>
                         }
+
                         <TouchableOpacity>
-                            <Text style={{marginTop: width/30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}} onPress={onLogin}>Forgot Password?</Text>
+                            <Text style={style.text} onPress={onLogin}>Forgot Password?</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
                             <Text >LOGIN</Text>
                         </TouchableOpacity>
                         <View style={{ flexDirection: "row", justifyContent: "center"}}>
-                            <Text style={{marginTop: width/30, textAlignVertical: "center",textAlign: "center", fontSize:15, color:"#8898AA"}}> Don't have account? </Text>
+                            <Text style={style.text}> Don't have account? </Text>
                             <TouchableOpacity>
-                                <Text style={{marginTop: width/30, textAlignVertical: "center",textAlign: "center", fontSize:15}} onPress={onRegistration}>Sign up</Text>
+                                <Text style={style.signUp} onPress={onRegistration}>Sign up</Text>
                             </TouchableOpacity>
                         </View>
                         </View>

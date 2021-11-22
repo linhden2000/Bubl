@@ -1,16 +1,15 @@
-// style for Login goes here
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get("screen");
 
 export default StyleSheet.create({
-
     container: {
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
     },
+
     imageBG:{
         flex: 1,
         justifyContent:"center",
@@ -18,6 +17,7 @@ export default StyleSheet.create({
         width:width,
         height:height
     },
+    // White box container
     box:{
         flex: 1,
         alignContent:"center",
@@ -33,6 +33,8 @@ export default StyleSheet.create({
         width: width * 0.9,
         height: height * 0.2,
     },
+
+    //Log in with social account container
     social:{
         flex: 2,
         alignSelf:"center",
@@ -42,39 +44,62 @@ export default StyleSheet.create({
         height: height* 0.5,
         borderRadius: 20,
     },
+
     socialElement:{
         marginTop: width/30,
         alignSelf:"center",
         justifyContent: "center",
-        width: width / 1.25, 
+        width: width/1.25, 
     },
 
+    // Traditional Login
     login:{
         backgroundColor: "#F4F5F7",
-        //alignSelf:"center",
         alignContent:"flex-end",
-        //justifyContent: "flex-end",
         width: width * 0.9, 
         height: height * 0.5,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
     },
 
+    //Traditional Login inputView
     inputView: {
         backgroundColor: "#FFFFFF",
         borderRadius: 10,
-        width: "80%",
+        width: width * 0.8,
         height: width/10,
         marginTop: width/30,
         alignSelf:"center",
         flexDirection: "row",
       },
-
+    icon:{
+        textAlign: 'center', 
+        alignItems:"center", 
+        justifyContent: "center",
+        fontSize: width/30, 
+        width: width/10,
+    },
+    
+    //Traditional Login textInput
     TextInput: {
-        height: 50,
         flex: 1,
         alignSelf:"center",
-        //padding: 10,
+        fontSize: width/30,
+    },
+
+    text:{
+        marginTop: width/30, 
+        textAlignVertical: "center",
+        textAlign: "center", 
+        fontSize: width/30, 
+        color:"#8898AA"
+    },
+
+    signUp:{
+        marginTop: width/30, 
+        textAlignVertical: "center",
+        textAlign: "center", 
+        fontSize: width/30, 
     },
 
     loginBtn: {
@@ -86,10 +111,10 @@ export default StyleSheet.create({
         justifyContent: "center",
         marginTop: width/30,
         backgroundColor: '#5E72E4',
-  },
+    },
   
-  errorMsg: {
-    color: '#FF0000',
-    fontSize: 14,
-},
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: width/30,
+    },
 })
