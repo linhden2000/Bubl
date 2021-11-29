@@ -1,32 +1,53 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView, Image, ImageBackground} from 'react-native'
-import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
-
+import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, ScrollView, Platform, Image, ImageBackground} from 'react-native'
+import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath, Button} from '@ui-kitten/components';
+import RangeSlider from 'react-native-range-slider-expo';
+import * as ImagePicker from 'expo-image-picker';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
 );
+const editIcon = (props) => (
+    <Icon {...props} name='edit-outline'/>
+);
 export default function CreateUserScreen({navigation}){
-    //Navigation
-    const onLogout = () => {
-        navigation.navigate('Registration');
-    }
-    const onSubmit = () => {
-        navigation.navigate('DashboardNavigation');
-    }
-
     //List of user input data
     // The following are inputted to input fields
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [KUID, setKUID] = useState('')
     const [email, setEmail] = useState('')
-    const [date, setDate] = useState(new Date());
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [zipCode, setZipCode] = useState('')
+    const [fromValue, setFromValue] = useState(0);
+    const [toValue, setToValue] = useState(0);
+    const [value, setValue] = useState(0);
+    //The following code is for the user birthday (datepicker)
+    const [date, setDate] = useState(new Date());
+    const now = new Date();
+    const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
+    const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
+    //Navigation
+    const onLogout = () => {
+        navigation.navigate('Registration');
+    }
+    // Submit User Information
+    const onSubmit = () => {
+        navigation.navigate('DashboardNavigation');
+        console.log(firstName)
+        console.log(lastName);
+        console.log(KUID);
+        console.log(email);
+        console.log(address);
+        console.log(city);
+        console.log(zipCode);
+        console.log(fromValue);
+        console.log(toValue);
+        console.log(date);
+    }
     //The following are inputted by dropdown
     //** States drop down **/
     const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
@@ -51,16 +72,41 @@ export default function CreateUserScreen({navigation}){
     const renderSexualPrefOption = (label, key) => (
         <SelectItem key={key} title={label}/>
     );
-
-  
+    //** Image Picker - Allows users to upload image from their device as their profile pic**/
+    //Source: https://docs.expo.dev/versions/latest/sdk/imagepicker/
+    const [profilePic, setImage] = useState("../../../assets/shrek.jpg");
+    useEffect(() => {
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if(status !== 'granted'){
+                    alert('Sorry, this app requires your permission to access cameral roll.');
+                }
+            }
+        })();
+    }, []);
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images, //allow image uploads only
+            allowEditing: false,
+            aspect: [4,3],
+            quality: 1,
+        })
+        console.log(result);
+        if(!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
     // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
             <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
             <ScrollView>
             <View style={style.profilePicContainer}>
-                <Avatar source={require("../../../assets/shrek.jpg")} 
+                <Avatar source={{ uri: profilePic }} style={{ width: 200, height: 200 }} 
                 style={style.profilePic}/>
+                <Button style={style.editButton} status="control" accessoryLeft={editIcon}
+                onPress={pickImage}/> 
             </View>
             <Card style={style.card}>
             <View style={style.container}>
@@ -100,6 +146,8 @@ export default function CreateUserScreen({navigation}){
                     <Datepicker
                         label='Birthday'
                         placeholder='Pick Date'
+                        min={minDatePicker}
+                        max={maxDatePicker}
                         date={date}
                         onSelect={nextDate => setDate(nextDate)}
                         accessoryRight={CalendarIcon}
@@ -117,22 +165,33 @@ export default function CreateUserScreen({navigation}){
                     </Select>
                 </View>
                 <View style={style.inputView}>
+                    <Select
+                        label="Sexual Preference"
+                        style={style.select}
+                        placeholder='You may select multiple options'
 
-                <Select
-                    label="Sexual Preference"
-                    style={style.select}
-                    placeholder='You may select multiple options'
+                        multiSelect={true}
+                        value={groupDisplayValues.join(', ')}
+                        selectedIndex={selectedSexualPrefIndex}
 
-                    multiSelect={true}
-                    value={groupDisplayValues.join(', ')}
-                    selectedIndex={selectedSexualPrefIndex}
-
-                    onSelect={index => setSelectedSexualPrefIndex(index)}>
-                    {sexualPrefProp.map(renderSexualPrefOption)}
-                </Select>
-
-                
+                        onSelect={index => setSelectedSexualPrefIndex(index)}>
+                        {sexualPrefProp.map(renderSexualPrefOption)}
+                    </Select>
                 </View>
+                <View style={style.inputView}>
+                    <Text>Age Range: {fromValue} - {toValue}</Text>
+                    <RangeSlider min={18} max={100}
+                         inRangeBarColor={'#5e72e4'}
+                         fromKnobColor={'#5e72e4'}
+                         toKnobColor={'#5e72e4'}
+                         outOfRangeBarColor={'#C8C8C8'}
+                         showRangeLabels={false}
+                         fromValueOnChange={value => setFromValue(value)}
+                         toValueOnChange={value => setToValue(value)}
+                         initialFromValue={18}
+                         initialToValue={30}
+                    />
+               </View>
                 <View style={style.inputView}>
                     <Input
                         label = 'Address'
@@ -185,6 +244,7 @@ Last Name
 Email
 KU ID
 Sexual Orientation
+Age Range Preference
 Gender
 Age
 Location
