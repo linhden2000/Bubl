@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView} from 'react-native'
+import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView, Image, ImageBackground} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 
 
@@ -56,6 +56,7 @@ export default function CreateUserScreen({navigation}){
     // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
+            <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
             <ScrollView>
             <View style={style.profilePicContainer}>
                 <Avatar source={require("../../../assets/shrek.jpg")} 
