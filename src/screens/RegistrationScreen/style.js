@@ -1,5 +1,8 @@
 // style for Registration goes here
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get("screen");
+
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -8,13 +11,20 @@ export default StyleSheet.create({
         justifyContent: "center",
     },
 
+    imageBG:{
+      flex: 1,
+      justifyContent:"center",
+      position: "absolute",
+      width:width,
+      height:height
+    },
+    
     inputView: {
         backgroundColor: "#FFC0CB",
         borderRadius: 30,
         width: "70%",
         height: 45,
         marginBottom: 20,
-     
         alignItems: "center",
       },
 
