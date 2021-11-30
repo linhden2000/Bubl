@@ -67,4 +67,10 @@ export default StyleSheet.create({
         width: 10,
         height: 10,
       },
+      errorMsg: {
+        color: '#FF0000',
+        fontSize: width/30,
+        padding: 10,
+        marginLeft: 20,
+    },
 })
