@@ -5,6 +5,7 @@ import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, ScrollView, Plat
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath, Button} from '@ui-kitten/components';
 import RangeSlider from 'react-native-range-slider-expo';
 import * as ImagePicker from 'expo-image-picker';
+import defaultPic from "../../../assets/shrek.jpg";
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
@@ -74,7 +75,9 @@ export default function CreateUserScreen({navigation}){
     );
     //** Image Picker - Allows users to upload image from their device as their profile pic**/
     //Source: https://docs.expo.dev/versions/latest/sdk/imagepicker/
-    const [profilePic, setImage] = useState("../../../assets/shrek.jpg");
+    //Source for default image: https://medium.com/swlh/how-to-obtain-a-uri-for-an-image-asset-in-react-native-with-expo-88dfbe1023b8 
+    const defaultPicURI = Image.resolveAssetSource(defaultPic).uri
+    const [profilePic, setImage] = useState(defaultPicURI);
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
