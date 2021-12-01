@@ -1,10 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import style from './style';
-import { StyleSheet, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons';
+import logo from '../../../assets/bublLogo.png';
+
+import AppLoading from 'expo-app-loading';
+//import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
+import {
+    useFonts,
+    OleoScript_400Regular,
+    OleoScript_700Bold,
+  } from '@expo-google-fonts/oleo-script';
+
 import { auth } from '../../firebase/config';
 import * as Animatable from 'react-native-animatable';
 
- 
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -62,48 +72,94 @@ export default function LoginScreen({navigation}) {
             setValidPassword(false)
         }
     }
-    
 
-    return (
-        <View style={style.container}>
-            <View style={style.inputView}>
-                <TextInput
-                    style={style.TextInput}
-                    placeholder="Email"
-                    placeholderTextColor="#003f5c" 
-                    onChangeText={text=>setEmail(text)}
-                    onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}
-                />
+    const { width, height } = Dimensions.get("screen");
+
+    let [fontsLoaded] = useFonts({
+        OleoScript_400Regular,
+        OleoScript_700Bold,
+    });
+
+    if(!fontsLoaded) {
+        return <AppLoading />;
+    }
+    else {
+        return (
+            <View style={style.container}>
+                <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
+                {/* White box container */}
+                <View style={style.box}>
+                    {/* 1. The logo */}
+                    <View style={style.logo}>
+                        <Image style= {{ alignSelf: "center", width: width/2, height: height/5}} source={logo} />
+                        <Text style={{marginTop: -width/5, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/15 }}>Bubl</Text>
+                    </View>
+                    {/* 2. Login with social account */}
+                    <View style={style.social}>
+                        <View style={style.socialElement}>
+                            <FontAwesome.Button name="facebook" backgroundColor="#3b5998" justifyContent="center">Login with Facebook </FontAwesome.Button>
+                        </View>
+                        <View style={style.socialElement}>
+                            <FontAwesome.Button name="google" backgroundColor="#DB4437" justifyContent="center">Login with Google </FontAwesome.Button>
+                        </View> 
+                    </View>
+                    {/* 3. Login with traditional way */}
+                    <View style={style.login}>
+                        <Text style={style.text}> Or log in the classic way</Text>
+                        {/* Email inputView */}
+                        <View style={style.inputView}>
+                            <View style={style.icon} >
+                                <FontAwesome name="envelope"/>
+                            </View>
+                            <TextInput
+                                style={style.TextInput}
+                                placeholder="Email"
+                                placeholderTextColor="#003f5c" 
+                                onChangeText={text=>setEmail(text)}
+                                onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}
+                            />
+                        </View>
+                        { isValidEmail ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Email is required .</Text>
+                        </Animatable.View>
+                        }
+                        {/* Password inputView */}
+                        <View style={style.inputView}>
+                            <View style={style.icon} >
+                                <FontAwesome name="unlock-alt"/>
+                            </View>
+                            <TextInput
+                                style={style.TextInput}
+                                placeholder="Password" secureTextEntry
+                                placeholderTextColor="#003f5c"
+                                onChangeText={text=>setPassword(text)}
+                                onEndEditing={text=>handlePasswordChange(text.nativeEvent.text)}
+                            />
+                        </View>
+                        { isValidPassword ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Password is required .</Text>
+                        </Animatable.View>
+                        }
+
+                        <TouchableOpacity>
+                            <Text style={style.text} onPress={onLogin}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
+                            <Text >LOGIN</Text>
+                        </TouchableOpacity>
+                        <View style={{ flexDirection: "row", justifyContent: "center"}}>
+                            <Text style={style.text}> Don't have account? </Text>
+                            <TouchableOpacity>
+                                <Text style={style.signUp} onPress={onRegistration}>Sign up</Text>
+                            </TouchableOpacity>
+                        </View>
+                        </View>
+                </View>    
             </View>
-            { isValidEmail ? null : 
-            <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={style.errorMsg}>Email is required .</Text>
-            </Animatable.View>
-            }
-            <View style={style.inputView}>
-                <TextInput
-                    style={style.TextInput}
-                    placeholder="Password" secureTextEntry
-                    placeholderTextColor="#003f5c"
-                    onChangeText={text=>setPassword(text)}
-                    onEndEditing={text=>handlePasswordChange(text.nativeEvent.text)}
-                />
-            </View>
-            { isValidPassword ? null : 
-            <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={style.errorMsg}>Password is required .</Text>
-            </Animatable.View>
-            }
-            <TouchableOpacity>
-                <Text style={style.forgot_button} onPress={onLogin}>Forgot Password?</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
-                <Text style={style.loginText}>LOGIN</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Text style={style.forgot_button} onPress={onRegistration}>Don't have account? Sign up</Text>
-            </TouchableOpacity>
-        </View>
-    )
+        )
+    }
+    
 }
 

@@ -1,11 +1,13 @@
 import React, {useState, useCallback, useEffect} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, ScrollView, Platform, Image} from 'react-native'
+import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, ScrollView, Platform, Image, ImageBackground} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath, Button} from '@ui-kitten/components';
 import RangeSlider from 'react-native-range-slider-expo';
 import * as ImagePicker from 'expo-image-picker';
 import defaultPic from "../../../assets/shrek.jpg";
+import * as Animatable from 'react-native-animatable'; //validation animation
+
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
@@ -31,6 +33,14 @@ export default function CreateUserScreen({navigation}){
     const now = new Date();
     const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
     const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
+    //Validation
+    const [isValidFirstName, setValidFirstName] = useState(true)
+    const [isValidLastName, setValidLastName] = useState(true)
+    const [isValidKUID, setValidKUID] = useState(true)
+    const [isValidEmail, setValidEmail] = useState(true)
+    const [isValidAddress, setValidAddress] = useState(true)
+    const [isValidCity, setValidCity] = useState(true)
+    const [isValidZipCode, setValidZipCode] = useState(true)
     //Navigation
     const onLogout = () => {
         navigation.navigate('Registration');
@@ -100,9 +110,61 @@ export default function CreateUserScreen({navigation}){
             setImage(result.uri);
         }
     };
+    //Validation
+    //When the user clicks out of the text box it will warn the user that the text input is required
+    const handleFirstNameChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidFirstName(true)
+        } else {
+            setValidFirstName(false)
+        }
+    }    
+    const handleLastNameChange= (val) => {
+        if( val.trim().length > 0 ) {
+            setValidLastName(true)
+        } else {
+            setValidLastName(false)
+        }
+    }
+    const handleKUIDChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidKUID(true)
+        } else {
+            setValidKUID(false)
+        }
+    }
+    const handleEmailChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidEmail(true)
+        } else {
+            setValidEmail(false)
+        }
+    }
+    const handleAdressChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidAddress(true)
+        } else {
+            setValidAddress(false)
+        }
+    }
+    const handleCityChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidCity(true)
+        } else {
+            setValidCity(false)
+        }
+    }
+    const handleZipCodeChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidZipCode(true)
+        } else {
+            setValidZipCode(false)
+        }
+    }
     // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
+            <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
             <ScrollView>
             <View style={style.profilePicContainer}>
                 <Avatar source={{ uri: profilePic }} style={{ width: 200, height: 200 }} 
@@ -118,32 +180,56 @@ export default function CreateUserScreen({navigation}){
                         placeholder='Place your Text'
                         value={firstName}
                         onChangeText={nextValue => setFirstName(nextValue)}
+                        onEndEditing={text=>handleFirstNameChange(text.nativeEvent.text)}
                     />    
                 </View>
+                { isValidFirstName ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>First Name is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                     <Input
                         label = 'Last Name'
                         placeholder='Place your Text'
                         value={lastName}
                         onChangeText={nextValue => setLastName(nextValue)}
+                        onEndEditing={text=>handleLastNameChange(text.nativeEvent.text)}
                     />
                 </View>
+                { isValidLastName ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Last Name is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                     <Input
                         label = 'KU ID'
                         placeholder='Place your Text'
                         value={KUID}
                         onChangeText={nextValue => setKUID(nextValue)}
+                        onEndEditing={text=>handleKUIDChange(text.nativeEvent.text)}
                     />
                 </View>
+                { isValidKUID ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>KU ID is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                     <Input
                         label = 'Email'
                         placeholder='Place your Text'
                         value={email}
                         onChangeText={nextValue => setEmail(nextValue)}
+                        onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}
                     />
                 </View>
+                { isValidEmail ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Email is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                     <Datepicker
                         label='Birthday'
@@ -200,24 +286,43 @@ export default function CreateUserScreen({navigation}){
                         placeholder='Place your Text'
                         value={address}
                         onChangeText={nextValue => setAddress(nextValue)}
+                        onEndEditing={text=>handleAdressChange(text.nativeEvent.text)}
                     />
                 </View>
+                { isValidAddress ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Adress is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                     <Input
                         label = 'City'
                         placeholder='Place your Text'
                         value={city}
                         onChangeText={nextValue => setCity(nextValue)}
+                        onEndEditing={text=>handleCityChange(text.nativeEvent.text)}
                     />
                 </View>
+                { isValidCity ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>City is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                     <Input
                         label = 'Zip Code'
                         placeholder='Place your Text'
                         value={zipCode}
                         onChangeText={nextValue => setZipCode(nextValue)}
+                        onEndEditing={text=>handleZipCodeChange(text.nativeEvent.text)}
+
                     />
                 </View>
+                { isValidZipCode ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Zip Code is required .</Text>
+                        </Animatable.View>
+                }
                 <View style={style.inputView}>
                 <Select
                     label="States"
