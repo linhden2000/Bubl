@@ -4,20 +4,18 @@ import { StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity } from 'r
 import {auth} from '../../firebase/config';
 
 export default function DashboardScreen({navigation}) {
-    // const onLogout = () => {
-    //   auth
-    //   .signOut()
-    //   .then(() => {
-    //     navigation.replace('Login')
-    //   })
-    //   .catch(error => {
-    //     alert(error.message)
-    //   })
-        
-    // }
     const onLogout = () => {
-      navigation.replace('Login')
+      auth
+      .signOut()
+      .then(() => {
+        navigation.replace('Login')
+      })
+      .catch(error => {
+        alert(error.message)
+      })
+        
     }
+  
     return (
       <View>
         <Text>Dashboard</Text>

@@ -5,6 +5,7 @@ import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, ScrollView, Plat
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath, Button} from '@ui-kitten/components';
 import RangeSlider from 'react-native-range-slider-expo';
 import * as ImagePicker from 'expo-image-picker';
+import { auth, firestore } from '../../firebase/config';
 
 const CalendarIcon = (props) => (
     <Icon {...props} name='calendar'/>
@@ -24,30 +25,17 @@ export default function CreateUserScreen({navigation}){
     const [zipCode, setZipCode] = useState('')
     const [fromValue, setFromValue] = useState(0);
     const [toValue, setToValue] = useState(0);
-    const [value, setValue] = useState(0);
     //The following code is for the user birthday (datepicker)
     const [date, setDate] = useState(new Date());
     const now = new Date();
     const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
     const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
-    //Navigation
-    const onLogout = () => {
-        navigation.navigate('Registration');
-    }
-    // Submit User Information
-    const onSubmit = () => {
-        navigation.navigate('DashboardNavigation');
-        console.log(firstName)
-        console.log(lastName);
-        console.log(KUID);
-        console.log(email);
-        console.log(address);
-        console.log(city);
-        console.log(zipCode);
-        console.log(fromValue);
-        console.log(toValue);
-        console.log(date);
-    }
+
+    // Current User
+    const currentUser = auth?.currentUser
+    // "users" collection
+    const usersRef = firestore.collection('users')
+    
     //The following are inputted by dropdown
     //** States drop down **/
     const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
@@ -97,6 +85,54 @@ export default function CreateUserScreen({navigation}){
             setImage(result.uri);
         }
     };
+
+    //** Submit User Information and Navigate to Dashboard **//
+    const onSubmit = () => { 
+        const uid = currentUser.uid
+        const selectedGender = selectedGenderIndex.toString()
+        // Convert Index Path to String
+        const gender = selectedGenderIndex.toString() == "1"? "man" : "woman"
+        let sexualPref = "both"
+        if(selectedSexualPrefIndex == "1,2") {
+            sexualPref = "both"
+        }
+        else if(selectedSexualPrefIndex == "1") {
+            sexualPref = "male"
+        }
+        else {
+            sexualPref = "female"
+        }
+        
+        const userData = {
+            id: uid,
+            email: currentUser.email,
+            firstName: firstName,
+            lastName: lastName,
+            kuid: KUID,
+            address: address,
+            city: city,
+            zipCode: zipCode,
+            fromAge: fromValue,
+            toAge: toValue,
+            birthday: date,
+            gender: gender,
+            profilePic: profilePic,
+            sexualPref: sexualPref,
+            state: USStatesProp[parseInt(selectedStateIndex.toString()) - 1]
+        }
+
+        // Set users data, navigate to Dashboard if succeed
+        usersRef
+        .doc(uid)
+        .set(userData)
+        .then(() => {
+            navigation.navigate('DashboardNavigation');
+        })
+        .catch(error => {
+            alert(error)
+        })
+    }
+
     // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
@@ -157,7 +193,6 @@ export default function CreateUserScreen({navigation}){
                         label="Gender"
                         style={style.select}
                         placeholder='Default'
-
                         value={displayGenderValue}
                         onSelect={index => setSelectedGenderIndex(index)}>
                         {genderProp.map(renderGenderOption)}
