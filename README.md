@@ -3,7 +3,15 @@
 * node.js: https://nodejs.org/en/download/
 * expo: 
   * `npm install -g expo-cli`
+<<<<<<< HEAD
   * `expo install expo-app-loading`
+=======
+<<<<<<< HEAD
+  * `expo install expo-app-loading`
+=======
+  * `expo install expo-image-picker`
+>>>>>>> 077b671236487c347417fa4498b41a77c41a2d1c
+>>>>>>> a44555c256100aa0c7f322bce334eba19e439711
 * firebase: `npm install --save firebase@8.2.3`
 * React Navigation Library:
   * `npm install @react-navigation/native`
