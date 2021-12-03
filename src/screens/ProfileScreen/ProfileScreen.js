@@ -7,7 +7,11 @@ export default function ProfileScreen({navigation}) {
     const onLogout = () => {
         navigation.navigate('Login')
     }
-    
+
+    const onMyProfile = () => {
+      navigation.navigate('MyProfile')
+    }
+
     return (
       <View style={style.container}>
         {/* Logo Img here
@@ -18,7 +22,7 @@ export default function ProfileScreen({navigation}) {
         <Text style={{left: 45, fontSize: 15}}>Looking for my Fiona</Text>
           
         <View style={style.content}>
-          <TouchableOpacity style={style.Btn}>
+          <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
             <Text style={style.text}>My Profile</Text>
           </TouchableOpacity> 
           <TouchableOpacity style={style.Btn}>
