@@ -13,39 +13,37 @@ export default function RegistrationScreen({navigation}) {
         and navigate to 'Create User'
         - Otherwise, Throw an error and create alert
     */
-    // const onSignUp = () => {
-    //     if(password1 == password2) {
-    //         auth
-    //         .createUserWithEmailAndPassword(email, password1)
-    //         .then(userCredentials => {
-    //             const user = userCredentials.user 
-    //             const data = {
-    //                 id: user.uid,
-    //                 email: user.email
-    //             }
-    //             // Get 'users' collection from firestore
-    //             const usersRef = firestore.collection('users')
-    //             usersRef
-    //             // Get user document using user's uid
-    //             .doc(user.uid)
-    //             // Set user data in firestore
-    //             .set(data)
-    //             .then(() => {
-    //                 navigation.replace('Create User')
-    //             })
-    //             .catch(error => {
-    //                 alert(error)
-    //             })
-    //         })
-    //         .catch(error => alert(error.message))
-    //     }
-    //     else {
-    //         alert("Passwords don't match")
-    //     }
-    // }
     const onSignUp = () => {
-        navigation.replace('Create User')
+        if(password1 == password2) {
+            auth
+            .createUserWithEmailAndPassword(email, password1)
+            .then(userCredentials => {
+                const user = userCredentials.user 
+                const data = {
+                    id: user.uid,
+                    email: user.email
+                }
+                // Get 'users' collection from firestore
+                const usersRef = firestore.collection('users')
+                usersRef
+                // Get user document using user's uid
+                .doc(user.uid)
+                // Set user data in firestore
+                .set(data)
+                .then(() => {
+                    navigation.replace('Create User')
+                })
+                .catch(error => {
+                    alert(error)
+                })
+            })
+            .catch(error => alert(error.message))
+        }
+        else {
+            alert("Passwords don't match")
+        }
     }
+    
     // Navigate to Login Screen
     const onLogin = () => {
         navigation.navigate('Login')
