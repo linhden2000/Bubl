@@ -1,7 +1,10 @@
 import React, {useState} from 'react'
 import style from './style';
-import { StyleSheet, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, KeyboardAvoidingView, Image, ImageBackground } from 'react-native'
 import {auth, firestore} from '../../firebase/config'
+import { FontAwesome } from '@expo/vector-icons';
+// import logo from '../../../assets/bublLogo.png';
+
 
 export default function RegistrationScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -53,6 +56,13 @@ export default function RegistrationScreen({navigation}) {
         <View style={style.container}>
             {/* Logo Img here
              <Image style={styles.image} source={require("./assets/logo.png")} />*/}
+            
+            {/* 1. The background gradient */}
+            <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
+            
+            {/* 2. The white box around all registration options */}
+
+            {/* 3. Email box */}
             <View style={style.inputView}>
                 <TextInput
                     style={style.TextInput}
@@ -61,6 +71,8 @@ export default function RegistrationScreen({navigation}) {
                     onChangeText = {text => setEmail(text)}
                 />
             </View>
+
+            {/* 4. password box */}
             <View style={style.inputView}>
                 <TextInput
                     style={style.TextInput}
@@ -69,6 +81,8 @@ export default function RegistrationScreen({navigation}) {
                     onChangeText = {text => setPassword1(text)}
                 />
             </View>
+
+            {/* 5. re-enter password box */}
             <View style={style.inputView}>
                 <TextInput
                     style={style.TextInput}
@@ -77,12 +91,17 @@ export default function RegistrationScreen({navigation}) {
                     onChangeText = {text => setPassword12(text)}
                 />
             </View>
+
+            {/* 6. signup box - after finish entering email, password */}
             <TouchableOpacity style={style.loginBtn} onPress={onSignUp}>
                 <Text>SIGNUP</Text>
             </TouchableOpacity>
+
+            {/* 7. login box - go back to log in */}
             <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
-                <Text>LOGIN</Text>
+                <Text>RETURN TO LOGIN</Text>
             </TouchableOpacity>
+
         </View>
     )
 }
