@@ -70,55 +70,57 @@ export default function RegistrationScreen({navigation}) {
                 <Image style={style.imageLogo} source={require("../../../assets/bublLogo.png")} />
                 <Text style={style.textLogo}>Bubl</Text>
                 <Text style={style.textDescription}>Please enter a valid email and password</Text>
-            </View>
 
-            {/* Entry Boxes */}
-            <View style={style.entryBoxes}>
-                {/* 3. Email box */}
-                <View style={style.inputView}>
-                    <TextInput
-                        style={style.TextInput}
-                        placeholder="Email"
-                        placeholderTextColor="#003f5c"
-                        onChangeText = {text => setEmail(text)}
-                    />
+            <View style={style.interactiveBoxes}>
+                {/* Entry Boxes */}
+                <View style={style.entryBoxes}>
+                    {/* 3. Email box */}
+                    <View style={style.inputView}>
+                        <TextInput
+                            style={style.TextInput}
+                            placeholder="Email"
+                            placeholderTextColor="#003f5c"
+                            onChangeText = {text => setEmail(text)}
+                        />
+                    </View>
+
+                    {/* 4. password box */}
+                    <View style={style.inputView}>
+                        <TextInput
+                            style={style.TextInput}
+                            placeholder="Password" secureTextEntry
+                            placeholderTextColor="#003f5c"
+                            onChangeText = {text => setPassword1(text)}
+                        />
+                    </View>
+
+                    {/* 5. re-enter password box */}
+                    <View style={style.inputView}>
+                        <TextInput
+                            style={style.TextInput}
+                            placeholder="Re-enter Password" secureTextEntry
+                            placeholderTextColor="#003f5c"
+                            onChangeText = {text => setPassword12(text)}
+                        />
+                    </View>
                 </View>
 
-                {/* 4. password box */}
-                <View style={style.inputView}>
-                    <TextInput
-                        style={style.TextInput}
-                        placeholder="Password" secureTextEntry
-                        placeholderTextColor="#003f5c"
-                        onChangeText = {text => setPassword1(text)}
-                    />
-                </View>
+                {/* Button Boxes */}
+                <View style={style.buttonBoxes}>
+                    {/* 6. signup box - after finish entering email, password */}
+                    <TouchableOpacity style={style.signUpBtn} onPress={onSignUp}>
+                        <Text>SIGNUP</Text>
+                    </TouchableOpacity>
 
-                {/* 5. re-enter password box */}
-                <View style={style.inputView}>
-                    <TextInput
-                        style={style.TextInput}
-                        placeholder="Re-enter Password" secureTextEntry
-                        placeholderTextColor="#003f5c"
-                        onChangeText = {text => setPassword12(text)}
-                    />
+                    {/* 7. login box - go back to log in */}
+                    <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
+                        <Text>RETURN TO LOGIN</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-
-            {/* Button Boxes */}
-            <View style={style.buttonBoxes}>
-                {/* 6. signup box - after finish entering email, password */}
-                <TouchableOpacity style={style.signUpBtn} onPress={onSignUp}>
-                    <Text>SIGNUP</Text>
-                </TouchableOpacity>
-
-                {/* 7. login box - go back to log in */}
-                <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
-                    <Text>RETURN TO LOGIN</Text>
-                </TouchableOpacity>
-            </View>
-
         </View>    
     </View>
+    </View>
+
     )
 }

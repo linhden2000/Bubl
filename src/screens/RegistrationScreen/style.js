@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
 
   imageLogo: {
-    marginTop: 50,
+    marginTop: 20,
     alignSelf: "center",
     width: width/2,
     height: height/5,
@@ -33,15 +33,31 @@ export default StyleSheet.create({
     color:"#8898AA",
     fontFamily: "OleoScript_400Regular",
     fontSize: width/20,
-    marginTop: 30,
-  },
-
-  entryBoxes: {
     marginTop: 20,
   },
 
+  interactiveBoxes: {
+    display: "flex",
+    flexDirection: "column",
+    alignContent:"flex-end",
+    backgroundColor: "#F4F5F7",
+    justifyContent:"flex-end",
+    justifyContent:"space-evenly",
+    width: width * 0.9, 
+    height: height * 0.6,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+
+  entryBoxes: {
+    // width: width * 0.9,
+    // height: width/10,
+  },
+
   buttonBoxes: {
-    marginBottom: 50,
+    // marginTop: width * 0.6,
+    // width: width * 0.9,
+    // height: width/10,
   },
 
   imageBG: {
@@ -53,21 +69,20 @@ export default StyleSheet.create({
   },
 
   whiteBox: {
-    flex: 1,
+    // flex: 1,
+    display: "flex",
     alignContent:"center",
     justifyContent: "space-between",
     position: "absolute",
     backgroundColor:"#FFFFFF",
-    width: width * 0.9,
+    justifyContent:"flex-end",
+    justifyContent:"space-evenly",
+    width: width * 0.9, 
     height: height * 0.8,
     borderRadius: 20,
   },
     
   logo:{
-    // flex: 1,
-    // width: width * 0.9,
-    // height: height * 0.2,
-    // justifyContent: "space-around",
     alignItems: "center",
   },
 
