@@ -25,7 +25,7 @@ export default StyleSheet.create({
     alignSelf: "center",
     color:"#8898AA",
     fontFamily: "OleoScript_400Regular",
-    fontSize: width/15,
+    fontSize: width/10,
   },
 
   textDescription: {
@@ -39,9 +39,7 @@ export default StyleSheet.create({
   interactiveBoxes: {
     display: "flex",
     flexDirection: "column",
-    alignContent:"flex-end",
     backgroundColor: "#F4F5F7",
-    justifyContent:"flex-end",
     justifyContent:"space-evenly",
     width: width * 0.9, 
     height: height * 0.6,
@@ -50,14 +48,11 @@ export default StyleSheet.create({
   },
 
   entryBoxes: {
-    // width: width * 0.9,
-    // height: width/10,
+    marginTop: width/30,
   },
 
   buttonBoxes: {
-    // marginTop: width * 0.6,
-    // width: width * 0.9,
-    // height: width/10,
+
   },
 
   imageBG: {
@@ -88,14 +83,14 @@ export default StyleSheet.create({
 
   inputView:{
     // flex: 1,
-    marginTop: 20,
+    marginTop: width/30,
     alignSelf:"center",
     justifyContent: "center",
     backgroundColor: "#FFC0CB",
     borderRadius: 30,
     width: "70%",
     height: 45,
-    marginBottom: 15,
+    marginBottom: width/20,
     alignItems: "center",
   },
 
@@ -103,13 +98,15 @@ export default StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
+    //marginTop: width/30,
     marginLeft: 20,
+    //backgroundColor: "red"
   },
 
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-  },
+  // forgot_button: {
+    // height: 30,
+    // marginBottom: 30,
+  // },
 
   signUpBtn: {
     alignSelf:"center",
@@ -118,7 +115,7 @@ export default StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: width/30,
     backgroundColor: "#A3AFF5",
   },
 
@@ -129,7 +126,7 @@ export default StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: width/10,
     backgroundColor: "#5E72E4",
   },
 })
