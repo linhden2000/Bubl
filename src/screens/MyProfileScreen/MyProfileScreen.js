@@ -14,7 +14,7 @@ export default function ProfileScreen({navigation}) {
       <Icon {...props} name='edit-outline'/>
     );
     
-    return (
+    return ( 
       <View style={style.container}>
         <View style={style.profile} >
           <Image style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
@@ -29,8 +29,8 @@ export default function ProfileScreen({navigation}) {
           </View>
 
           
-          <View>
-            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={require("../../../assets/profile.png")} />
+          <View style={{position: 'absolute', justifyContent: "flex-end", marginTop: width/5}}>
+            <Image style={{width: width/3, height: height/6, borderRadius: 100}} source={require("../../../assets/profile.png")} />
             <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
           </View>
           
