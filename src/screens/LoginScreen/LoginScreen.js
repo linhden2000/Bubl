@@ -129,7 +129,7 @@ export default function LoginScreen({navigation}) {
                         </View>
                         { isValidEmail ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={style.errorMsg}>Email is required .</Text>
+                            <Text style={style.errorMsg}>Email is required.</Text>
                         </Animatable.View>
                         }
                         {/* Password inputView */}
@@ -149,7 +149,7 @@ export default function LoginScreen({navigation}) {
                         </View>
                         { isValidPassword ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Password is required .</Text>
+                        <Text style={style.errorMsg}>Password is required.</Text>
                         </Animatable.View>
                         }
 

@@ -116,6 +116,8 @@ export default StyleSheet.create({
     errorMsg: {
         color: '#FF0000',
         fontSize: width/30,
+        marginLeft: width/15,
+        marginTop: width/80,
     },
     authErrorCard: {
         marginHorizontal: 15,
