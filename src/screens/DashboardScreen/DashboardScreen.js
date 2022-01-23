@@ -37,7 +37,7 @@ export default function DashboardScreen({navigation}) {
           </Card>
 
           <Card style={style.matchCards}>
-            <Text>Fairy Godmother</Text>
+            <Text>Gingerbread Man</Text>
           </Card>
 
           <Card style={style.matchCards}>
