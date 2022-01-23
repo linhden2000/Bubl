@@ -35,4 +35,15 @@ export default StyleSheet.create({
   questionHeaderContainer:{
   
   },
+  categoryHeader:{
+    marginVertical: 10,
+  },
+  divider:{
+    marginVertical: 10,
+  },
+  questionCards:{
+    borderRadius: 15,
+    marginVertical: 5,
+    height: height * 0.13,
+  }
 })
