@@ -1,5 +1,6 @@
 // Style for dashboard goes here
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
 
   container: {
@@ -44,5 +45,15 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center', 
     alignItems: 'center'
+  },
+  submitBtn: {
+    width: "80%",
+    borderRadius: 10,
+    height: width/10,
+    alignItems: "center",
+    alignSelf:"center",
+    justifyContent: "center",
+    marginTop: width/30,
+    backgroundColor: '#5E72E4',
   },
 })
