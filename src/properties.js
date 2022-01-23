@@ -80,5 +80,6 @@ export const categoryProp = [
     "Education",
     "Career",
     "Social",
-    "Lifestyle"
+    "Lifestyle",
+    "Other"
 ]
