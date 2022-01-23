@@ -7,7 +7,7 @@ export default StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#fff", 
         alignItems: "center",
         justifyContent: "space-between",
     },
@@ -16,8 +16,6 @@ export default StyleSheet.create({
       flex: 0.5,
       width: width,
       height: height/3,
-      //marginTop: height/20,
-      // borderRadius: 100,
       alignItems:"center",
       //backgroundColor: "red",
     },
@@ -32,13 +30,13 @@ export default StyleSheet.create({
 
     editButton: {
       position: "absolute",
-      marginTop: width/3,
-      marginLeft: 90,
+      //marginTop: width/3,
+      marginLeft: width/4,
       borderRadius: 20,
       borderColor: "#bdbdbd",
-      width: 5,
-      height: 5,
-      // backgroundColor: "red",
+      width: width/20,
+      height: width/20,
+      //backgroundColor: "red",
     },
 
     content: {
