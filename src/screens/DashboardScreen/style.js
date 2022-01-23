@@ -31,5 +31,8 @@ export default StyleSheet.create({
     marginVertical: 5,
     borderRadius: 35,
     height: height * 0.13,
-  }
+  },
+  questionHeaderContainer:{
+  
+  },
 })
