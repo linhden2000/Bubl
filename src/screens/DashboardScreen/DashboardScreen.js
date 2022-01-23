@@ -1,22 +1,10 @@
 import React from 'react'
 import style from './style';
-import { StyleSheet,SafeAreaView, View, TouchableOpacity } from 'react-native';
-import { Button, Layout, Text } from '@ui-kitten/components';
+import { StyleSheet,ScrollView, View, TouchableOpacity } from 'react-native';
+import { Button, Card, Text } from '@ui-kitten/components';
 import {auth} from '../../firebase/config';
 
 export default function DashboardScreen({navigation}) {
-    const onLogout = () => {
-      auth
-      .signOut()
-      .then(() => {
-        navigation.replace('Login')
-      })
-      .catch(error => {
-        alert(error.message)
-      })
-        
-    }
-
     const createQuestion = () => {
       console.log("question button pushed")
       navigation.navigate('CreateQuestions');
@@ -24,14 +12,59 @@ export default function DashboardScreen({navigation}) {
   
     return (
       <View>
-        <Text>Dashboard</Text>
-        <Button style={style.submitBtn} onPress={createQuestion}>
-          <Text>Post a Question</Text>
-        </Button>
-        <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
-          <Text>LOGOUT</Text>
-         </TouchableOpacity>
-         {/* <Text>Hello {auth?.currentUser.email}</Text>  */}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={style.header} category='h5'>Your Top 5 Matches</Text>
+          <Card style={style.matchCards}>
+            <Text>Lord Farquad</Text>
+          </Card>
+
+          <Card style={style.matchCards}>
+            <Text>Prince Charming</Text>
+          </Card>
+
+          <Card style={style.matchCards}>
+            <Text>Fairy Godmother</Text>
+          </Card>
+
+          <Card style={style.matchCards}>
+            <Text>Fairy Godmother</Text>
+          </Card>
+            
+          <Card style={style.matchCards}>
+            <Text>Puss in Boots</Text>
+          </Card>
+
+          <Button style={style.postQuestionBtn} onPress={createQuestion}>
+            <Text>Post a Question</Text>
+          </Button>
+          {/* <Text>Hello {auth?.currentUser.email}</Text>  */}
+          <ScrollView snapToAlignment={true}>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            <Card style={style.matchCards}>
+              <Text>Puss in Boots</Text>
+            </Card>
+            </ScrollView>
+        </ScrollView>
       </View>
     )
 }
