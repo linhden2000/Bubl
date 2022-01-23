@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import style from './style';
 import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome} from '@expo/vector-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons'
 import logo from '../../../assets/bublLogo.png';
+import {Card} from '@ui-kitten/components';
 
 import AppLoading from 'expo-app-loading';
 //import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
@@ -21,6 +24,7 @@ export default function LoginScreen({navigation}) {
     const [password, setPassword] = useState('')
     const [isValidEmail, setValidEmail] = useState(true)
     const [isValidPassword, setValidPassword] = useState(true)
+    const [authError, setAuthError] = useState(false) //Displays message if auth fails
     
     // Navigate to Registration Screen
     const onRegistration = () => {
@@ -44,13 +48,13 @@ export default function LoginScreen({navigation}) {
         - Otherwise, throws an error
     */
     const onLogin = () => {
-        auth
-        .signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
+            setAuthError(false)
             const user = userCredential.user
         })
         .catch(error => {
-            alert(error)
+            setAuthError(true)
         })        
     }
 
@@ -103,12 +107,19 @@ export default function LoginScreen({navigation}) {
                     {/* 3. Login with traditional way */}
                     <View style={style.login}>
                         <Text style={style.text}> Or log in the classic way</Text>
+                        {}{authError ?(
+                        <Card style={style.authErrorCard}>
+                            <Text style={style.authErrorMsg}> <FontAwesomeIcon icon={faExclamationTriangle} color={ 'red' }/>  Wrong email or password. Please try again.</Text>
+                        </Card>
+                        ): null}
                         {/* Email inputView */}
                         <View style={style.inputView}>
                             <View style={style.icon} >
                                 <FontAwesome name="envelope"/>
                             </View>
                             <TextInput
+                                autoCorrect={false}
+                                autoCapitalize={false}
                                 style={style.TextInput}
                                 placeholder="Email"
                                 placeholderTextColor="#003f5c" 
@@ -118,7 +129,7 @@ export default function LoginScreen({navigation}) {
                         </View>
                         { isValidEmail ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Email is required .</Text>
+                            <Text style={style.errorMsg}>Email is required .</Text>
                         </Animatable.View>
                         }
                         {/* Password inputView */}
@@ -127,6 +138,8 @@ export default function LoginScreen({navigation}) {
                                 <FontAwesome name="unlock-alt"/>
                             </View>
                             <TextInput
+                                autoCorrect={false}
+                                autoCapitalize={false}
                                 style={style.TextInput}
                                 placeholder="Password" secureTextEntry
                                 placeholderTextColor="#003f5c"

@@ -117,4 +117,12 @@ export default StyleSheet.create({
         color: '#FF0000',
         fontSize: width/30,
     },
+    authErrorCard: {
+        marginHorizontal: 15,
+        marginVertical: 5,
+    },
+    authErrorMsg: {
+        fontSize: 13,
+        color: '#EC3134',
+    },
 })
