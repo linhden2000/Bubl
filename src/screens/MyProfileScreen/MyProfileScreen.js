@@ -1,11 +1,28 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import style from './style';
 import { Image, Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, ImageBackground } from 'react-native'
 import { Icon, Button} from '@ui-kitten/components';
-
+import { auth, firestore } from '../../firebase/config';
+import moment from 'moment';
 const { width, height } = Dimensions.get("screen");
 
 export default function ProfileScreen({navigation}) {
+    //** Set intial states for user's information **//
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [kuId, setKUID] = useState('')
+    const [email, setEmail] = useState('')
+    const [birthday, setBirthday] = useState('')
+    const [address, setAddress] = useState('')
+    const [zipCode, setZipCode] = useState('')
+    const [fromValue, setFromValue] = useState(0);
+    const [toValue, setToValue] = useState(0);
+    const [sexualPref, setSexualPref] = useState('')
+    const [gender, setGender] = useState('')
+    const [profilePic, setProfilePic] = useState('')
+    const [city, setCity] = useState('')
+    const [USState, setUSState] = useState('')
+
     const onLogout = () => {
         navigation.navigate('Login')
     }
@@ -13,8 +30,46 @@ export default function ProfileScreen({navigation}) {
     const editIcon = (props) => (
       <Icon {...props} name='edit-outline'/>
     );
-    
-    return ( 
+    //** Get User Data from Firestore **//
+    const fetchUserData = async() => {
+      const currentUser = auth?.currentUser
+      const uid = currentUser.uid
+      const data = firestore
+                   .collection('users')
+                   .doc(uid)
+                   .onSnapshot(documentSnapshot => {
+                    const userData = documentSnapshot.data()
+                    setFirstName(userData.firstName)
+                    setLastName(userData.lastName)
+                    setKUID(userData.kuid)
+                    setEmail(userData.email)
+                    setAddress(userData.address)
+                    setCity(userData.city)
+                    setZipCode(userData.zipCode)
+                    setFromValue(userData.fromAge)
+                    setToValue(userData.toAge)
+                    setSexualPref(userData.sexualPref)
+                    setGender(userData.gender)
+                    if(userData.birthday) {
+                      let epochMilliseconds = userData.birthday.seconds * 1000
+                      let birthdayTimeStamp = new Date(epochMilliseconds)
+                      let actualDate = birthdayTimeStamp.getDate()
+                      let actualMonth = birthdayTimeStamp.getMonth()
+                      let actualYear = birthdayTimeStamp.getFullYear()
+                      let birthdayString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                      setBirthday(birthdayString)
+                    }
+                    setProfilePic(userData.profilePic)
+                    setUSState(userData.state)
+                  });
+    }
+    //** Fecth User Data when the screen is loaded **/
+    useEffect(() => {
+      fetchUserData()
+    }, [])
+
+    //** Render the information **/
+    return (
       <View style={style.container}>
         <View style={style.profile} >
           <Image style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
@@ -28,66 +83,72 @@ export default function ProfileScreen({navigation}) {
             </TouchableOpacity>
           </View>
 
-          
-          <View style={{position: 'absolute', justifyContent: "flex-end", marginTop: width/5}}>
-            <Image style={{width: width/3, height: height/6, borderRadius: 100}} source={require("../../../assets/profile.png")} />
+          <View>
+            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
             <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
           </View>
-          
-          {/* <Text style={{marginTop: width/20}}> Change Profile Photo</Text> */}
         </View>
 
         <ScrollView style={style.content}>
           <View style={style.Btn}>
             <Text style={{color:"#8898AA"}}> First Name</Text>
-            <TextInput> Sherk </TextInput>
+            <TextInput> {firstName}</TextInput>
           </View>
 
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}> Last Name</Text>
-            <TextInput> The Musical </TextInput>
+            <TextInput> {lastName} </TextInput>
           </View>
 
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}> KU ID</Text>
-            <TextInput> 3000000 </TextInput>
+            <TextInput> {kuId} </TextInput>
           </View>
 
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}> Email</Text>
-            <TextInput> happyShrek@gmail.com </TextInput>
-          </View>
-
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Password</Text>
-            <TextInput> ******** </TextInput>
+            <TextInput> {email} </TextInput>
           </View>
 
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}> Birthday</Text>
-            <TextInput> 01/01/2001 </TextInput>
-          </View>
-
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Gender</Text>
-            <TextInput> Male </TextInput>
-          </View>
-
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Preference</Text>
-            <TextInput> Male </TextInput>
-          </View>
-
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Age</Text>
-            <TextInput> 100 </TextInput>
+            <TextInput> {birthday} </TextInput>
           </View>
 
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}> Address</Text>
-            <TextInput> 1 Jayhawk Blvd, Lawrence, KS 66045 </TextInput>
+            <TextInput> {address} </TextInput>
           </View>
 
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}> City</Text>
+            <TextInput> {city} </TextInput>
+          </View>
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}> State</Text>
+            <TextInput> {USState} </TextInput>
+          </View>
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}> Zip code</Text>
+            <TextInput> {zipCode} </TextInput>
+          </View>
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}> Gender</Text>
+            <TextInput> {gender} </TextInput>
+          </View>
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}> Sexual Preference</Text>
+            <TextInput> both </TextInput>
+          </View>
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}>Preferred Age Range</Text>
+            <TextInput> From {fromValue} to {toValue} </TextInput>
+          </View>
         </ScrollView>       
       </View>
     )

@@ -20,9 +20,10 @@ export default function DashboardScreen({navigation}) {
       <View>
         <Text>Dashboard</Text>
         <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
+          <Text>Hello {auth?.currentUser.uid}</Text>
           <Text>LOGOUT</Text>
          </TouchableOpacity>
-         {/* <Text>Hello {auth?.currentUser.email}</Text>  */}
+         {/*   */}
       </View>
     )
 }
