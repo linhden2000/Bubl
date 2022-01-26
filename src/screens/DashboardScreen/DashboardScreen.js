@@ -2,8 +2,13 @@ import React, {useState} from 'react'
 import style from './style';
 import { StyleSheet,ScrollView, View, TouchableOpacity } from 'react-native';
 import {categoryProp} from '../../properties'
-import { Button, Card, Text, Tab, TabBar, Divider, IndexPath} from '@ui-kitten/components';
+import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon} from '@ui-kitten/components';
 import {auth} from '../../firebase/config';
+
+//Icons (EVA Icons)
+const chatBubble = (props) => (
+  <Icon {...props} name='message-circle-outline'/>
+);
 
 export default function DashboardScreen({navigation}) {
     //Variables
@@ -14,7 +19,6 @@ export default function DashboardScreen({navigation}) {
     const renderCategories = (label) => (
       <Tab>title={label}</Tab>
     );
-    console.log(categoryProp.map(renderCategories)[1])
 
 
 
@@ -24,28 +28,69 @@ export default function DashboardScreen({navigation}) {
     }
   
     return (
-      <View>
+      <View style={style.mainView}>
         <ScrollView showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[6]}>
-          <Text style={style.header} category='h5'>Your Top 5 Matches</Text>
+          <Text style={style.header} category='h5'>Your Top Matches</Text>
+          
+            <Card style={style.matchCards}>
+              <View style={{flexDirection:"row"}}>
+                  <Avatar style={style.profilePic} source={require('../../../assets/lordFarquad.png')}/>
+                  <View style={{flexDirection:"col"}}>
+                    <Text style={style.profileName}>Lord Farquad</Text> 
+                    <Divider style={style.profileDivider}/>
+                    <Text style={style.pointsLabel}>Points: 100</Text>
+                    <Icon style={style.chatBubbleIcon} fill='#7f7aff' name='message-circle-outline'/>
+                  </View>
+              </View>
+            </Card>
+          
           <Card style={style.matchCards}>
-            <Text>Lord Farquad</Text>
+            <View style={{flexDirection:"row"}}>
+              <Avatar style={style.profilePic} source={require('../../../assets/princeCharming.jpg')}/>
+              <View style={{flexDirection:"col"}}>
+                <Text style={style.profileName}>Prince Charming</Text>
+                <Divider style={style.profileDivider}/>
+                <Text style={style.pointsLabel}>Points: 80</Text>
+                <Icon style={style.chatBubbleIcon} fill='#7f7aff' name='message-circle-outline'/>
+              </View>
+            </View>
           </Card>
 
           <Card style={style.matchCards}>
-            <Text>Prince Charming</Text>
+            <View style={{flexDirection:"row"}}>
+              <Avatar style={style.profilePic}source={require('../../../assets/gingerbreadMan.png')}/>
+              <View style={{flexDirection:"col"}}>
+                <Text style={style.profileName}t>Gingerbread Man</Text>
+                <Divider style={style.profileDivider}/>
+                <Text style={style.pointsLabel}>Points: 60</Text>
+                <Icon style={style.chatBubbleIcon} fill='#7f7aff' name='message-circle-outline'/>
+              </View>
+            </View>
           </Card>
 
           <Card style={style.matchCards}>
-            <Text>Gingerbread Man</Text>
-          </Card>
-
-          <Card style={style.matchCards}>
-            <Text>Fairy Godmother</Text>
+            <View style={{flexDirection:"row"}}>
+              <Avatar style={style.profilePic}source={require('../../../assets/fairyMother.png')}/>
+              <View style={{flexDirection:"col"}}>
+                <Text style={style.profileName}>Fairy Godmother</Text>
+                <Divider style={style.profileDivider}/>
+                <Text style={style.pointsLabel}>Points: 50</Text>
+                <Icon style={style.chatBubbleIcon} fill='#7f7aff' name='message-circle-outline'/>
+              </View>
+            </View>
           </Card>
             
           <Card style={style.matchCards}>
-            <Text>Puss in Boots</Text>
+            <View style={{flexDirection:"row"}}>
+              <Avatar style={style.profilePic}source={require('../../../assets/pussInBoots.png')}/>
+              <View style={{flexDirection:"col"}}>
+                <Text style={style.profileName}>Puss in Boots</Text>
+                <Divider style={style.profileDivider}/>
+                <Text style={style.pointsLabel}>Points: 49</Text>
+                <Icon style={style.chatBubbleIcon} fill='#7f7aff' name='message-circle-outline'/>
+              </View>
+            </View>
           </Card>
           {/* <Text>Hello {auth?.currentUser.email}</Text>  */}
           <Card style={style.questionHeaderContainer}>

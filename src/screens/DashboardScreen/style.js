@@ -2,7 +2,9 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
-
+  mainView:{
+    //backgroundColor: '#FFFFFF',
+  },
   postQuestionBtn: {
     width: "80%",
     borderRadius: 10,
@@ -21,16 +23,16 @@ export default StyleSheet.create({
     height:height
   },
   header: {
-    //color: '#FFFFFF',
     padding: 10,
   },
   matchContainer: {
     borderRadius: 20,
   },
   matchCards:{
+    flexDirection: 'row',
+    alignItems: 'center',
     marginVertical: 5,
-    borderRadius: 35,
-    height: height * 0.13,
+    borderRadius: 40,
   },
   questionHeaderContainer:{
   
@@ -45,5 +47,29 @@ export default StyleSheet.create({
     borderRadius: 15,
     marginVertical: 5,
     height: height * 0.13,
+  },
+  profilePic:{
+    width: width*0.25,
+    height: width*0.25,
+  },
+  profileName:{
+    fontSize: 20,
+    alignContent: 'center',
+    marginLeft: width *0.05,
+    //marginLeft: width *0.15,
+  },
+  pointsLabel: {
+    marginTop: height * 0.02,
+    marginLeft: width *0.05,
+  },
+  profileDivider: {
+    backgroundColor: '#7f7aff',
+    width: width * 0.5,
+  },
+  chatBubbleIcon: {
+    marginLeft: width *0.05,
+    marginTop: height * 0.01,
+    width: width * 0.08,
+    height: width * 0.08,
   }
 })
