@@ -123,12 +123,12 @@ export default function RegistrationScreen({navigation}) {
                         <View style={style.buttonBoxes}>
                             {/* 6. signup box - after finish entering email, password */}
                             <TouchableOpacity style={style.signUpBtn} onPress={onSignUp}>
-                                <Text>SIGNUP</Text>
+                                    <Text style={{fontSize: 18}}>SIGNUP</Text>
                             </TouchableOpacity>
 
                             {/* 7. login box - go back to log in */}
                             <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
-                                <Text>RETURN TO LOGIN</Text>
+                                <Text style={{fontSize: 18}}>RETURN TO LOGIN</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

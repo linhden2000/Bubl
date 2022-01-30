@@ -95,7 +95,7 @@ export default StyleSheet.create({
     flex: 1,
     padding: 10,
     marginLeft: 20,
-    fontSize: 15,
+    fontSize: 18,
   },
 
   signUpBtn: {
@@ -118,5 +118,5 @@ export default StyleSheet.create({
     justifyContent: "center",
     marginTop: width/30,
     backgroundColor: '#5E72E4',
-},
+  },
 })
