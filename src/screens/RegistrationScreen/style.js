@@ -6,7 +6,6 @@ const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: "#9678b6",
       alignItems: "center",
       justifyContent: "center",
   },
@@ -31,7 +30,8 @@ export default StyleSheet.create({
     color:"#8898AA",
     fontFamily: "OleoScript_400Regular",
     fontSize: width/20,
-    marginTop: 20,
+    marginTop: 15,
+    marginBottom: 20,
   },
 
   interactiveBoxes: {
@@ -40,17 +40,20 @@ export default StyleSheet.create({
     backgroundColor: "#F4F5F7",
     justifyContent:"space-evenly",
     width: width * 0.9, 
-    height: height * 0.6,
+    height: height * 0.55,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
 
   entryBoxes: {
-    marginTop: width/30,
+    height: height * 0.25,
+    justifyContent:"space-evenly",
+
   },
 
   buttonBoxes: {
-
+    height: height * 0.2,
+    justifyContent:"space-evenly",
   },
 
   imageBG: {
@@ -62,15 +65,12 @@ export default StyleSheet.create({
   },
 
   whiteBox: {
-    // flex: 1,
-    display: "flex",
+    flex: 1,
     alignContent:"center",
     justifyContent: "space-between",
     position: "absolute",
     backgroundColor:"#FFFFFF",
-    justifyContent:"flex-end",
-    justifyContent:"space-evenly",
-    width: width * 0.9, 
+    width: width * 0.9,
     height: height * 0.8,
     borderRadius: 20,
   },
@@ -94,15 +94,9 @@ export default StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-    //marginTop: width/30,
     marginLeft: 20,
-    //backgroundColor: "red"
+    fontSize: 15,
   },
-
-  // forgot_button: {
-    // height: 30,
-    // marginBottom: 30,
-  // },
 
   signUpBtn: {
     width: "80%",
