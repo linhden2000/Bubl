@@ -1,38 +1,60 @@
 // Style for message goes here
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get("screen");
+
 export default StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#fff", 
         alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#F4BCD9"
+        justifyContent: "space-between",
     },
 
-    navbar:{
-      flexDirection: 'row',
-      backgroundColor: "#F4BCD9",
-      height: 50,
-      marginTop: 50,
+    profile:{
+      flex: 0.5,
+      width: width,
+      height: height/3,
+      alignItems:"center",
+      //backgroundColor: "red",
+    },
+
+    imageBG:{
+      flex: 1,
+      justifyContent:"center",
+      position: "absolute",
+      width:width,
+      height:height/3.3
+    },
+
+    editButton: {
+      position: "absolute",
+      //marginTop: width/3,
+      marginLeft: width/4,
+      borderRadius: 20,
+      borderColor: "#bdbdbd",
+      width: width/20,
+      height: width/20,
+      //backgroundColor: "red",
     },
 
     content: {
-      marginTop: 20,
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-
+      flex: 2,
+      // alignItems: "center",
+      // justifyContent: "center",
+      //marginTop: height/20,
     },
 
     Btn: {
       marginTop: 10,
-      width: 350,
-      borderRadius: 25,
-      height: 60,
+      width: width*7/8,
+      height: height/15,
       textAlign: "left",
       justifyContent: "center",
-      backgroundColor: "#FFFFFF",
+      // backgroundColor: "#FFFFFF",
+      borderBottomColor: 'black',
+      borderBottomWidth: 1,
   },
 
   text:{
