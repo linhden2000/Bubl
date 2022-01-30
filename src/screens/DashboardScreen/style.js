@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
   mainView:{
-    //backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
   },
   postQuestionBtn: {
     width: "80%",
@@ -24,9 +24,21 @@ export default StyleSheet.create({
   },
   header: {
     padding: 10,
+    //color: "#5c5c5c",
+    fontFamily: "PublicSans_600SemiBold",
   },
   matchContainer: {
     borderRadius: 20,
+  },
+  shadow:{
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   matchCards:{
     flexDirection: 'row',
@@ -63,13 +75,26 @@ export default StyleSheet.create({
     marginLeft: width *0.05,
   },
   profileDivider: {
-    backgroundColor: '#7f7aff',
+    backgroundColor: '#bababa',
     width: width * 0.5,
+    marginLeft: width *0.05,
+  },
+  matchIcons:{
+    width: width * 0.07,
+    height: width * 0.07,
   },
   chatBubbleIcon: {
     marginLeft: width *0.05,
     marginTop: height * 0.01,
-    width: width * 0.08,
-    height: width * 0.08,
-  }
+    
+  },
+  addPersonIcon: {
+    marginLeft: width *0.13,
+    marginTop: height * 0.01,
+  },
+  moreVerticalIcon: {
+    marginLeft: width *0.13,
+    marginTop: height * 0.01,
+  },
+  
 })
