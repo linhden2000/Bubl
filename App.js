@@ -15,7 +15,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ProfileScreen, MyProfileScreen, CreateUserScreen} from "./src/screens";
+import { LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ChatScreen, ProfileScreen, MyProfileScreen, CreateUserScreen} from "./src/screens";
 
 
 /* Navigation Structure: 
@@ -81,6 +81,7 @@ export default function App() {
         <AuthStack.Screen name="DashboardNavigation" component={DashboardNavigation}/>
         <AuthStack.Screen name="Create User" component={CreateUserScreen}/>
         <AuthStack.Screen name="MyProfile" component={MyProfileScreen}/>
+        <AuthStack.Screen name="Chat" component={ChatScreen}/>
       </AuthStack.Navigator>
     </NavigationContainer>
     </ApplicationProvider>
