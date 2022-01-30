@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import style from './style';
 import { StyleSheet,ScrollView, View, TouchableOpacity } from 'react-native';
 import {categoryProp} from '../../properties'
-import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout} from '@ui-kitten/components';
-import {useFonts, PublicSans_600SemiBold} from '@expo-google-fonts/public-sans';
+import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
+        Select, SelectItem, IndexPath } from '@ui-kitten/components';
+import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import AppLoading from 'expo-app-loading';
 import {auth} from '../../firebase/config';
 
@@ -12,15 +13,19 @@ export default function DashboardScreen({navigation}) {
     //Source: https://github.com/expo/google-fonts
     let [fontsLoaded] = useFonts ({
       PublicSans_600SemiBold,
+      PublicSans_500Medium,
+      PublicSans_400Regular,
+      PublicSans_300Light,
     });
     //Variables
     const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
     const shouldLoadComponent = (index) => index === selectedIndex;
 
     //Categories Tab
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
-    const renderCategories = (label) => (
-      <Tab>title={label}</Tab>
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(new IndexPath(0));
+    const displayCategory= categoryProp[selectedCategoryIndex.row];
+    const renderCategoryOption = (label, key) => (
+      <SelectItem key={key} title={label}/>
     );
 
     //Show/hide tabs
@@ -148,45 +153,85 @@ export default function DashboardScreen({navigation}) {
             
             <Divider style={style.divider}/>
             <Text style={style.categoryHeader} category='s1'>Categories</Text>
-            <ScrollView horizontal={true} 
-            showsHorizontalScrollIndicator={false}>
-            <TabBar 
-              selectedIndex={selectedCategoryIndex}
-              onSelect={index => setSelectedCategoryIndex(index)}>
-                <Tab title='All  '></Tab>
-                <Tab title='Movies  '></Tab>
-                <Tab title='Sports  '></Tab>
-                <Tab title='Food  '></Tab>
-                <Tab title='Travel  '></Tab>
-                <Tab title='Family  '></Tab>
-                <Tab title='Career  '></Tab>
-                <Tab title='Social  '></Tab>
-                <Tab title='Music  '></Tab>
-                <Tab title='Other  '></Tab>
-            </TabBar>
-            </ScrollView>
+            <Select 
+            style={style.select}
+
+            value={displayCategory}
+            onSelect={index => setSelectedCategoryIndex(index)}>
+            {categoryProp.map(renderCategoryOption)}
+          </Select>
           </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 1</Text>
-          </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 2</Text>
-          </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 3</Text>
-          </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 4</Text>
-          </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 5</Text>
-          </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 6</Text>
-          </Card>
-          <Card style={style.questionCards}>
-            <Text>Question 7</Text>
-          </Card>
+
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
+            </Card>
+          </View>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>KU or K-State?</Text>
+            </Card>
+          </View>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>If you could travel anywhere, where would it be?</Text>
+            </Card>
+          </View>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>What is your favorite pizza flavor?</Text>
+            </Card>
+          </View>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>Do you play video games? If so, what is your favorite or currently playing right now?</Text>
+            </Card>
+          </View>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>Are you looking for a long-term relationship or are you only looking for a fling?</Text>
+            </Card>
+          </View>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>Marvel or DC? And who is your favorite characters?</Text>
+            </Card>
+          </View>
           <Button style={style.postQuestionBtn} onPress={createQuestion}>
             <Text>Post a Question</Text>
           </Button>

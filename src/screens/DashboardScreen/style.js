@@ -50,15 +50,11 @@ export default StyleSheet.create({
   
   },
   categoryHeader:{
-    marginVertical: 10,
+    fontFamily: "PublicSans_600SemiBold",
+    marginVertical: 2,
   },
   divider:{
     marginVertical: 10,
-  },
-  questionCards:{
-    borderRadius: 15,
-    marginVertical: 5,
-    height: height * 0.13,
   },
   profilePic:{
     width: width*0.25,
@@ -96,5 +92,32 @@ export default StyleSheet.create({
     marginLeft: width *0.13,
     marginTop: height * 0.01,
   },
+
+  //Question Cards
+  questionCards:{
+    //borderRadius: 15,
+    marginVertical: 5,
+  },
+  questionContent:{
+    fontFamily: "PublicSans_500Medium",
+    fontSize: height * 0.025,
+    marginTop: height * 0.009,
+  },
+  questionUserIcon:{
+    width: width * 0.07,
+    height: width * 0.07,
+  },
+  questionUserName:{
+    color: "#878787",
+    fontFamily: "PublicSans_300Light",
+    marginTop: height*0.005,
+    marginBottom: height*0.01,
+    marginLeft: width*0.02,
+  },
+  questionDivider:{
+    backgroundColor: '#d6d6d6',
+    width: width * 0.85,
+    marginVertical: height*0.005,
+  }
   
 })
