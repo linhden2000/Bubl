@@ -29,12 +29,19 @@ export default function DashboardScreen({navigation}) {
     );
 
     //Show/hide tabs
-    //const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions
-    //const [showAllQuestions, setShowAllQuestions] = useState(false); //Display questions from other users
-
-    const createQuestion = () => {
-      console.log("question button pushed")
-      navigation.navigate('CreateQuestions');
+    const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions
+    const [showAllQuestions, setShowAllQuestions] = useState(false); //Display questions from other users
+    const createQuestion = (input) => {
+      console.log("question button pushed");
+      if (input == 0){ //User selects 'Questions' tab
+        setShowMyQuestions(false);
+        setShowAllQuestions(true);
+      }
+      else if(input == 1){ //User selects 'My Questions' tab
+        setShowMyQuestions(true);
+        setShowAllQuestions(false);
+      }
+      setSelectedQuestionTabIndex(input);
     }
     
     if (!fontsLoaded) {
@@ -140,15 +147,9 @@ export default function DashboardScreen({navigation}) {
             <TabBar 
               selectedIndex={selectedQuestionTabIndex}
               shouldLoadComponent={shouldLoadComponent}
-              onSelect={index => setSelectedQuestionTabIndex(index)}>
+              onSelect={index => createQuestion(index)}>
                 <Tab title='Questions'></Tab>
-                <Tab title='Your Questions'>
-                  <Layout>
-                    <Button style={style.postQuestionBtn} onPress={createQuestion}>
-                      <Text>Post a Question</Text>
-                    </Button>
-                  </Layout>
-                </Tab>
+                <Tab title='My Questions'></Tab>
             </TabBar>
             
             <Divider style={style.divider}/>
@@ -161,80 +162,89 @@ export default function DashboardScreen({navigation}) {
             {categoryProp.map(renderCategoryOption)}
           </Select>
           </Card>
+          
+          {
+            }{showAllQuestions ? ( //If multiple choice
+            <View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>KU or K-State?</Text>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>If you could travel anywhere, where would it be?</Text>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>What is your favorite pizza flavor?</Text>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>Do you play video games? If so, what is your favorite or currently playing right now?</Text>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>Are you looking for a long-term relationship or are you only looking for a fling?</Text>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.questionCards}>
+                  <View style={{flexDirection:"row"}}>
+                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                    <Text style={style.questionUserName}>Anonymous</Text>
+                  </View>
+                  <Divider style={style.questionDivider}/>
+                  <Text style={style.questionContent}>Marvel or DC? And who is your favorite characters?</Text>
+                </Card>
+              </View>
+            </View>
+          ): null}
 
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
-            </Card>
-          </View>
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>KU or K-State?</Text>
-            </Card>
-          </View>
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>If you could travel anywhere, where would it be?</Text>
-            </Card>
-          </View>
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>What is your favorite pizza flavor?</Text>
-            </Card>
-          </View>
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>Do you play video games? If so, what is your favorite or currently playing right now?</Text>
-            </Card>
-          </View>
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>Are you looking for a long-term relationship or are you only looking for a fling?</Text>
-            </Card>
-          </View>
-          <View style={style.shadow}>
-            <Card style={style.questionCards}>
-              <View style={{flexDirection:"row"}}>
-                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                <Text style={style.questionUserName}>Anonymous</Text>
-              </View>
-              <Divider style={style.questionDivider}/>
-              <Text style={style.questionContent}>Marvel or DC? And who is your favorite characters?</Text>
-            </Card>
-          </View>
-          <Button style={style.postQuestionBtn} onPress={createQuestion}>
+          {
+            }{showMyQuestions ? (
+          <Button style={style.postQuestionBtn}>
             <Text>Post a Question</Text>
           </Button>
+          ): null}
         </ScrollView>
       </View>
     )

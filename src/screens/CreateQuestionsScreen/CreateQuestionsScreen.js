@@ -39,9 +39,9 @@ export default function CreateQuestionsScreen({navigation}) {
   const navigateToDashboard = () => {
     navigation.navigate('DashboardNavigation');
   }
-  const displayAnswer = (questionType) => {
-    setSelectedQuestionTypeIndex(questionType)
-    if(questionTypesProp[questionType.row] == "Multiple Choice")
+  const displayAnswer = (index) => {
+    setSelectedQuestionTypeIndex(index)
+    if(questionTypesProp[index.row] == "Multiple Choice")
       setShouldShow(true)
     else
       setShouldShow(false)

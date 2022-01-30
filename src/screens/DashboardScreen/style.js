@@ -5,16 +5,6 @@ export default StyleSheet.create({
   mainView:{
     backgroundColor: '#FFFFFF',
   },
-  postQuestionBtn: {
-    width: "80%",
-    borderRadius: 10,
-    height: width/10,
-    alignItems: "center",
-    alignSelf:"center",
-    justifyContent: "center",
-    marginTop: width/30,
-    backgroundColor: '#5E72E4',
-  },
   imageBG:{
     flex: 1,
     justifyContent:"center",
@@ -118,6 +108,16 @@ export default StyleSheet.create({
     backgroundColor: '#d6d6d6',
     width: width * 0.85,
     marginVertical: height*0.005,
-  }
+  },
+  postQuestionBtn: {
+    width: "80%",
+    borderRadius: 10,
+    height: width/10,
+    alignItems: "center",
+    alignSelf:"center",
+    justifyContent: "center",
+    marginTop: width/30,
+    backgroundColor: '#5E72E4',
+  },
   
 })
