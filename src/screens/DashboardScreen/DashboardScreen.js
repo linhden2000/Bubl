@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import style from './style';
 import { StyleSheet,ScrollView, View, TouchableOpacity } from 'react-native';
-import {categoryProp} from '../../properties'
+import {dashboardCategoryProp} from '../../properties'
 import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
         Select, SelectItem, IndexPath } from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import AppLoading from 'expo-app-loading';
 import {auth} from '../../firebase/config';
+
 
 export default function DashboardScreen({navigation}) {
     //Load fonts
@@ -19,19 +20,20 @@ export default function DashboardScreen({navigation}) {
     });
     //Variables
     const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
+    const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
     const shouldLoadComponent = (index) => index === selectedIndex;
 
     //Categories Tab
     const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(new IndexPath(0));
-    const displayCategory= categoryProp[selectedCategoryIndex.row];
+    const displayCategory= dashboardCategoryProp[selectedCategoryIndex.row];
     const renderCategoryOption = (label, key) => (
       <SelectItem key={key} title={label}/>
     );
 
     //Show/hide tabs
     const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions
-    const [showAllQuestions, setShowAllQuestions] = useState(false); //Display questions from other users
-    const createQuestion = (input) => {
+    const [showAllQuestions, setShowAllQuestions] = useState(true); //Display questions from other users
+    const tabSelect = (input) => {
       console.log("question button pushed");
       if (input == 0){ //User selects 'Questions' tab
         setShowMyQuestions(false);
@@ -40,9 +42,16 @@ export default function DashboardScreen({navigation}) {
       else if(input == 1){ //User selects 'My Questions' tab
         setShowMyQuestions(true);
         setShowAllQuestions(false);
+        setFirstClickMyQuestion(true);
       }
       setSelectedQuestionTabIndex(input);
     }
+    
+    const createQuestion = () => {
+      //Bug automatically firing.
+      //navigation.navigate('CreateQuestions');
+    }
+
     
     if (!fontsLoaded) {
       return <AppLoading />;
@@ -147,20 +156,24 @@ export default function DashboardScreen({navigation}) {
             <TabBar 
               selectedIndex={selectedQuestionTabIndex}
               shouldLoadComponent={shouldLoadComponent}
-              onSelect={index => createQuestion(index)}>
+              onSelect={index => tabSelect(index)}>
                 <Tab title='Questions'></Tab>
                 <Tab title='My Questions'></Tab>
             </TabBar>
-            
-            <Divider style={style.divider}/>
-            <Text style={style.categoryHeader} category='s1'>Categories</Text>
-            <Select 
-            style={style.select}
 
-            value={displayCategory}
-            onSelect={index => setSelectedCategoryIndex(index)}>
-            {categoryProp.map(renderCategoryOption)}
-          </Select>
+            {
+            }{showAllQuestions ? (
+              <View>
+                <Divider style={style.divider}/>
+                <Text style={style.categoryHeader} category='s1'>Categories</Text>
+                <Select 
+                  style={style.select}
+                  value={displayCategory}
+                  onSelect={index => setSelectedCategoryIndex(index)}>
+                  {dashboardCategoryProp.map(renderCategoryOption)}
+                </Select>
+              </View>
+            ): null}
           </Card>
           
           {
@@ -241,13 +254,58 @@ export default function DashboardScreen({navigation}) {
 
           {
             }{showMyQuestions ? (
-          <Button style={style.postQuestionBtn}>
-            <Text>Post a Question</Text>
-          </Button>
+          <View>
+            <View>
+              <Button style={style.postQuestionBtn} onPress={createQuestion()}>
+                <Text>Post a Question</Text>
+              </Button>
+            </View>
+            <View>
+              <Text style={style.timeStamp}>Posted on January 28, 2022</Text>
+              <Divider style={style.timeStampDivider}/>
+              <View style={style.shadow}>
+                <Card style={style.myQuestionCards}>
+                  <Text style={style.questionContent}>What is your favorite food?</Text>
+                  <Divider style={style.myQuestionDivider}/>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style={style.myQuestionInfo}>Unread answers: </Text>
+                    <Text style={style.myQuestionInfo}>15</Text>
+                  </View>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style={style.myQuestionInfo}>Read answers: </Text>
+                    <Text style={style.myQuestionInfo}>2</Text>
+                  </View>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style={style.myQuestionInfo}>Total answers: </Text>
+                    <Text style={style.myQuestionInfo}>17</Text>
+                  </View>
+                </Card>
+              </View>
+              <View style={style.shadow}>
+                <Card style={style.myQuestionCards}>
+                  <Text style={style.questionContent}>What is your all time favorite horror movie?</Text>
+                  <Divider style={style.myQuestionDivider}/>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style={style.myQuestionInfo}>Unread answers: </Text>
+                    <Text style={style.myQuestionInfo}>3</Text>
+                  </View>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style={style.myQuestionInfo}>Read answers: </Text>
+                    <Text style={style.myQuestionInfo}>2</Text>
+                  </View>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style={style.myQuestionInfo}>Total answers: </Text>
+                    <Text style={style.myQuestionInfo}>5</Text>
+                  </View>
+                </Card>
+              </View>
+            </View>
+          </View>
           ): null}
         </ScrollView>
       </View>
     )
 }
+
 
 

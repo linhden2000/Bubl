@@ -120,4 +120,28 @@ export default StyleSheet.create({
     backgroundColor: '#5E72E4',
   },
   
+  //My Questions
+  timeStamp:{
+    alignSelf:"center",
+    marginTop: 20,
+    fontFamily: "PublicSans_300Light",
+  },
+  timeStampDivider: {
+    width: width*0.9,
+    alignSelf: "center",
+    backgroundColor: "#c4c4c4",
+    marginVertical: 10,
+  },
+  myQuestionCards:{
+    alignSelf: "center",
+    marginVertical: 5,
+    width: width * 0.9,
+  },
+  myQuestionDivider:{
+    marginVertical: 8,
+  },
+  myQuestionInfo: {
+    fontFamily: "PublicSans_300Light",
+  },
+  
 })

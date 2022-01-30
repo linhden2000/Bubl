@@ -83,3 +83,20 @@ export const categoryProp = [
     "Lifestyle",
     "Other"
 ]
+
+export const dashboardCategoryProp = [
+    "All",
+    "Movies", 
+    "Sports",
+    "Music",
+    "Food",
+    "Traveling",
+    "Family",
+    "Outdoor Activties",
+    "Arts",
+    "Education",
+    "Career",
+    "Social",
+    "Lifestyle",
+    "Other"
+]
