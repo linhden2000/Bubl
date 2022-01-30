@@ -1,7 +1,5 @@
 // style for Registration goes here
 import { StyleSheet, Dimensions } from 'react-native';
-// import { gridColumn } from 'styled-system';
-// import { flex } from 'styled-system';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -13,12 +11,12 @@ export default StyleSheet.create({
       justifyContent: "center",
   },
 
-  imageLogo: {
-    marginTop: 20,
-    alignSelf: "center",
-    width: width/2,
-    height: height/5,
+  logo: {
+    flex: 1,
+    width: width * 0.9,
+    height: height * 0.2,
   },
+
 
   textLogo: {
     marginTop: -width/5,
@@ -82,16 +80,14 @@ export default StyleSheet.create({
   },
 
   inputView:{
-    // flex: 1,
-    marginTop: width/30,
+    width: "80%",
+    borderRadius: 10,
+    height: width/10,
+    alignItems: "center",
     alignSelf:"center",
     justifyContent: "center",
+    marginTop: width/30,
     backgroundColor: "#FFC0CB",
-    borderRadius: 30,
-    width: "70%",
-    height: 45,
-    marginBottom: width/20,
-    alignItems: "center",
   },
 
   TextInput: {
@@ -109,24 +105,24 @@ export default StyleSheet.create({
   // },
 
   signUpBtn: {
-    alignSelf:"center",
     width: "80%",
-    borderRadius: 25,
-    height: 50,
+    borderRadius: 10,
+    height: width/10,
     alignItems: "center",
+    alignSelf:"center",
     justifyContent: "center",
     marginTop: width/30,
-    backgroundColor: "#A3AFF5",
+    backgroundColor: '#5E72E4',
   },
 
   loginBtn: {
-    alignSelf:"center",
     width: "80%",
-    borderRadius: 25,
-    height: 50,
+    borderRadius: 10,
+    height: width/10,
     alignItems: "center",
+    alignSelf:"center",
     justifyContent: "center",
-    marginTop: width/10,
-    backgroundColor: "#5E72E4",
-  },
+    marginTop: width/30,
+    backgroundColor: '#5E72E4',
+},
 })
