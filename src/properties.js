@@ -63,3 +63,40 @@ export const sexualPrefProp = [
     "Non-Binary"
 ]
 
+export const questionTypesProp = [
+    "Short Answer", 
+    "Multiple Choice",
+]
+
+export const categoryProp = [
+    "Movies", 
+    "Sports",
+    "Music",
+    "Food",
+    "Traveling",
+    "Family",
+    "Outdoor Activties",
+    "Arts",
+    "Education",
+    "Career",
+    "Social",
+    "Lifestyle",
+    "Other"
+]
+
+export const dashboardCategoryProp = [
+    "All",
+    "Movies", 
+    "Sports",
+    "Music",
+    "Food",
+    "Traveling",
+    "Family",
+    "Outdoor Activties",
+    "Arts",
+    "Education",
+    "Career",
+    "Social",
+    "Lifestyle",
+    "Other"
+]
