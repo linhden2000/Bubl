@@ -68,6 +68,7 @@ export default StyleSheet.create({
   matchIcons:{
     width: width * 0.07,
     height: width * 0.07,
+    marginTop: height * 0.06,
   },
   chatBubbleIcon: {
     marginLeft: width *0.05,

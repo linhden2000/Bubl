@@ -68,8 +68,6 @@ export default function DashboardScreen({navigation}) {
                   <Avatar style={style.profilePic} source={require('../../../assets/lordFarquad.png')}/>
                   <View style={{flexDirection:"col"}}>
                     <Text style={style.profileName}>Lord Farquad</Text> 
-                    <Divider style={style.profileDivider}/>
-                    <Text style={style.pointsLabel}>Points: 100</Text>
                     <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
                       <Icon style={[style.addPersonIcon, style.matchIcons]} fill='#7f7aff' name='person-add-outline'/>
@@ -86,8 +84,6 @@ export default function DashboardScreen({navigation}) {
                 <Avatar style={style.profilePic} source={require('../../../assets/princeCharming.jpg')}/>
                 <View style={{flexDirection:"col"}}>
                   <Text style={style.profileName}>Prince Charming</Text>
-                  <Divider style={style.profileDivider}/>
-                  <Text style={style.pointsLabel}>Points: 80</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
                       <Icon style={[style.addPersonIcon, style.matchIcons]} fill='#7f7aff' name='person-add-outline'/>
@@ -104,8 +100,6 @@ export default function DashboardScreen({navigation}) {
                 <Avatar style={style.profilePic}source={require('../../../assets/gingerbreadMan.png')}/>
                 <View style={{flexDirection:"col"}}>
                   <Text style={style.profileName}t>Gingerbread Man</Text>
-                  <Divider style={style.profileDivider}/>
-                  <Text style={style.pointsLabel}>Points: 60</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
                       <Icon style={[style.addPersonIcon, style.matchIcons]} fill='#7f7aff' name='person-add-outline'/>
@@ -122,8 +116,6 @@ export default function DashboardScreen({navigation}) {
                 <Avatar style={style.profilePic}source={require('../../../assets/fairyMother.png')}/>
                 <View style={{flexDirection:"col"}}>
                   <Text style={style.profileName}>Fairy Godmother</Text>
-                  <Divider style={style.profileDivider}/>
-                  <Text style={style.pointsLabel}>Points: 50</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
                       <Icon style={[style.addPersonIcon, style.matchIcons]} fill='#7f7aff' name='person-add-outline'/>
@@ -140,8 +132,6 @@ export default function DashboardScreen({navigation}) {
                 <Avatar style={style.profilePic}source={require('../../../assets/pussInBoots.png')}/>
                 <View style={{flexDirection:"col"}}>
                   <Text style={style.profileName}>Puss in Boots</Text>
-                  <Divider style={style.profileDivider}/>
-                  <Text style={style.pointsLabel}>Points: 49</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
                       <Icon style={[style.addPersonIcon, style.matchIcons]} fill='#7f7aff' name='person-add-outline'/>
