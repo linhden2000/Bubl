@@ -8,3 +8,4 @@ export {default as MyProfileScreen} from './MyProfileScreen/MyProfileScreen'
 export {default as PreferenceScreen} from './PreferenceScreen/PreferenceScreen'
 export {default as AccountSettingsScreen} from './AccountSettingsScreen/AccountSettingsScreen'
 export {default as CreateUserScreen} from './CreateUserScreen/CreateUserScreen';
+export {default as CreateQuestionsScreen} from './CreateQuestionsScreen/CreateQuestionsScreen';
