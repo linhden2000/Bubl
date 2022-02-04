@@ -1,13 +1,19 @@
 // Style for message goes here
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions} from 'react-native';
+
+const { width, height } = Dimensions.get("screen");
+
 export default StyleSheet.create({
 
     container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
+        flexDirection: 'row',
         justifyContent: "center",
-        backgroundColor: "#F4BCD9"
+        marginTop: width/25,
+    },
+
+    page:{
+      backgroundColor:'white',
+      flex : 1,
     },
 
     navbar:{
@@ -45,5 +51,49 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center', 
     alignItems: 'center'
+  },
+
+  avatar: {
+    width: width/4.5,
+    height: height/10,
+    borderRadius: 40,
+    marginRight: width/20,
+    marginLeft: width/20,
+  },
+
+  badgeContainer:{
+    backgroundColor: "blue",
+    width: width/15,
+    height: height/30,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor:'white',
+    justifyContent: 'center',
+    alignItems:'center',
+    position:'absolute',
+    left: width/4.75,
+  },
+
+  badgeText:{
+    color:'white',
+  },
+
+  rightContainer: {
+    flex: 1,
+    marginTop: width/25,
+    marginRight: width/25
+  },
+  row:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  name: {
+    fontWeight: 'bold',
+    fontSize: width/20,
+    marginBottom: width/25,
+  },
+  text:{
+    color: 'grey',
+    fontSize: width/25,
   },
 })
