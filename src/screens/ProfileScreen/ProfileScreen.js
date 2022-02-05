@@ -38,6 +38,14 @@ export default function ProfileScreen({navigation}) {
       navigation.navigate('MyProfile')
     }
 
+    const onAccountSettings = () => {
+      navigation.navigate('AccountSettings')
+    }
+
+    const onPrefence = () => {
+      navigation.navigate('Preference')
+    }
+
     return (
       <View style={style.container}>
                 <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
@@ -54,10 +62,10 @@ export default function ProfileScreen({navigation}) {
                       <TouchableOpacity style={style.inputView} onPress={onMyProfile}>
                         <Text style={style.TextInput}>My Profile</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={style.inputView}>
+                      <TouchableOpacity style={style.inputView} onPress={onPrefence}>
                         <Text style={style.TextInput}>Preference</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={style.inputView}>
+                      <TouchableOpacity style={style.inputView} >
                         <Text style={style.TextInput}>Account Settings</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={style.inputView}>
@@ -86,10 +94,10 @@ export default function ProfileScreen({navigation}) {
             <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
               <Text style={style.text}>My Profile</Text>
             </TouchableOpacity> 
-            <TouchableOpacity style={style.Btn}>
+            <TouchableOpacity style={style.Btn onPress={onPrefence}}>
               <Text style={style.text}>Preference</Text>
             </TouchableOpacity> 
-            <TouchableOpacity style={style.Btn}>
+            <TouchableOpacity style={style.Btn} onPress={onAccountSettings}>
               <Text style={style.text}>Account Settings</Text>
             </TouchableOpacity> 
             <TouchableOpacity style={style.Btn}>

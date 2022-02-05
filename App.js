@@ -17,7 +17,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 import {LoginScreen, RegistrationScreen, DashboardScreen, MessageScreen, ChatScreen, ProfileScreen, MyProfileScreen, CreateUserScreen,
-        CreateQuestionsScreen} from "./src/screens";
+        CreateQuestionsScreen,
+        AccountSettingsScreen,
+        PreferenceScreen} from "./src/screens";
 
 /* Navigation Structure: 
     Login (AuthStack)
@@ -67,7 +69,7 @@ function DashboardNavigation() {
       })} >
       <Tab.Screen name="Message" component={MessageScreen}/>
       <Tab.Screen name="Dashboard" component={DashboardScreen}/>
-      <Tab.Screen name="Profile" component={ProfileScreen}/>
+      /*<Tab.Screen name="Profile" component={ProfileScreen}/>*/
     </Tab.Navigator>
   )
   
@@ -85,6 +87,10 @@ export default function App() {
         <AuthStack.Screen name="MyProfile" component={MyProfileScreen}/>
         <AuthStack.Screen name="Chat" component={ChatScreen}/>
         <AuthStack.Screen name="CreateQuestions" component={CreateQuestionsScreen}/>
+        <AuthStack.Screen name="AccountSettings" component={AccountSettingsScreen}/>
+        <AuthStack.Screen name="Preference" component={PreferenceScreen}/>
+
+
 
       </AuthStack.Navigator>
     </NavigationContainer>
