@@ -3,7 +3,7 @@ import style from './style';
 import { StyleSheet,ScrollView, View, TouchableOpacity } from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
 import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
-        Select, SelectItem, IndexPath } from '@ui-kitten/components';
+        Select, SelectItem, IndexPath, List, ListItem } from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import AppLoading from 'expo-app-loading';
 import {auth} from '../../firebase/config';
@@ -48,8 +48,11 @@ export default function DashboardScreen({navigation}) {
     }
     
     const createQuestion = () => {
-      //Bug automatically firing.
-      //navigation.navigate('CreateQuestions');
+      //Bug: automatically firing if user clicks on 'My Questions' tab.
+      navigation.navigate('CreateQuestions');
+    }
+    const answerQuestion = () => {
+      console.log("yeet")
     }
 
     
@@ -63,7 +66,7 @@ export default function DashboardScreen({navigation}) {
           <Text style={style.header} category='h5'>Your Top Matches</Text>
           
           <View style={style.shadow}>
-            <Card style={style.matchCards}>
+            <Card style={style.matchCards} onPress={() => answerQuestion()}>
               <View style={{flexDirection:"row"}}>
                   <Avatar style={style.profilePic} source={require('../../../assets/lordFarquad.png')}/>
                   <View style={{flexDirection:"col"}}>
