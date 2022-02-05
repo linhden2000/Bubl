@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import style from './style';
-import { StyleSheet,ScrollView, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,ScrollView, View, TouchableOpacity, FlatList } from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
 import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
         Select, SelectItem, IndexPath, List, ListItem } from '@ui-kitten/components';
@@ -57,7 +57,10 @@ export default function DashboardScreen({navigation}) {
 
     
     if (!fontsLoaded) {
-      return <AppLoading />;
+      // return <AppLoading />;
+      return <View>
+        <Text>Dashboard</Text>
+      </View>
     }
     return (
       <View style={style.mainView}>
@@ -69,7 +72,7 @@ export default function DashboardScreen({navigation}) {
             <Card style={style.matchCards} onPress={() => answerQuestion()}>
               <View style={{flexDirection:"row"}}>
                   <Avatar style={style.profilePic} source={require('../../../assets/lordFarquad.png')}/>
-                  <View style={{flexDirection:"col"}}>
+                  <View >
                     <Text style={style.profileName}>Lord Farquad</Text> 
                     <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
@@ -85,7 +88,7 @@ export default function DashboardScreen({navigation}) {
             <Card style={style.matchCards}>
               <View style={{flexDirection:"row"}}>
                 <Avatar style={style.profilePic} source={require('../../../assets/princeCharming.jpg')}/>
-                <View style={{flexDirection:"col"}}>
+                <View >
                   <Text style={style.profileName}>Prince Charming</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
@@ -101,7 +104,7 @@ export default function DashboardScreen({navigation}) {
             <Card style={style.matchCards}>
               <View style={{flexDirection:"row"}}>
                 <Avatar style={style.profilePic}source={require('../../../assets/gingerbreadMan.png')}/>
-                <View style={{flexDirection:"col"}}>
+                <View>
                   <Text style={style.profileName}t>Gingerbread Man</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
@@ -117,7 +120,7 @@ export default function DashboardScreen({navigation}) {
             <Card style={style.matchCards}>
               <View style={{flexDirection:"row"}}>
                 <Avatar style={style.profilePic}source={require('../../../assets/fairyMother.png')}/>
-                <View style={{flexDirection:"col"}}>
+                <View>
                   <Text style={style.profileName}>Fairy Godmother</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
@@ -133,7 +136,7 @@ export default function DashboardScreen({navigation}) {
             <Card style={style.matchCards}>
               <View style={{flexDirection:"row"}}>
                 <Avatar style={style.profilePic}source={require('../../../assets/pussInBoots.png')}/>
-                <View style={{flexDirection:"col"}}>
+                <View >
                   <Text style={style.profileName}>Puss in Boots</Text>
                   <View style={{flexDirection:"row"}}>
                       <Icon style={[style.chatBubbleIcon, style.matchIcons]} fill='#7f7aff' name='message-circle-outline'/>
@@ -144,7 +147,7 @@ export default function DashboardScreen({navigation}) {
               </View>
             </Card>
           </View>
-          {/* <Text>Hello {auth?.currentUser.email}</Text>  */}
+      
           <Card style={style.questionHeaderContainer}>
             <TabBar 
               selectedIndex={selectedQuestionTabIndex}
