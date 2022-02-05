@@ -1,7 +1,5 @@
 import React from 'react'
 import style from './style';
-import { Image, StyleSheet, Text, SafeAreaView, ScrollView, View, Button, TouchableOpacity } from 'react-native'
-
 import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import logo from '../../../assets/bublLogo.png';
@@ -73,36 +71,6 @@ export default function ProfileScreen({navigation}) {
                       
                     </View>
                 </View>    
-            </View>
-        {/* Logo Img here
-          <Image style={styles.image} source={require("../assets/logo.png")} />*/} 
-        <Image style={style.image} source={require("../../../assets/sky.png")} />
-        <Image style={style.profile} source={require("../../../assets/profile.png")} /> 
-        <Text style={{fontSize: 20, fontWeight: "bold"}}>Sherk</Text>
-        <Text style={{left: 45, fontSize: 15}}>Looking for my Fiona</Text>
-          
-        <ScrollView showsVerticalScrollIndicator={false}> 
-          <View style={style.content}>
-            <TouchableOpacity style={style.Btn} onPress={onMyProfile}>
-              <Text style={style.text}>My Profile</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity style={style.Btn}>
-              <Text style={style.text}>Preference</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity style={style.Btn}>
-              <Text style={style.text}>Account Settings</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity style={style.Btn}>
-              <Text style={style.text}>Customer Service</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.Btn}>
-              <Text style={style.text}>What Works</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity style={style.Btn} onPress={onLogout}>
-              <Text style={style.text}>Logout</Text>
-            </TouchableOpacity>
-          </View>    
-        </ScrollView> 
-      </View>
+          </View>
     )
 }
