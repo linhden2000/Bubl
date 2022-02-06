@@ -46,11 +46,13 @@ export default function DashboardScreen({navigation}) {
       }
       setSelectedQuestionTabIndex(input);
     }
-    
+
     const createQuestion = () => {
       //Bug: automatically firing if user clicks on 'My Questions' tab.
       navigation.navigate('CreateQuestions');
     }
+    
+
     const answerQuestion = () => {
       console.log("yeet")
     }
@@ -249,10 +251,10 @@ export default function DashboardScreen({navigation}) {
           ): null}
 
           {
-            }{showMyQuestions ? (
+            }{showMyQuestions &&
           <View>
             <View>
-              <Button style={style.postQuestionBtn} onPress={createQuestion()}>
+              <Button style={style.postQuestionBtn} onPress={() => createQuestion()}>
                 <Text>Post a Question</Text>
               </Button>
             </View>
@@ -297,7 +299,7 @@ export default function DashboardScreen({navigation}) {
               </View>
             </View>
           </View>
-          ): null}
+          }
         </ScrollView>
       </View>
     )
