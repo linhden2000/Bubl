@@ -53,10 +53,6 @@ export default function RegistrationScreen({navigation}) {
             alert("Passwords don't match")
         }
     }
-<<<<<<< HEAD
-=======
-    
->>>>>>> fe044cc5ca0f6f58fb5a29bd612279c47bc29c05
     // Navigate to Login Screen
     const onLogin = () => {
         navigation.navigate('Login')
@@ -93,6 +89,9 @@ export default function RegistrationScreen({navigation}) {
                         <View style={style.entryBoxes}>
                             {/* 3. Email box */}
                             <View style={style.inputView}>
+                            <View style={style.icon}>
+                                <FontAwesome name="envelope"/>
+                            </View>
                                 <TextInput
                                     style={style.TextInput}
                                     placeholder="Email"
@@ -103,6 +102,9 @@ export default function RegistrationScreen({navigation}) {
 
                             {/* 4. password box */}
                             <View style={style.inputView}>
+                            <View style={style.icon} >
+                                <FontAwesome name="unlock-alt"/>
+                            </View>
                                 <TextInput
                                     style={style.TextInput}
                                     placeholder="Password" secureTextEntry
@@ -113,6 +115,9 @@ export default function RegistrationScreen({navigation}) {
 
                             {/* 5. re-enter password box */}
                             <View style={style.inputView}>
+                            <View style={style.icon} >
+                                <FontAwesome name="unlock-alt"/>
+                            </View>
                                 <TextInput
                                     style={style.TextInput}
                                     placeholder="Re-enter Password" secureTextEntry
@@ -126,13 +131,17 @@ export default function RegistrationScreen({navigation}) {
                         <View style={style.buttonBoxes}>
                             {/* 6. signup box - after finish entering email, password */}
                             <TouchableOpacity style={style.signUpBtn} onPress={onSignUp}>
-                                    <Text style={{fontSize: 18}}>SIGNUP</Text>
+                                    <Text>SIGNUP</Text>
                             </TouchableOpacity>
 
-                            {/* 7. login box - go back to log in */}
-                            <TouchableOpacity style={style.loginBtn} onPress={onLogin}>
-                                <Text style={{fontSize: 18}}>RETURN TO LOGIN</Text>
+                            {/* 7. login  - go back to log in */}
+                            <View style={{ flexDirection: "row", justifyContent: "center"}}>
+                            <Text style={style.text}> Already have an account? </Text>
+                            <TouchableOpacity>
+                                <Text style={style.signUp} onPress={onLogin}>Login</Text>
                             </TouchableOpacity>
+                        </View>
+
                         </View>
                     </View>
                 </View>    

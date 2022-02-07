@@ -83,33 +83,28 @@ export default StyleSheet.create({
     width: "80%",
     borderRadius: 10,
     height: width/10,
-    alignItems: "center",
     alignSelf:"center",
-    justifyContent: "center",
+    flexDirection: "row",
     marginTop: width/30,
-    backgroundColor: "#FFC0CB",
+    backgroundColor: "#FFFFFF",
+  },
+
+  icon:{
+    textAlign: 'center', 
+    alignItems:"center", 
+    justifyContent: "center",
+    fontSize: width/30, 
+    width: width/10,
   },
 
   TextInput: {
-    height: 50,
+    color: '#003f5c',
     flex: 1,
-    padding: 10,
-    marginLeft: 20,
-    fontSize: 18,
+    alignSelf:"center",
+    fontSize: width/30,
   },
 
   signUpBtn: {
-    width: "80%",
-    borderRadius: 10,
-    height: width/10,
-    alignItems: "center",
-    alignSelf:"center",
-    justifyContent: "center",
-    marginTop: width/30,
-    backgroundColor: '#5E72E4',
-  },
-
-  loginBtn: {
     width: "80%",
     borderRadius: 10,
     height: width/10,
