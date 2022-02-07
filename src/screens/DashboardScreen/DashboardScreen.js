@@ -287,7 +287,7 @@ export default function DashboardScreen({navigation}) {
               
                 <View style={style.shadow}>
                   <Card style={style.myQuestionCards}>
-                  <TouchableOpacity style={{backgroundColor: "red"}}onPress={() => displayAnswers()}>
+                  <TouchableOpacity onPress={() => displayAnswers()}>
                     <Text style={style.questionContent}>What is your favorite food?</Text>
                     <Divider style={style.myQuestionDivider}/>
                     <View style={{flexDirection:"row"}}>
