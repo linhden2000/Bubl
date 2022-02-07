@@ -144,5 +144,21 @@ export default StyleSheet.create({
   myQuestionInfo: {
     fontFamily: "PublicSans_300Light",
   },
+
+  //Answering questions
+  answerBox: {
+    marginVertical: 15,
+  },
+  submitBtn:{
+      width: "80%",
+      borderRadius: 10,
+      height: width/10,
+      alignItems: "center",
+      alignSelf:"center",
+      justifyContent: "center",
+      marginTop: width/30,
+      backgroundColor: '#55c242',
+      borderColor: 'transparent',
+  },
   
 })

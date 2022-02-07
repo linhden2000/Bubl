@@ -3,7 +3,7 @@ import style from './style';
 import { StyleSheet,ScrollView, View, TouchableOpacity, FlatList } from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
 import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
-        Select, SelectItem, IndexPath, List, ListItem } from '@ui-kitten/components';
+        Select, SelectItem, IndexPath, Input, List, ListItem } from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import AppLoading from 'expo-app-loading';
 import {auth} from '../../firebase/config';
@@ -21,6 +21,8 @@ export default function DashboardScreen({navigation}) {
     //Variables
     const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
     const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
+    const [answer, setAnswer] = useState("");
+    const [displayAnswerInputBox, setDisplayAnswerInputBox] = useState(false);
     const shouldLoadComponent = (index) => index === selectedIndex;
 
     //Categories Tab
@@ -48,13 +50,18 @@ export default function DashboardScreen({navigation}) {
     }
 
     const createQuestion = () => {
-      //Bug: automatically firing if user clicks on 'My Questions' tab.
       navigation.navigate('CreateQuestions');
     }
     
 
     const answerQuestion = () => {
-      console.log("yeet")
+      if(displayAnswerInputBox == false)
+        setDisplayAnswerInputBox(true);
+      else if(displayAnswerInputBox == true)
+      setDisplayAnswerInputBox(false);
+    }
+    const submitAnswer = () => {
+      console.log("yeet2")
     }
 
     
@@ -71,7 +78,7 @@ export default function DashboardScreen({navigation}) {
           <Text style={style.header} category='h5'>Your Top Matches</Text>
           
           <View style={style.shadow}>
-            <Card style={style.matchCards} onPress={() => answerQuestion()}>
+            <Card style={style.matchCards}>
               <View style={{flexDirection:"row"}}>
                   <Avatar style={style.profilePic} source={require('../../../assets/lordFarquad.png')}/>
                   <View >
@@ -158,9 +165,7 @@ export default function DashboardScreen({navigation}) {
                 <Tab title='Questions'></Tab>
                 <Tab title='My Questions'></Tab>
             </TabBar>
-
-            {
-            }{showAllQuestions ? (
+            {showAllQuestions ? (
               <View>
                 <Divider style={style.divider}/>
                 <Text style={style.categoryHeader} category='s1'>Categories</Text>
@@ -173,20 +178,37 @@ export default function DashboardScreen({navigation}) {
               </View>
             ): null}
           </Card>
-          
-          {
-            }{showAllQuestions ? ( //If multiple choice
+          {showAllQuestions ? ( //If multiple choice
             <View>
+              
               <View style={style.shadow}>
                 <Card style={style.questionCards}>
+                <TouchableOpacity onPress={() => answerQuestion()}>
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
+                  </TouchableOpacity>
+                  { displayAnswerInputBox ? (
+                  <View>
+                    <Input
+                      style={style.answerBox}
+                      multiline={true}
+                      textStyle={{ minHeight: 70}}
+                      placeholder='Type your answer here...'
+                      value={answer}
+                      onChangeText={input => setAnswer(input)}
+                    />
+                    <Button style={style.submitBtn} onPress={() => submitAnswer()}>
+                      <Text>Submit Answer</Text>
+                    </Button>
+                  </View>
+                  ): null}
                 </Card>
               </View>
+              
               <View style={style.shadow}>
                 <Card style={style.questionCards}>
                   <View style={{flexDirection:"row"}}>
@@ -249,9 +271,7 @@ export default function DashboardScreen({navigation}) {
               </View>
             </View>
           ): null}
-
-          {
-            }{showMyQuestions &&
+          {showMyQuestions &&
           <View>
             <View>
               <Button style={style.postQuestionBtn} onPress={() => createQuestion()}>
