@@ -119,7 +119,7 @@ export default function LoginScreen({navigation}) {
                             </View>
                             <TextInput
                                 autoCorrect={false}
-                                autoCapitalize={false}
+                                autoCapitalize="none"
                                 style={style.TextInput}
                                 placeholder="Email"
                                 placeholderTextColor="#003f5c" 
@@ -139,7 +139,7 @@ export default function LoginScreen({navigation}) {
                             </View>
                             <TextInput
                                 autoCorrect={false}
-                                autoCapitalize={false}
+                                autoCapitalize="none"
                                 style={style.TextInput}
                                 placeholder="Password" secureTextEntry
                                 placeholderTextColor="#003f5c"

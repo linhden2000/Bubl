@@ -53,6 +53,10 @@ export default function RegistrationScreen({navigation}) {
             alert("Passwords don't match")
         }
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> fe044cc5ca0f6f58fb5a29bd612279c47bc29c05
     // Navigate to Login Screen
     const onLogin = () => {
         navigation.navigate('Login')
