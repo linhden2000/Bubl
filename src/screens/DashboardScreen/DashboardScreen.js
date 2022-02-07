@@ -52,13 +52,16 @@ export default function DashboardScreen({navigation}) {
     const createQuestion = () => {
       navigation.navigate('CreateQuestions');
     }
+    const displayAnswers  = () => {
+      navigation.navigate('AnswerDisplay')
+    }
     
 
     const answerQuestion = () => {
       if(displayAnswerInputBox == false)
         setDisplayAnswerInputBox(true);
       else if(displayAnswerInputBox == true)
-      setDisplayAnswerInputBox(false);
+        setDisplayAnswerInputBox(false);
     }
     const submitAnswer = () => {
       console.log("yeet2")
@@ -281,24 +284,28 @@ export default function DashboardScreen({navigation}) {
             <View>
               <Text style={style.timeStamp}>Posted on January 28, 2022</Text>
               <Divider style={style.timeStampDivider}/>
-              <View style={style.shadow}>
-                <Card style={style.myQuestionCards}>
-                  <Text style={style.questionContent}>What is your favorite food?</Text>
-                  <Divider style={style.myQuestionDivider}/>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Unread answers: </Text>
-                    <Text style={style.myQuestionInfo}>15</Text>
-                  </View>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Read answers: </Text>
-                    <Text style={style.myQuestionInfo}>2</Text>
-                  </View>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Total answers: </Text>
-                    <Text style={style.myQuestionInfo}>17</Text>
-                  </View>
-                </Card>
-              </View>
+              
+                <View style={style.shadow}>
+                  <Card style={style.myQuestionCards}>
+                  <TouchableOpacity style={{backgroundColor: "red"}}onPress={() => displayAnswers()}>
+                    <Text style={style.questionContent}>What is your favorite food?</Text>
+                    <Divider style={style.myQuestionDivider}/>
+                    <View style={{flexDirection:"row"}}>
+                      <Text style={style.myQuestionInfo}>Unread answers: </Text>
+                      <Text style={style.myQuestionInfo}>15</Text>
+                    </View>
+                    <View style={{flexDirection:"row"}}>
+                      <Text style={style.myQuestionInfo}>Read answers: </Text>
+                      <Text style={style.myQuestionInfo}>2</Text>
+                    </View>
+                    <View style={{flexDirection:"row"}}>
+                      <Text style={style.myQuestionInfo}>Total answers: </Text>
+                      <Text style={style.myQuestionInfo}>17</Text>
+                    </View>
+                    </TouchableOpacity>
+                  </Card>
+                </View>
+              
               <View style={style.shadow}>
                 <Card style={style.myQuestionCards}>
                   <Text style={style.questionContent}>What is your all time favorite horror movie?</Text>
