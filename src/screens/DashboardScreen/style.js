@@ -85,6 +85,14 @@ export default StyleSheet.create({
   },
 
   //Question Cards
+  questionTimeStamp: {
+    color: "#878787",
+    fontFamily: "PublicSans_300Light",
+    marginTop: height*0.005,
+    marginBottom: height*0.01,
+    marginLeft: width*0.3,
+    fontSize: 12,
+  },
   questionCards:{
     //borderRadius: 15,
     marginVertical: 5,

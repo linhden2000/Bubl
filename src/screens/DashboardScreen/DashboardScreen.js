@@ -5,6 +5,7 @@ import {dashboardCategoryProp} from '../../properties'
 import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
         Select, SelectItem, IndexPath, Input, List, ListItem } from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import moment from 'moment'
 import AppLoading from 'expo-app-loading';
 import {auth} from '../../firebase/config';
 
@@ -23,7 +24,15 @@ export default function DashboardScreen({navigation}) {
     const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
     const [answer, setAnswer] = useState("");
     const [displayAnswerInputBox, setDisplayAnswerInputBox] = useState(false);
+    const [date, setDate] = useState(new Date('01/4/2022'));
     const shouldLoadComponent = (index) => index === selectedIndex;
+
+    /* 
+    Messing around with date.
+    var now = moment(date).format('MMMM D, YYYY'); 
+    console.log(now)
+    console.log(date)
+    */
 
     //Categories Tab
     const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(new IndexPath(0));
@@ -70,9 +79,6 @@ export default function DashboardScreen({navigation}) {
     
     if (!fontsLoaded) {
       // return <AppLoading />;
-      return <View>
-        <Text>Dashboard</Text>
-      </View>
     }
     return (
       <View style={style.mainView}>
@@ -190,6 +196,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 4, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
@@ -217,6 +224,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 4, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>KU or K-State?</Text>
@@ -227,6 +235,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 3, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>If you could travel anywhere, where would it be?</Text>
@@ -237,6 +246,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 2, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>What is your favorite pizza flavor?</Text>
@@ -247,6 +257,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>Do you play video games? If so, what is your favorite or currently playing right now?</Text>
@@ -257,6 +268,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>Are you looking for a long-term relationship or are you only looking for a fling?</Text>
@@ -267,6 +279,7 @@ export default function DashboardScreen({navigation}) {
                   <View style={{flexDirection:"row"}}>
                     <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                     <Text style={style.questionUserName}>Anonymous</Text>
+                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
                   </View>
                   <Divider style={style.questionDivider}/>
                   <Text style={style.questionContent}>Marvel or DC? And who is your favorite characters?</Text>
