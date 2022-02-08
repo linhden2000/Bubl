@@ -4,6 +4,8 @@ import { Image, Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions,
 import { Icon, Button} from '@ui-kitten/components';
 import { auth, firestore } from '../../firebase/config';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faHome, faComment, faUser} from '@fortawesome/free-solid-svg-icons'
 const { width, height } = Dimensions.get("screen");
 
 export default function ProfileScreen({navigation}) {
@@ -25,6 +27,18 @@ export default function ProfileScreen({navigation}) {
 
     const onLogout = () => {
         navigation.navigate('Login')
+    }
+
+    const onMessage = () => {
+      navigation.navigate('Message')
+    }
+
+    const onProfile = () => {
+      navigation.navigate('Profile')
+    }
+
+    const onDashBoard = () => {
+      navigation.navigate('Dashboard')
     }
 
     const editIcon = (props) => (
@@ -149,7 +163,20 @@ export default function ProfileScreen({navigation}) {
             <Text  style={{color:"#8898AA"}}>Preferred Age Range</Text>
             <TextInput> From {fromValue} to {toValue} </TextInput>
           </View>
-        </ScrollView>       
+        </ScrollView>   
+        <View style={style.navbar}>
+          <TouchableOpacity style={style.messageBtn} onPress={onMessage}>
+            <FontAwesomeIcon icon={faComment} />
+          </TouchableOpacity> 
+
+          <TouchableOpacity style={style.homeBtn} onPress={onDashBoard}>
+            <FontAwesomeIcon icon={faHome} />
+          </TouchableOpacity> 
+
+          <TouchableOpacity style={style.profileBtn} onPress={onProfile}>
+              <FontAwesomeIcon icon={faUser} />
+          </TouchableOpacity> 
+        </View>          
       </View>
     )
 }
