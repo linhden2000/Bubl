@@ -254,14 +254,11 @@ export default function CreateUserScreen({navigation}){
                 }
                 <View style={style.inputView}>
                     <Input
-                        //TODO: Down the line only have the text disabled if we already have the email, 
-                        //otherwise just have the text input like the others
                         label = 'Email'
-                        //placeholder={auth?.currentUser.email}
-                        value={auth?.currentUser.email}
-                        /*onChangeText={nextValue => setEmail(nextValue)}
-                        onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}*/
-                        disabled = {true}
+                        placeholder='Place your Text'
+                        value={email}
+                        onChangeText={nextValue => setEmail(nextValue)}
+                        onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}
                     />
                 </View>
                 { isValidEmail ? null : 
