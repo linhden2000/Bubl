@@ -11,7 +11,7 @@ export default function MessageScreen({navigation}) {
     }
     return (
         <View style={style.page}> 
-            <View style={style.container}>
+            <TouchableOpacity style={style.container} onPress={onChat}>
                 <Image style={style.avatar} source={require("../../../assets/MickyMouse.png")} />
                 <View style={style.badgeContainer}>
                     <Text style={style.badgeText}>4</Text>
@@ -23,9 +23,9 @@ export default function MessageScreen({navigation}) {
                     </View>
                     <Text numberOfLines={1} style={style.text}> Hello Shrek. I am missing you so much lalalalallalalalalalal</Text>
                 </View>   
-            </View>
+            </TouchableOpacity>
 
-            <View style={style.container}>
+            <TouchableOpacity style={style.container} onPress={onChat}>
                 <Image style={style.avatar} source={require("../../../assets/WillSmith.png")} />
                 <View style={style.badgeContainer}>
                     <Text style={style.badgeText}>2</Text>
@@ -37,11 +37,11 @@ export default function MessageScreen({navigation}) {
                     </View>
                     <Text numberOfLines={1} style={style.text}> I am finishing with my work</Text>
                 </View>   
-            </View>
+            </TouchableOpacity>
 
 
 
-            <View style={style.container}>
+            <TouchableOpacity style={style.container} onPress={onChat}>
                 <Image style={style.avatar} source={require("../../../assets/Leonardo.png")} />
                 <View style={style.badgeContainer}>
                     <Text style={style.badgeText}>4</Text>
@@ -53,10 +53,10 @@ export default function MessageScreen({navigation}) {
                     </View>
                     <Text numberOfLines={1} style={style.text}> Shrek, I can't believe</Text>
                 </View>   
-            </View>
+            </TouchableOpacity>
 
 
-            <View style={style.container}>
+            <TouchableOpacity style={style.container} onPress={onChat}>
                 <Image style={style.avatar} source={require("../../../assets/TomCruise.png")} />
                 <View style={style.badgeContainer}>
                     <Text style={style.badgeText}>10</Text>
@@ -68,10 +68,10 @@ export default function MessageScreen({navigation}) {
                     </View>
                     <Text numberOfLines={1} style={style.text}> Answer my texts pls</Text>
                 </View>   
-            </View>
+            </TouchableOpacity>
 
 
-            <View style={style.container}>
+            <TouchableOpacity style={style.container} onPress={onChat}>
                 <Image style={style.avatar} source={require("../../../assets/Fiona.png")} />
                 {/* <View style={style.badgeContainer}>
                     <Text style={style.badgeText}></Text>
@@ -83,14 +83,7 @@ export default function MessageScreen({navigation}) {
                     </View>
                     <Text numberOfLines={1} style={style.text}> Good night</Text>
                 </View>   
-            </View>
-
-            {/* <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
-              <Text>LOGOUT</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity style={style.logoutBtn} onPress={onChat}>
-              <Text>CHAT</Text>
-            </TouchableOpacity>  */}
+            </TouchableOpacity>
         </View>
         
     )
