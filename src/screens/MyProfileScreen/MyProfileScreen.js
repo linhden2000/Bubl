@@ -28,6 +28,9 @@ export default function ProfileScreen({navigation}) {
     const onLogout = () => {
         navigation.navigate('Login')
     }
+    const onProfile = () => {
+      navigation.navigate('Profile')
+  }
 
     const onMessage = () => {
       navigation.navigate('Message')
@@ -87,12 +90,12 @@ export default function ProfileScreen({navigation}) {
       <View style={style.container}>
         <View style={style.profile} >
           <Image style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
-          <View style={{flexDirection: "row", justifyContent: "space-between", width: width* 7/8, marginTop: height/30}}>
+          <View style={{flexDirection: "row", justifyContent: "space-between", width: width* 7/8, marginTop: height/25}}>
             <TouchableOpacity onPress={onLogout}>
               <Text>LOGOUT</Text>
             </TouchableOpacity>
             <Text style={{alignSelf: "center", fontWeight: "bold", fontSize: width/17}}>Edit Profile</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onProfile}>
               <Text>SAVE</Text>
             </TouchableOpacity>
           </View>
