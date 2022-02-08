@@ -16,7 +16,8 @@ export default StyleSheet.create({
         fontWeight: 'bold'
     },
     headerCard:{
-        height: 60,
+        paddingTop: 35,
+        height: 85,
     },
     select: {
         margin: 2,

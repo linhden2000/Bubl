@@ -49,7 +49,7 @@ export default function CreateQuestionsScreen({navigation}) {
     return (
       <View style={{flex: 1}}>
         <Card style={style.headerCard}>
-          <Text style={style.pageTitle} category='S1'>Question Creation</Text>
+          <Text style={style.pageTitle} category='S1'>Create a Question</Text>
           <Button style={style.backBtn} onPress={navigateToDashboard} 
                 accessoryLeft={BackIcon} appearance='ghost'/>
         </Card>
