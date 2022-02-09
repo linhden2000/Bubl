@@ -36,10 +36,6 @@ export default function ProfileScreen({navigation}) {
       navigation.navigate('Message')
     }
 
-    const onProfile = () => {
-      navigation.navigate('Profile')
-    }
-
     const onDashBoard = () => {
       navigation.navigate('Dashboard')
     }

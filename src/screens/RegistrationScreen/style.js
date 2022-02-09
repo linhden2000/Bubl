@@ -1,31 +1,28 @@
 // style for Registration goes here
 import { StyleSheet, Dimensions } from 'react-native';
-// import { gridColumn } from 'styled-system';
-// import { flex } from 'styled-system';
 
 const { width, height } = Dimensions.get("screen");
 
 export default StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: "#9678b6",
       alignItems: "center",
       justifyContent: "center",
   },
 
-  imageLogo: {
-    marginTop: 50,
-    alignSelf: "center",
-    width: width/2,
-    height: height/5,
+  logo: {
+    flex: 1,
+    width: width * 0.9,
+    height: height * 0.2,
   },
+
 
   textLogo: {
     marginTop: -width/5,
     alignSelf: "center",
     color:"#8898AA",
     fontFamily: "OleoScript_400Regular",
-    fontSize: width/15,
+    fontSize: width/10,
   },
 
   textDescription: {
@@ -33,15 +30,30 @@ export default StyleSheet.create({
     color:"#8898AA",
     fontFamily: "OleoScript_400Regular",
     fontSize: width/20,
-    marginTop: 30,
+    marginTop: 15,
+    marginBottom: 20,
+  },
+
+  interactiveBoxes: {
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#F4F5F7",
+    justifyContent:"space-evenly",
+    width: width * 0.9, 
+    height: height * 0.55,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 
   entryBoxes: {
-    marginTop: 20,
+    height: height * 0.25,
+    justifyContent:"space-evenly",
+
   },
 
   buttonBoxes: {
-    marginBottom: 50,
+    height: height * 0.2,
+    justifyContent:"space-evenly",
   },
 
   imageBG: {
@@ -64,57 +76,42 @@ export default StyleSheet.create({
   },
     
   logo:{
-    // flex: 1,
-    // width: width * 0.9,
-    // height: height * 0.2,
-    // justifyContent: "space-around",
     alignItems: "center",
   },
 
   inputView:{
-    // flex: 1,
-    marginTop: 20,
+    width: "80%",
+    borderRadius: 10,
+    height: width/10,
     alignSelf:"center",
+    flexDirection: "row",
+    marginTop: width/30,
+    backgroundColor: "#FFFFFF",
+  },
+
+  icon:{
+    textAlign: 'center', 
+    alignItems:"center", 
     justifyContent: "center",
-    backgroundColor: "#FFC0CB",
-    borderRadius: 30,
-    width: "70%",
-    height: 45,
-    marginBottom: 15,
-    alignItems: "center",
+    fontSize: width/30, 
+    width: width/10,
   },
 
   TextInput: {
-    height: 50,
+    color: '#003f5c',
     flex: 1,
-    padding: 10,
-    marginLeft: 20,
-  },
-
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
+    alignSelf:"center",
+    fontSize: width/30,
   },
 
   signUpBtn: {
-    alignSelf:"center",
     width: "80%",
-    borderRadius: 25,
-    height: 50,
+    borderRadius: 10,
+    height: width/10,
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#A3AFF5",
-  },
-
-  loginBtn: {
     alignSelf:"center",
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#5E72E4",
+    marginTop: width/30,
+    backgroundColor: '#5E72E4',
   },
 })
