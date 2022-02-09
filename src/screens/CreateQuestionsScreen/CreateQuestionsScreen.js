@@ -3,7 +3,7 @@ import style from './style';
 import {questionTypesProp, categoryProp} from '../../properties'
 import { StyleSheet,SafeAreaView, View,ScrollView} from 'react-native';
 import { Button, Input, Text, Card, Icon, Select, SelectItem, IndexPath} from '@ui-kitten/components';
-import {auth} from '../../firebase/config';
+import {auth, firestore} from '../../firebase/config';
 
 //Icons
 const BackIcon = (props) => (
@@ -45,6 +45,22 @@ export default function CreateQuestionsScreen({navigation}) {
       setShouldShow(true)
     else
       setShouldShow(false)
+  }
+  const currentUser = auth?.currentUser.uid
+  const questionCollection = firestore
+                              .collection('users')
+                              .doc(currentUser)
+                              .collection('questions')
+  const handlePostQuesion = () => {
+    const questionData = {
+      question: question,
+      questionType: questionTypesProp[selectedQuestionTypeIndex.row],
+      category: categoryProp[selectedCategoryIndex.row]
+    }
+    questionCollection
+      .add(questionData)
+      .then(() => console.log('question added'))
+      .catch(err => console.log(err))
   }
     return (
       <View style={{flex: 1}}>
@@ -94,11 +110,8 @@ export default function CreateQuestionsScreen({navigation}) {
 
               </View>
             ): null}
-            <Button style={style.submitBtn}>Post Question</Button>
-            
+            <Button style={style.submitBtn} onPress={handlePostQuesion}>Post Question</Button>
           </Card>
-
-          
         </Card>
         </ScrollView>
       </View>
