@@ -12,6 +12,13 @@ export default StyleSheet.create({
         justifyContent: "space-between",
     },
 
+    navbar:{
+      flexDirection: 'row',
+      backgroundColor: "#F4BCD9",
+      height: 50,
+      marginTop: 50,
+    },
+
     profile:{
       flex: 0.5,
       width: width,

@@ -97,7 +97,7 @@ export default function ProfileScreen({navigation}) {
           </View>
 
           <View>
-            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
+            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={profilePic ? {uri: profilePic} : undefined} />
             <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
           </View>
         </View>
