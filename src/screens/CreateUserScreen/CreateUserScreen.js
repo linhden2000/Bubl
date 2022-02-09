@@ -255,10 +255,10 @@ export default function CreateUserScreen({navigation}){
                 <View style={style.inputView}>
                     <Input
                         label = 'Email'
-                        placeholder='Place your Text'
-                        value={email}
-                        onChangeText={nextValue => setEmail(nextValue)}
-                        onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}
+                        value={auth?.currentUser.email}
+                        /*onChangeText={nextValue => setEmail(nextValue)}
+                        onEndEditing={text=>handleEmailChange(text.nativeEvent.text)}*/
+                        disabled = {true}
                     />
                 </View>
                 { isValidEmail ? null : 
