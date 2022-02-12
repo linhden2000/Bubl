@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import style from './style';
 import {questionTypesProp, categoryProp} from '../../properties'
-import { StyleSheet,SafeAreaView, View,ScrollView} from 'react-native';
+import { StyleSheet,SafeAreaView, View,ScrollView, Alert} from 'react-native';
 import { Button, Input, Text, Card, Icon, Select, SelectItem, IndexPath} from '@ui-kitten/components';
 import {auth, firestore} from '../../firebase/config';
 
@@ -62,6 +62,15 @@ export default function CreateQuestionsScreen({navigation}) {
       .then(() => console.log('question added'))
       .catch(err => console.log(err))
   }
+
+  //function to alert user that they submitted their question successfully
+  const submitAlert = () => 
+    Alert.alert(
+      "Your question was submitted successfully!"
+    );
+
+  //function to clear question field
+
     return (
       <View style={{flex: 1}}>
         <Card style={style.headerCard}>
@@ -110,7 +119,7 @@ export default function CreateQuestionsScreen({navigation}) {
 
               </View>
             ): null}
-            <Button style={style.submitBtn} onPress={handlePostQuesion}>Post Question</Button>
+            <Button style={style.submitBtn} onPress={handlePostQuesion} onPress={submitAlert}>Post Question</Button>
           </Card>
         </Card>
         </ScrollView>
