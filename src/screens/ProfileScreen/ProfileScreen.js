@@ -79,6 +79,7 @@ export default function ProfileScreen({navigation}) {
                       
                     </View>
                 </View>    
-          </View>
+            </View>
+      
     )
 }
