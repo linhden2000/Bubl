@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
 import { Icon, Button} from '@ui-kitten/components';
+import moment from 'moment';
 import { Image, StyleSheet, Text,TextInput, SafeAreaView, View, TouchableOpacity, ScrollView } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHome, faComment, faUser} from '@fortawesome/free-solid-svg-icons'
