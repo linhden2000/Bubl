@@ -18,8 +18,7 @@ export default function CreateQuestionsScreen({navigation}) {
 
   //Variables
   const [question, setQuestion] = useState('');
-
-  
+  const [listOfAns, setListOfAns] = useState([''])
   //Question type drop down
   const [selectedQuestionTypeIndex, setSelectedQuestionTypeIndex] = useState(new IndexPath(0));
   const displayQuestionType = questionTypesProp[selectedQuestionTypeIndex.row];
@@ -52,16 +51,37 @@ export default function CreateQuestionsScreen({navigation}) {
                               .doc(currentUser)
                               .collection('questions')
   const handlePostQuesion = () => {
-    const questionData = {
+    let questionData = {
       question: question,
-      questionType: questionTypesProp[selectedQuestionTypeIndex.row],
       category: categoryProp[selectedCategoryIndex.row]
+    } 
+    if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
+      questionData = {
+        ...questionData,
+        questionType: "Short Answer"
+      } 
     }
+    else if(questionTypesProp[selectedQuestionTypeIndex.row] == "Multiple Choice") {
+      questionData = {
+        ...questionData,
+        questionType: "Multiple Choice",
+        answerList: listOfAns
+      }
+    }
+    
     questionCollection
       .add(questionData)
       .then(() => console.log('question added'))
       .catch(err => console.log(err))
   }
+
+  const handleAddAnswer = () => {
+    let updatedListOfAns = [...listOfAns]
+    updatedListOfAns.push(answer)
+    setListOfAns(updatedListOfAns)
+    setAnswer('')
+  }
+    
     return (
       <View style={{flex: 1}}>
         <Card style={style.headerCard}>
@@ -102,12 +122,14 @@ export default function CreateQuestionsScreen({navigation}) {
             }{shouldShow ? ( //If multiple choice
               <View>
                 <Text style={style.answerTitle} category='h5'>Answers</Text>
-
-                <Text style={style.answerLabel}>Answer 1</Text>
-                <Input placeholder='Type an answer'></Input>
-
-                <Button style={style.plusIcon} accessoryLeft={PlusIcon} appearance='ghost'/>
-
+                {listOfAns.map((item, index) => 
+                  <View key={index}>
+                    <Text style={style.answerLabel}>Answer {index + 1}</Text>
+                    <Input placeholder='Type an answer' onChangeText={input => {setAnswer(input); console.log(answer)}}></Input>
+                  </View>
+                )
+                }
+                <Button style={style.plusIcon} onPress={handleAddAnswer} accessoryLeft={PlusIcon} appearance='ghost'/>
               </View>
             ): null}
             <Button style={style.submitBtn} onPress={handlePostQuesion}>Post Question</Button>
