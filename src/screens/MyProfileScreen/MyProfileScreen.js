@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
+import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
 import { Image, Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, ImageBackground } from 'react-native'
-import { Icon, Button} from '@ui-kitten/components';
+import { Icon, Button, Select, IndexPath, SelectItem} from '@ui-kitten/components';
 import { auth, firestore } from '../../firebase/config';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -24,6 +25,40 @@ export default function ProfileScreen({navigation}) {
     const [profilePic, setProfilePic] = useState('')
     const [city, setCity] = useState('')
     const [USState, setUSState] = useState('')
+
+    const [editMode, setEditMode] = useState(''); //Editing or viewing
+
+
+    // Current User
+    const currentUser = auth?.currentUser
+    // "users" collection
+    const usersRef = firestore.instance.collection('users')
+
+    //The following are inputted by dropdown
+    //** States drop down **/
+    const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
+    const displayStateValue = USStatesProp[selectedStateIndex.row];
+    const renderStateOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+    //** Gender drop down **/
+    const [selectedGenderIndex, setSelectedGenderIndex] = useState(new IndexPath(0));
+    const displayGenderValue = genderProp[selectedGenderIndex.row];
+    const renderGenderOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
+    //** Gender Preference drop down (Multi Select)**/
+    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = useState([
+        new IndexPath(0),
+        new IndexPath(1),
+    ]);
+
+    const groupDisplayValues = selectedSexualPrefIndex.map(index => {
+      return sexualPrefProp[index.row];
+    });
+    const renderSexualPrefOption = (label, key) => (
+        <SelectItem key={key} title={label}/>
+    );
 
     const onLogout = () => {
         navigation.navigate('Login')
@@ -76,9 +111,59 @@ export default function ProfileScreen({navigation}) {
                     setUSState(userData.state)
                   });
     }
+    const onSave = () => { 
+      const uid = auth?.currentUser.uid
+      const selectedGender = selectedGenderIndex.toString()
+      // Convert Index Path to String
+      const gender = selectedGenderIndex.toString() == "1"? "man" : "woman"
+      let sexualPref = "both"
+      if(selectedSexualPrefIndex == "1,2") {
+          sexualPref = "both"
+      }
+      else if(selectedSexualPrefIndex == "1") {
+          sexualPref = "male"
+      }
+      else {
+          sexualPref = "female"
+      }
+      
+      const userData = {
+          id: uid,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          kuid: kuId,
+          address: address,
+          city: city,
+          zipCode: zipCode,
+          fromAge: fromValue,
+          toAge: toValue,
+          birthday: birthday,
+          gender: gender,
+          profilePic: profilePic,
+          sexualPref: sexualPref,
+          state: USStatesProp[parseInt(selectedStateIndex.toString()) - 1]
+      }
+
+      setEditMode(false);
+
+      // Set users data, navigate to Dashboard if succeed
+      usersRef
+      .document(uid)
+      .setData(userData)
+      .then(() => {
+          {onProfile};
+      })
+      .catch(error => {
+          alert(error)
+      })
+  }
     //** Fecth User Data when the screen is loaded **/
     useEffect(() => {
+      let isMounted = true;
       fetchUserData()
+      setEditMode(false);
+      return () => { isMounted = false }; // cleanup toggles value, if unmounted 
     }, [])
 
     //** Render the information **/
@@ -91,9 +176,17 @@ export default function ProfileScreen({navigation}) {
               <Text>LOGOUT</Text>
             </TouchableOpacity>
             <Text style={{alignSelf: "center", fontWeight: "bold", fontSize: width/17}}>Edit Profile</Text>
-            <TouchableOpacity onPress={onProfile}>
-              <Text>SAVE</Text>
-            </TouchableOpacity>
+            {editMode ?
+            (<View>
+              <TouchableOpacity onPress={onSave}>
+            <Text>SAVE</Text>
+          </TouchableOpacity>
+          </View>) : 
+            (<View>
+              <TouchableOpacity onPress={() => setEditMode(true)}>
+            <Text>EDIT</Text>
+          </TouchableOpacity>
+          </View>)}
           </View>
 
           <View>
@@ -148,15 +241,30 @@ export default function ProfileScreen({navigation}) {
             <TextInput> {zipCode} </TextInput>
           </View>
 
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Gender</Text>
-            <TextInput> {gender} </TextInput>
-          </View>
+          <View style={style.inputView}>
+                    <Select
+                        label="Gender"
+                        style={style.select}
+                        placeholder='Default'
+                        value={displayGenderValue}
+                        onSelect={index => setSelectedGenderIndex(index)}>
+                        {genderProp.map(renderGenderOption)}
+                    </Select>
+                </View>
+                <View style={style.inputView}>
+                    <Select
+                        label="Sexual Preference"
+                        style={style.select}
+                        placeholder='You may select multiple options'
 
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Sexual Preference</Text>
-            <TextInput> both </TextInput>
-          </View>
+                        multiSelect={true}
+                        value={groupDisplayValues.join(', ')}
+                        selectedIndex={selectedSexualPrefIndex}
+
+                        onSelect={index => setSelectedSexualPrefIndex(index)}>
+                        {sexualPrefProp.map(renderSexualPrefOption)}
+                    </Select>
+                </View>
 
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}>Preferred Age Range</Text>
