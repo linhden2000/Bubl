@@ -1,9 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import style from './style';
 import {questionTypesProp, categoryProp} from '../../properties'
-import { StyleSheet,SafeAreaView, View,ScrollView} from 'react-native';
+import { StyleSheet,SafeAreaView, View,ScrollView, Alert} from 'react-native';
 import { Button, Input, Text, Card, Icon, Select, SelectItem, IndexPath} from '@ui-kitten/components';
-import {auth} from '../../firebase/config';
+import {auth, firestore} from '../../firebase/config';
 
 //Icons
 const BackIcon = (props) => (
@@ -18,8 +18,7 @@ export default function CreateQuestionsScreen({navigation}) {
 
   //Variables
   const [question, setQuestion] = useState('');
-
-  
+  const [listOfAns, setListOfAns] = useState([])
   //Question type drop down
   const [selectedQuestionTypeIndex, setSelectedQuestionTypeIndex] = useState(new IndexPath(0));
   const displayQuestionType = questionTypesProp[selectedQuestionTypeIndex.row];
@@ -46,6 +45,59 @@ export default function CreateQuestionsScreen({navigation}) {
     else
       setShouldShow(false)
   }
+  const currentUser = auth?.currentUser.uid
+  const questionCollection = firestore
+                              .collection('users')
+                              .doc(currentUser)
+                              .collection('questions')
+  const handlePostQuesion = () => {
+    let questionData = {
+      question: question,
+      category: categoryProp[selectedCategoryIndex.row],
+      postedTime: new Date()
+    } 
+    if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
+      questionData = {
+        ...questionData,
+        questionType: "Short Answer"
+      } 
+    }
+    else if(questionTypesProp[selectedQuestionTypeIndex.row] == "Multiple Choice") {
+      let filteredListOfAns = listOfAns.filter(ans => ans != '')
+      questionData = {
+        ...questionData,
+        questionType: "Multiple Choice",
+        answerList: filteredListOfAns
+      }
+    }
+    
+    questionCollection
+      .add(questionData)
+      .then(() => submitAlert())
+      .catch(err => console.log(err))
+  }
+
+  //function to alert user that they submitted their question successfully
+  const submitAlert = () => 
+    Alert.alert(
+      "Your question was submitted successfully!"
+    );
+
+  // Add new answer choice modal to the UI
+  const handleAddAnswer = () => {
+      let updatedListOfAns = [...listOfAns]
+      updatedListOfAns.push('')
+      setListOfAns(updatedListOfAns)
+  }
+  // Update list of questions before submitting
+  const handleChangeAnswer = (input, index) => {
+    console.log(index);
+    setAnswer(input)
+    let newListOfAns = [...listOfAns]
+    newListOfAns[index] = input
+    setListOfAns(newListOfAns)
+  }
+
     return (
       <View style={{flex: 1}}>
         <Card style={style.headerCard}>
@@ -86,19 +138,18 @@ export default function CreateQuestionsScreen({navigation}) {
             }{shouldShow ? ( //If multiple choice
               <View>
                 <Text style={style.answerTitle} category='h5'>Answers</Text>
-
-                <Text style={style.answerLabel}>Answer 1</Text>
-                <Input placeholder='Type an answer'></Input>
-
-                <Button style={style.plusIcon} accessoryLeft={PlusIcon} appearance='ghost'/>
-
+                {listOfAns.map((item, index) => 
+                  <View key={index}>
+                    <Text style={style.answerLabel}>Answer {index + 1}</Text>
+                    <Input placeholder='Type an answer' onChangeText={input => {handleChangeAnswer(input, index)}}></Input>
+                  </View>
+                )
+                }
+                <Button style={style.plusIcon} onPress={handleAddAnswer} accessoryLeft={PlusIcon} appearance='ghost'/>
               </View>
             ): null}
-            <Button style={style.submitBtn}>Post Question</Button>
-            
+            <Button style={style.submitBtn} onPress={handlePostQuesion}>Post Question</Button>
           </Card>
-
-          
         </Card>
         </ScrollView>
       </View>
