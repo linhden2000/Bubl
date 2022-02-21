@@ -1,13 +1,10 @@
 import React, {useState} from 'react'
 import style from './style';
-import { StyleSheet,ScrollView, View, TouchableOpacity, FlatList } from 'react-native';
+import { ScrollView, View, TouchableOpacity } from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
-import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
-        Select, SelectItem, IndexPath, Input, List, ListItem } from '@ui-kitten/components';
+import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon,
+        Select, SelectItem, IndexPath, Input } from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
-import moment from 'moment'
-import AppLoading from 'expo-app-loading';
-import {auth} from '../../firebase/config';
 
 
 export default function DashboardScreen({navigation}) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 // Galio components
 import { Block, Text, Button as GaButton, theme } from "galio-framework";
 // Argon themed components
@@ -392,7 +392,7 @@ class Elements extends React.Component {
   render() {
     return (
       <Block flex center>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30, width }}>
+        <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30, width }}>
           {this.renderButtons()}
           {this.renderText()}
           {this.renderInputs()}
@@ -400,7 +400,7 @@ class Elements extends React.Component {
           {this.renderSwitches()}
           {this.renderNavigation()}
           {this.renderTableCell()}
-        </ScrollView>
+        </FlatList>
       </Block>
     );
   }

@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  ScrollView,
+  FlatList,
   StyleSheet,
   Image
 } from "react-native";
@@ -26,7 +26,7 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
         <Image styles={styles.logo} source={Images.Logo} />
       </Block>
       <Block flex style={{ paddingLeft: 8, paddingRight: 14 }}>
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <FlatList style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           {screens.map((item, index) => {
               return (
                 <DrawerCustomItem
@@ -42,7 +42,7 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
               <Text color="#8898AA" style={{ marginTop: 16, marginLeft: 8 }}>DOCUMENTATION</Text>
             </Block>
             <DrawerCustomItem title="Getting Started" navigation={navigation} />
-        </ScrollView>
+        </FlatList>
       </Block>
     </Block>
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './style';
-import { Image, StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, ScrollView } from 'react-native'
+import { Image, StyleSheet, Text,SafeAreaView, View, Button, TouchableOpacity, FlatList } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHome, faComment, faUser} from '@fortawesome/free-solid-svg-icons'
 
