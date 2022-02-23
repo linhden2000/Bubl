@@ -15,7 +15,7 @@ export default StyleSheet.create({
   header: {
     padding: 10,
     //color: "#5c5c5c",
-    fontFamily: "PublicSans_600SemiBold",
+    // fontFamily: "PublicSans_600SemiBold",
   },
   matchContainer: {
     borderRadius: 20,
@@ -40,7 +40,7 @@ export default StyleSheet.create({
   
   },
   categoryHeader:{
-    fontFamily: "PublicSans_600SemiBold",
+    // fontFamily: "PublicSans_600SemiBold",
     marginVertical: 2,
   },
   divider:{
@@ -87,7 +87,7 @@ export default StyleSheet.create({
   //Question Cards
   questionTimeStamp: {
     color: "#878787",
-    fontFamily: "PublicSans_300Light",
+    // fontFamily: "PublicSans_300Light",
     marginTop: height*0.005,
     marginBottom: height*0.01,
     marginLeft: width*0.3,
@@ -98,7 +98,7 @@ export default StyleSheet.create({
     marginVertical: 5,
   },
   questionContent:{
-    fontFamily: "PublicSans_500Medium",
+    // fontFamily: "PublicSans_500Medium",
     fontSize: height * 0.025,
     marginTop: height * 0.009,
   },
@@ -108,7 +108,7 @@ export default StyleSheet.create({
   },
   questionUserName:{
     color: "#878787",
-    fontFamily: "PublicSans_300Light",
+    // fontFamily: "PublicSans_300Light",
     marginTop: height*0.005,
     marginBottom: height*0.01,
     marginLeft: width*0.02,
@@ -133,7 +133,7 @@ export default StyleSheet.create({
   timeStamp:{
     alignSelf:"center",
     marginTop: 20,
-    fontFamily: "PublicSans_300Light",
+    // fontFamily: "PublicSans_300Light",
   },
   timeStampDivider: {
     width: width*0.9,
@@ -150,7 +150,7 @@ export default StyleSheet.create({
     marginVertical: 8,
   },
   myQuestionInfo: {
-    fontFamily: "PublicSans_300Light",
+    // fontFamily: "PublicSans_300Light",
   },
 
   //Answering questions
