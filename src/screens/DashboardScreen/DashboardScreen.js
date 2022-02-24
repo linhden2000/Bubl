@@ -46,14 +46,9 @@ export default function DashboardScreen({navigation}) {
        // setMyQuestions(oldArray => [...oldArray, question]);
         myQuestions.push(question);
       })
-      console.log("TEST BEGIN")
-      console.log(myQuestions)
-      console.log("TEST END")
     }
     //Dynamically render the list of MyQuesitons
     const renderMyQuestion = (obj) => {
-      console.log("yeet")
-      console.log(myQuestions)
       
       return(
           <View style={style.shadow}>
