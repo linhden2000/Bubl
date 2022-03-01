@@ -10,3 +10,4 @@ export {default as AccountSettingsScreen} from './AccountSettingsScreen/AccountS
 export {default as CreateUserScreen} from './CreateUserScreen/CreateUserScreen';
 export {default as CreateQuestionsScreen} from './CreateQuestionsScreen/CreateQuestionsScreen';
 export {default as AnswerDisplayScreen} from './AnswerDisplayScreen/AnswerDisplayScreen';
+export {default as PublicProfileScreen} from './PublicProfileScreen/PublicProfileScreen';

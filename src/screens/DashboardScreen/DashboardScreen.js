@@ -73,7 +73,9 @@ export default function DashboardScreen({navigation}) {
         setDisplayAnswerInputBox(false);
     }
     const submitAnswer = () => {
-      console.log("yeet2")
+    }
+    const navigatePublicProfile = () => {
+      navigation.navigate('PublicProfile');
     }
 
     
@@ -84,6 +86,9 @@ export default function DashboardScreen({navigation}) {
       <View style={style.mainView}>
         <ScrollView showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[6]}>
+          <Button style={style.submitBtn} onPress={() => navigatePublicProfile()}>
+            <Text>Public Profile</Text>
+          </Button>
           <Text style={style.header} category='h5'>Your Top Matches</Text>
           
           <View style={style.shadow}>
