@@ -85,7 +85,7 @@ export default function DashboardScreen({navigation}) {
     return (
       <View style={style.mainView}>
         <ScrollView showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[6]}>
+        stickyHeaderIndices={[7]}>
           <Button style={style.submitBtn} onPress={() => navigatePublicProfile()}>
             <Text>Public Profile</Text>
           </Button>
