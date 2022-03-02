@@ -1,6 +1,8 @@
 import React from 'react'
 import style from './style';
 import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, Image } from 'react-native'
+import { auth, firestore } from '../../firebase/config';
+
 
 export default function MessageScreen({navigation}) {
     const onLogout = () => {

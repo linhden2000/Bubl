@@ -83,7 +83,9 @@ export default function ProfileScreen({navigation}) {
                   });
     }
     useEffect(() => {
+      let isMounted = true;
       fetchUserData()
+      return () => { isMounted = false }; // cleanup toggles value, if unmounted 
     }, [])
 
     return (

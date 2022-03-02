@@ -60,8 +60,8 @@ export default StyleSheet.create({
       textAlign: "left",
       justifyContent: "center",
       // backgroundColor: "#FFFFFF",
-      borderBottomColor: 'black',
-      borderBottomWidth: 1,
+      //borderBottomColor: 'black',
+      //borderBottomWidth: 1,
   },
 
   text:{
@@ -85,4 +85,14 @@ export default StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center'
   },
+
+  slider: {
+    paddingTop: 10,
+    paddingBottom: 1,
+    width: width*7/8,
+    textAlign: "left",
+    justifyContent: "center",
+    color:'#8898AA',
+    
+  }
 })
