@@ -21,13 +21,10 @@ export default StyleSheet.create({
   // White box container
   box:{
     flex: 1,
-    // alignContent:"center",
-    // justifyContent: "space-between", 
-    // position: "absolute",
     backgroundColor:"#FFFFFF",
     width: width * 0.9,
     height: height * 0.8,
-    marginTop: width * 0.2,
+    marginTop: width * 0.25,
     borderRadius: 20,
   },
   avatar:{
@@ -54,7 +51,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     width: width * 0.8,
     height: width/10,
-    marginTop: width/25,
+    marginTop: width/22,
     alignSelf:"center",
     flexDirection: "row",
   },
@@ -76,11 +73,10 @@ export default StyleSheet.create({
     justifyContent: "center", 
     fontSize: width/30, 
     color:"#8898AA"
-    
   },
 
   logoutBtn: {
-    width: "80%",
+    width: width/2,
     borderRadius: 10,
     height: width/10,
     alignItems: "center",
