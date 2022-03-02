@@ -16,8 +16,12 @@ import {
   } from '@expo-google-fonts/oleo-script';
 
 import { auth } from '../../firebase/config';
+import * as firebase from 'firebase'
+require('firebase/auth')
 import * as Animatable from 'react-native-animatable';
 
+import * as Google from 'expo-google-app-auth';
+// import { getAuth, onAuthStateChanged, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -25,7 +29,10 @@ export default function LoginScreen({navigation}) {
     const [isValidEmail, setValidEmail] = useState(true)
     const [isValidPassword, setValidPassword] = useState(true)
     const [authError, setAuthError] = useState(false) //Displays message if auth fails
-    
+    const [message, setMessage] = useState();
+    const [messageType, setMessageType] = useState();
+    const [googleSubmitting, setGoogleSubmitting] = useState(false);
+
     // Navigate to Registration Screen
     const onRegistration = () => {
         navigation.navigate('Registration')
@@ -74,6 +81,122 @@ export default function LoginScreen({navigation}) {
         }
     }
 
+    const handleMessage = (message, type = 'FAILED') => {
+        setMessage(message);
+        setMessageType(type);
+    }
+
+    const handleGoogleSignin = () => {
+        setGoogleSubmitting(true);
+        const config = {
+            iosClientId: `1007212790236-7dqbeccnnf23iuvi8j0dl9l4kllakqii.apps.googleusercontent.com`,
+            androidClientId: `1007212790236-0jdu668uh50e0enngei96ap8vg5rclge.apps.googleusercontent.com`,
+            scopes: ['profile', 'email']
+        };
+
+        Google
+            .logInAsync(config)
+            .then((result) => {
+                const {type, user} = result;
+
+                if(type == 'success'){
+                    const {email, name, photoUrl} = user;
+                    handleMessage('Google Signin sucessful', 'SUCCESS');
+                    setTimeout(() => navigation.navigate('Registration', {email, user, photoUrl}), 1000);
+                } else {
+                    handleMessage('Google Signin was cancelled');
+                }
+                setGoogleSubmitting(false);
+
+            })
+            .catch((error) => {
+                console.log(error);
+                handleMessage('An error occurred. Check your network and try again');
+                setGoogleSubmitting(false);
+            })
+    };
+    // isUserEqual = (googleUser, firebaseUser) => {
+    //     if (firebaseUser) {
+    //       var providerData = firebaseUser.providerData;
+    //       for (var i = 0; i < providerData.length; i++) {
+    //         if (
+    //           providerData[i].providerId ===
+    //             firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+    //           providerData[i].uid === googleUser.getBasicProfile().getId()
+    //         ) {
+    //           // We don't need to reauth the Firebase connection.
+    //           return true;
+    //         }
+    //       }
+    //     }
+    //     return false;
+    //   };
+    // isUserEqual = (googleUser, firebaseUser) => {
+    //     if (firebaseUser) {
+    //       const providerData = firebaseUser.providerData;
+    //       for (let i = 0; i < providerData.length; i++) {
+    //         if (providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
+    //             providerData[i].uid === googleUser.getBasicProfile().getId()) {
+    //           // We don't need to reauth the Firebase connection.
+    //           return true;
+    //         }
+    //       }
+    //     }
+    //     return false;
+    //   }
+      
+    // onSignIn = (googleUser) => {
+    //     console.log('Google Auth Response', googleUser);
+    //     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+    //     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    //       unsubscribe();
+    //       // Check if we are already signed-in Firebase with the correct user.
+    //       if (!isUserEqual(googleUser, firebaseUser)) {
+    //         // Build Firebase credential with the Google ID token.
+    //         const credential = GoogleAuthProvider.credential(
+    //             googleUser.id_token,
+    //             googleUser.accessToken
+    //         );
+      
+    //         // Sign in with credential from the Google user.
+    //         signInWithCredential(auth, credential).catch((error) => {
+    //           // Handle Errors here.
+    //           const errorCode = error.code;
+    //           const errorMessage = error.message;
+    //           // The email of the user's account used.
+    //           const email = error.email;
+    //           // The credential that was used.
+    //           const credential = GoogleAuthProvider.credentialFromError(error);
+    //           // ...
+    //         });
+    //       } else {
+    //         console.log('User already signed-in Firebase.');
+    //       }
+    //     }
+    //     );
+    //   }
+
+    //   signInWithGoogleAsync = async () => {
+    //     try {
+    //       const result = await Expo.Google.logInAsync({
+    //         iosClientId: `1007212790236-7dqbeccnnf23iuvi8j0dl9l4kllakqii.apps.googleusercontent.com`,
+    //         androidClientId: `1007212790236-0jdu668uh50e0enngei96ap8vg5rclge.apps.googleusercontent.com`,
+    //         behavior: 'web',
+    //         scopes: ['profile', 'email']
+    //       });
+    
+    //       if (typeof(result.type) !== "undefined" && typeof(result) !== "undefined" && result.type === 'success') {
+    //         this.onSignIn(result);
+    //         return result.accessToken;
+    //       } else {
+    //         return { cancelled: true };
+    //       } 
+    //     } catch (e) {
+    //       return { error: true };
+    //     }
+    //   };
+    
+
     const { width, height } = Dimensions.get("screen");
 
     let [fontsLoaded] = useFonts({
@@ -96,14 +219,34 @@ export default function LoginScreen({navigation}) {
                         <Text style={{marginTop: -width/5, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/15 }}>Bubl</Text>
                     </View>
                     {/* 2. Login with social account */}
-                    <View style={style.social}>
+                    {/* <View style={style.social}>
                         <View style={style.socialElement}>
                             <FontAwesome.Button name="facebook" backgroundColor="#3b5998" justifyContent="center">Login with Facebook </FontAwesome.Button>
                         </View>
                         <View style={style.socialElement}>
                             <FontAwesome.Button name="google" backgroundColor="#DB4437" justifyContent="center">Login with Google </FontAwesome.Button>
                         </View> 
-                    </View>
+                    </View> */}
+                        {!googleSubmitting && (
+                            <View style={style.social} >
+                                <View style={style.socialElement}>
+                                    <FontAwesome.Button name="facebook" backgroundColor="#3b5998" justifyContent="center">Login with Facebook </FontAwesome.Button>
+                                </View>
+                                <View style={style.socialElement}>
+                                    <FontAwesome.Button onPress={handleGoogleSignin} name="google" backgroundColor="#DB4437" justifyContent="center">Login with Google </FontAwesome.Button>
+                                </View> 
+                            </View>
+                        )}
+
+                        {googleSubmitting && (
+                            <View style={style.social} >
+                            <View style={style.socialElement}>
+                                <FontAwesome.Button name="facebook" backgroundColor="#3b5998" justifyContent="center">Login with Facebook </FontAwesome.Button>
+                            </View>
+                        </View>
+                        )}
+    
+
                     {/* 3. Login with traditional way */}
                     <View style={style.login}>
                         <Text style={style.text}> Or log in the classic way</Text>
