@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  FlatList,
+  ScrollView,
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
@@ -116,7 +116,7 @@ class Articles extends React.Component {
             </Block>
           </Block>
           <Block flex style={{ marginTop: theme.SIZES.BASE / 2 }}>
-            <FlatList
+            <ScrollView
               horizontal={true}
               pagingEnabled={true}
               decelerationRate={0}
@@ -132,7 +132,7 @@ class Articles extends React.Component {
                 categories.map((item, index) =>
                   this.renderProduct(item, index)
                 )}
-            </FlatList>
+            </ScrollView>
           </Block>
         </Block>
       </Block>
@@ -183,12 +183,12 @@ class Articles extends React.Component {
   render() {
     return (
       <Block flex center>
-        <FlatList
+        <ScrollView
           showsVerticalScrollIndicator={false}
         >
           {this.renderCards()}
           {this.renderAlbum()}
-        </FlatList>
+        </ScrollView>
       </Block>
     );
   }

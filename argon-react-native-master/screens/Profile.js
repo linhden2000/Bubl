@@ -2,7 +2,7 @@ import React from "react";
 import {
   StyleSheet,
   Dimensions,
-  FlatList,
+  ScrollView,
   Image,
   ImageBackground,
   Platform
@@ -27,7 +27,7 @@ class Profile extends React.Component {
             style={styles.profileContainer}
             imageStyle={styles.profileBackground}
           >
-            <FlatList
+            <ScrollView
               showsVerticalScrollIndicator={false}
               style={{ width, marginTop: '25%' }}
             >
@@ -155,10 +155,10 @@ class Profile extends React.Component {
                   </Block>
                 </Block>
               </Block>
-            </FlatList>
+            </ScrollView>
           </ImageBackground>
         </Block>
-        {/* <FlatList showsVerticalScrollIndicator={false} 
+        {/* <ScrollView showsVerticalScrollIndicator={false} 
                     contentContainerStyle={{ flex: 1, width, height, zIndex: 9000, backgroundColor: 'red' }}>
         <Block flex style={styles.profileCard}>
           <Block middle style={styles.avatarContainer}>
@@ -273,7 +273,7 @@ class Profile extends React.Component {
               </Block>
           </Block>
         </Block>
-                  </FlatList>*/}
+                  </ScrollView>*/}
       </Block>
     );
   }

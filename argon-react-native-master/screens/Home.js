@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Block, theme } from 'galio-framework';
 
 import { Card } from '../components';
@@ -9,7 +9,7 @@ const { width } = Dimensions.get('screen');
 class Home extends React.Component {
   renderArticles = () => {
     return (
-      <FlatList
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.articles}>
         <Block flex>
@@ -21,7 +21,7 @@ class Home extends React.Component {
           <Card item={articles[3]} horizontal />
           <Card item={articles[4]} full />
         </Block>
-      </FlatList>
+      </ScrollView>
     )
   }
 
