@@ -1,10 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import style from './style';
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,ScrollView, View, TouchableOpacity} from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
 import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon,
         Select, SelectItem, IndexPath, Input } from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import moment from 'moment'
+import AppLoading from 'expo-app-loading';
+import { auth, firestore } from '../../firebase/config';
 
 
 export default function DashboardScreen({navigation}) {
@@ -23,6 +26,58 @@ export default function DashboardScreen({navigation}) {
     const [displayAnswerInputBox, setDisplayAnswerInputBox] = useState(false);
     const [date, setDate] = useState(new Date('01/4/2022'));
     const shouldLoadComponent = (index) => index === selectedIndex;
+
+    //Store myQuestions
+    const [myQuestions, setMyQuestions] = useState([]);
+    //const myQuestions = [];
+    //Grab 'My Questions'
+    const fetchMyQuestions = async() => {
+      const currentUser = auth?.currentUser
+      const uid = currentUser.uid
+      const questions = firestore.collection('users').doc(uid).collection('questions');
+      const questionsSnapShot = await questions.get();
+      questionsSnapShot.forEach(doc => {
+        let question = {
+          "category" : doc.data().category,
+          "postedTime" : doc.data().postedTime,
+          "question" : doc.data().question,
+          "questionType" : doc.data().questionType,
+        }
+       // setMyQuestions(oldArray => [...oldArray, question]);
+        myQuestions.push(question);
+      })
+    }
+    //Dynamically render the list of MyQuesitons
+    const renderMyQuestion = (obj) => {
+      
+      return(
+          <View style={style.shadow}>
+            <Card style={style.myQuestionCards}>
+            <TouchableOpacity onPress={() => displayAnswers()}>
+              <Text style={style.questionContent}>{obj.question}</Text>
+              <Divider style={style.myQuestionDivider}/>
+              <View style={{flexDirection:"row"}}>
+                <Text style={style.myQuestionInfo}>Unread answers: </Text>
+                <Text style={style.myQuestionInfo}>15</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={style.myQuestionInfo}>Read answers: </Text>
+                <Text style={style.myQuestionInfo}>2</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={style.myQuestionInfo}>Total answers: </Text>
+                <Text style={style.myQuestionInfo}>17</Text>
+              </View>
+              </TouchableOpacity>
+            </Card>
+          </View>
+        );
+    };
+
+    useEffect(() => {
+      fetchMyQuestions()
+    }, [])
+
 
     /* 
     Messing around with date.
@@ -73,7 +128,6 @@ export default function DashboardScreen({navigation}) {
       console.log("yeet2")
     }
 
-    
     if (!fontsLoaded) {
       // return <AppLoading />;
     }
@@ -294,46 +348,7 @@ export default function DashboardScreen({navigation}) {
             <View>
               <Text style={style.timeStamp}>Posted on January 28, 2022</Text>
               <Divider style={style.timeStampDivider}/>
-              
-                <View style={style.shadow}>
-                  <Card style={style.myQuestionCards}>
-                  <TouchableOpacity onPress={() => displayAnswers()}>
-                    <Text style={style.questionContent}>What is your favorite food?</Text>
-                    <Divider style={style.myQuestionDivider}/>
-                    <View style={{flexDirection:"row"}}>
-                      <Text style={style.myQuestionInfo}>Unread answers: </Text>
-                      <Text style={style.myQuestionInfo}>15</Text>
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                      <Text style={style.myQuestionInfo}>Read answers: </Text>
-                      <Text style={style.myQuestionInfo}>2</Text>
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                      <Text style={style.myQuestionInfo}>Total answers: </Text>
-                      <Text style={style.myQuestionInfo}>17</Text>
-                    </View>
-                    </TouchableOpacity>
-                  </Card>
-                </View>
-              
-              <View style={style.shadow}>
-                <Card style={style.myQuestionCards}>
-                  <Text style={style.questionContent}>What is your all time favorite horror movie?</Text>
-                  <Divider style={style.myQuestionDivider}/>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Unread answers: </Text>
-                    <Text style={style.myQuestionInfo}>3</Text>
-                  </View>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Read answers: </Text>
-                    <Text style={style.myQuestionInfo}>2</Text>
-                  </View>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Total answers: </Text>
-                    <Text style={style.myQuestionInfo}>5</Text>
-                  </View>
-                </Card>
-              </View>
+                {myQuestions.map(renderMyQuestion)}
             </View>
           </View>
           }
@@ -341,6 +356,3 @@ export default function DashboardScreen({navigation}) {
       </View>
     )
 }
-
-
-
