@@ -56,6 +56,8 @@ export default function CreateQuestionsScreen({navigation}) {
       category: categoryProp[selectedCategoryIndex.row],
       postedTime: new Date()
     }
+  //function to alert user that they cannot submit a blank question
+  
     if(questionData.question == '') {
       Alert.alert(
         "You cannot submit a blank question!"
@@ -75,19 +77,15 @@ export default function CreateQuestionsScreen({navigation}) {
         answerList: filteredListOfAns
       }
     }
-    else {
-      questionCollection
-        .add(questionData)
-        .then(() => submitAlert())
-        .catch(err => console.log(err))
-    }
+    
+    questionCollection
+      .add(questionData)
+      .then(() => submitAlert())
+      .catch(err => console.log(err))
+    
   }
 
-  //function to alert user that they cannot submit a blank question
-  const isEmpty = () =>
-    Alert.alert(
-      "You cannot submit a blank question!"
-    );
+ 
 
   //function to alert user that they submitted their question successfully
   const submitAlert = () => 
