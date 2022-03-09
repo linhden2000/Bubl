@@ -22,7 +22,7 @@ export default StyleSheet.create({
     question: {
         alignSelf: "center",
         fontSize: 20,
-        fontFamily: "PublicSans_500Medium",
+        // fontFamily: "PublicSans_500Medium",
     },
 
     //Answers

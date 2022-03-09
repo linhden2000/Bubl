@@ -70,6 +70,8 @@ export default function CreateQuestionsScreen({navigation}) {
         answerList: filteredListOfAns
       }
     }
+
+    setQuestion(''); // CLEARS QUESTION FIELD
     
     questionCollection
       .add(questionData)

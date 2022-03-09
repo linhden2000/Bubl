@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
-import { Image, Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, ImageBackground } from 'react-native'
+import { Image, Text, TextInput, View, TouchableOpacity, FlatList, ScrollView, Dimensions, ImageBackground } from 'react-native'
 import { Icon, Button} from '@ui-kitten/components';
 import { auth, firestore } from '../../firebase/config';
 import moment from 'moment';
