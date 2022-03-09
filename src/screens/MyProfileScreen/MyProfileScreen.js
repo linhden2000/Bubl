@@ -71,7 +71,7 @@ export default function ProfileScreen({navigation}) {
       fetchUserData()
     }, [])
 
-    //** Render the information **/
+    //** Render the information **/ 
     return (
       <View style={style.container}>
         <View style={style.profile} >
@@ -86,8 +86,8 @@ export default function ProfileScreen({navigation}) {
             </TouchableOpacity>
           </View>
 
-          <View>
-            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
+          <View style={style.avatar}>
+            <Image style={{width: height/6, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
             <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
           </View>
         </View>

@@ -1,18 +1,23 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import style from './style';
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,ScrollView, View, TouchableOpacity, FlatList, SnapshotViewIOS } from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
-import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon,
-        Select, SelectItem, IndexPath, Input } from '@ui-kitten/components';
-import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
+        Select, SelectItem, IndexPath, Input, List, ListItem } from '@ui-kitten/components';
+import {useFonts, PublicSans_600SemiBold, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import moment from 'moment'
+import AppLoading from 'expo-app-loading';
+import {auth, firestore} from '../../firebase/config';
+import { log } from 'react-native-reanimated';
+import { LogBox } from 'react-native';
 
 
 export default function DashboardScreen({navigation}) {
+    LogBox.ignoreLogs(['Setting a timer']);
     //Load fonts
     //Source: https://github.com/expo/google-fonts
     let [fontsLoaded] = useFonts ({
       PublicSans_600SemiBold,
-      PublicSans_500Medium,
       PublicSans_400Regular,
       PublicSans_300Light,
     });
@@ -22,7 +27,11 @@ export default function DashboardScreen({navigation}) {
     const [answer, setAnswer] = useState("");
     const [displayAnswerInputBox, setDisplayAnswerInputBox] = useState(false);
     const [date, setDate] = useState(new Date('01/4/2022'));
+    const [questionsList, setQuestionsList] = useState([])
     const shouldLoadComponent = (index) => index === selectedIndex;
+    const usersRef = firestore.collection('users')
+    const currentUserUID = auth?.currentUser.uid
+    let sexualPref = ''
 
     /* 
     Messing around with date.
@@ -37,7 +46,135 @@ export default function DashboardScreen({navigation}) {
     const renderCategoryOption = (label, key) => (
       <SelectItem key={key} title={label}/>
     );
-
+    // Fetch user data
+    useEffect(() => {
+      usersRef
+        .doc(currentUserUID)
+        .onSnapshot(snapshot =>{
+          sexualPref = snapshot.data().sexualPref
+        })
+    })
+    // Listen to the change in category choice
+    useEffect(() => {
+      let queryGender = ''
+      // Query for single sexual preference
+      if(sexualPref == 'male' || sexualPref == 'female') {
+        if(sexualPref == 'male') {
+          queryGender = 'man'
+        }
+        else{
+          queryGender = 'woman'
+        }
+        usersRef
+        .where('gender', '==', queryGender)
+        .get()
+        .then(snapshot => {
+          if(snapshot.empty) {
+            console.log("There's no matching profile");
+          }
+          else {
+            snapshot.docs.forEach(doc => {
+              const selectedCategory = dashboardCategoryProp[selectedCategoryIndex.row]
+              if(selectedCategory == "All") {
+                usersRef.doc(doc.data().id).collection('questions')
+                        .get()
+                        .then(quesList => {
+                          quesList.docs.forEach(ques => {
+                            let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            question: ques.data().question,
+                            postedTime: postedTimeString 
+                          }
+                            setQuestionsList(prevState => [...prevState, data])
+                          })
+                        })
+              }
+              else {
+                usersRef.doc(doc.data().id).collection('questions')
+                      .where('category', '==', selectedCategory)
+                      .get()
+                      .then(quesList => {
+                        quesList.docs.forEach(ques => {
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            question: ques.data().question,
+                            postedTime: postedTimeString 
+                          }
+                          setQuestionsList(prevState => [...prevState, data])
+                        })
+                      })
+                      .catch(err => console.log(err))
+              }
+            })
+          }
+        })
+        .catch(err => console.log(err))  
+      }
+      // Query for both sexual preferences
+      else{
+        usersRef
+          .get()
+          .then(snapshot => { 
+            snapshot.docs.forEach(doc => {
+              const selectedCategory = dashboardCategoryProp[selectedCategoryIndex.row]
+              if(selectedCategory == "All") {
+                usersRef.doc(doc.data().id).collection('questions')
+                        .get()
+                        .then(quesList => {
+                          quesList.docs.forEach(ques => {
+                            let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            question: ques.data().question,
+                            postedTime: postedTimeString 
+                          }
+                            setQuestionsList(prevState => [...prevState, data])
+                          })
+                        })
+              }
+              else {
+                usersRef.doc(doc.data().id).collection('questions')
+                      .where('category', '==', selectedCategory)
+                      .get()
+                      .then(quesList => {
+                        quesList.docs.forEach(ques => {
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            question: ques.data().question,
+                            postedTime: postedTimeString 
+                          }
+                          setQuestionsList(prevState => [...prevState, data])
+                        })
+                      })
+                      .catch(err => console.log(err))
+              }
+            })
+          })
+      }
+      const unsubscribe = () => {
+        setQuestionsList(prevState => [])
+      }
+      return unsubscribe
+    }, [selectedCategoryIndex])
     //Show/hide tabs
     const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions
     const [showAllQuestions, setShowAllQuestions] = useState(true); //Display questions from other users
@@ -72,10 +209,45 @@ export default function DashboardScreen({navigation}) {
     const submitAnswer = () => {
       console.log("yeet2")
     }
-
     
+    const renderedQuestions = () => {
+      return questionsList.map((ques, index) => {
+        return (
+        <View key={index}>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+            <TouchableOpacity onPress={() => answerQuestion()}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+                <Text style={style.questionTimeStamp}>{ques.postedTime}</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>{ques.question}</Text>
+              </TouchableOpacity>
+              { displayAnswerInputBox ? (
+              <View>
+                <Input
+                  style={style.answerBox}
+                  multiline={true}
+                  textStyle={{ minHeight: 70}}
+                  placeholder='Type your answer here...'
+                  value={answer}
+                  onChangeText={input => setAnswer(input)}
+                />
+                <Button style={style.submitBtn} onPress={() => submitAnswer()}>
+                  <Text>Submit Answer</Text>
+                </Button>
+              </View>
+              ): null}
+            </Card>
+          </View>
+        </View>
+        )
+      })
+    } 
     if (!fontsLoaded) {
-      // return <AppLoading />;
+      return <AppLoading />;
     }
     return (
       <View style={style.mainView}>
@@ -184,106 +356,7 @@ export default function DashboardScreen({navigation}) {
               </View>
             ): null}
           </Card>
-          {showAllQuestions ? ( //If multiple choice
-            <View>
-              
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                <TouchableOpacity onPress={() => answerQuestion()}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 4, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
-                  </TouchableOpacity>
-                  { displayAnswerInputBox ? (
-                  <View>
-                    <Input
-                      style={style.answerBox}
-                      multiline={true}
-                      textStyle={{ minHeight: 70}}
-                      placeholder='Type your answer here...'
-                      value={answer}
-                      onChangeText={input => setAnswer(input)}
-                    />
-                    <Button style={style.submitBtn} onPress={() => submitAnswer()}>
-                      <Text>Submit Answer</Text>
-                    </Button>
-                  </View>
-                  ): null}
-                </Card>
-              </View>
-              
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 4, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>KU or K-State?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 3, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>If you could travel anywhere, where would it be?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 2, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>What is your favorite pizza flavor?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Do you play video games? If so, what is your favorite or currently playing right now?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Are you looking for a long-term relationship or are you only looking for a fling?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Marvel or DC? And who is your favorite characters?</Text>
-                </Card>
-              </View>
-            </View>
-          ): null}
+          {renderedQuestions()}
           {showMyQuestions &&
           <View>
             <View>
@@ -315,25 +388,6 @@ export default function DashboardScreen({navigation}) {
                     </TouchableOpacity>
                   </Card>
                 </View>
-              
-              <View style={style.shadow}>
-                <Card style={style.myQuestionCards}>
-                  <Text style={style.questionContent}>What is your all time favorite horror movie?</Text>
-                  <Divider style={style.myQuestionDivider}/>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Unread answers: </Text>
-                    <Text style={style.myQuestionInfo}>3</Text>
-                  </View>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Read answers: </Text>
-                    <Text style={style.myQuestionInfo}>2</Text>
-                  </View>
-                  <View style={{flexDirection:"row"}}>
-                    <Text style={style.myQuestionInfo}>Total answers: </Text>
-                    <Text style={style.myQuestionInfo}>5</Text>
-                  </View>
-                </Card>
-              </View>
             </View>
           </View>
           }
