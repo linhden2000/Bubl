@@ -29,6 +29,7 @@ export default StyleSheet.create({
   },
   avatar:{
     flex: 1,
+    //marginTop: -width/10,
     width: width * 0.9,
     height: height * 0.3,
     borderTopLeftRadius: 5,
@@ -63,6 +64,7 @@ export default StyleSheet.create({
     fontSize: width/30,
     textAlignVertical: "center",
     textAlign: "center",
+    color:"#7e27ed",
   },
 
   text:{
@@ -89,5 +91,15 @@ export default StyleSheet.create({
   errorMsg: {
     color: '#FF0000',
     fontSize: width/30,
+  },
+
+  biobox: {
+    borderColor: '#FCBACB',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    alignItems:'center',
+    width: width/1.5,
+    position: 'relative',
+    alignSelf: "center",
   },
 })
