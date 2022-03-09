@@ -56,14 +56,20 @@ export default function CreateQuestionsScreen({navigation}) {
       category: categoryProp[selectedCategoryIndex.row],
       postedTime: new Date()
     }
-  //function to alert user that they cannot submit a blank question
-  
+  //alert user that they cannot submit a blank question
     if(questionData.question == '') {
       Alert.alert(
         "You cannot submit a blank question!"
       );
+      
     }
-    if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
+  //alert user that they submitted their question successfully
+    else if(questionData.question != '') {
+      Alert.alert(
+        "Your question was submitted successfully!"
+      );
+    }
+    else if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
       questionData = {
         ...questionData,
         questionType: "Short Answer"
@@ -80,18 +86,8 @@ export default function CreateQuestionsScreen({navigation}) {
     
     questionCollection
       .add(questionData)
-      .then(() => submitAlert())
-      .catch(err => console.log(err))
-    
+      .catch(err => console.log(err)) 
   }
-
- 
-
-  //function to alert user that they submitted their question successfully
-  const submitAlert = () => 
-    Alert.alert(
-      "Your question was submitted successfully!"
-    );
 
   // Add new answer choice modal to the UI
   const handleAddAnswer = () => {
