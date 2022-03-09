@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useEffect} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, FlatList, Platform, Image, ImageBackground} from 'react-native'
+import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity, FlatList, ScrollView, Platform, Image, ImageBackground} from 'react-native'
 import { Input, Datepicker, Icon, Card, Avatar, Select, SelectItem, IndexPath, Button} from '@ui-kitten/components';
 import RangeSlider from 'react-native-range-slider-expo';
 import * as ImagePicker from 'expo-image-picker';
@@ -201,7 +201,7 @@ export default function CreateUserScreen({navigation}){
     return (
         <View style={style.form}>
             <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
-            <FlatList>
+            <ScrollView>
             <View style={style.profilePicContainer}>
                 <Avatar source={{ uri: profilePic }} style={{ width: 200, height: 200 }} 
                 style={style.profilePic}/>
@@ -374,7 +374,7 @@ export default function CreateUserScreen({navigation}){
                 </TouchableOpacity>   
             </View>
             </Card>
-            </FlatList>
+            </ScrollView>
         </View>
         
     )
