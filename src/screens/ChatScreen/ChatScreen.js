@@ -57,9 +57,7 @@ export default function ChatScreen({navigation}) {
                 <View style={style.root}>
                     <View style={style.inputContainer}>
                         <FontAwesomeIcon icon={faSmile} size={25} style={style.icon}/>
-                        
                         <TextInput style={style.input} placeholder="Signal message..."/>
-
                         <FontAwesomeIcon icon={faImage} size={25} style={style.icon}/>
                         <FontAwesomeIcon icon={faMicrophone} size={25} style={style.icon}/>
                     </View>
