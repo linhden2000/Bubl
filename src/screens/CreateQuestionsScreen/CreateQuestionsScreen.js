@@ -55,7 +55,12 @@ export default function CreateQuestionsScreen({navigation}) {
       question: question,
       category: categoryProp[selectedCategoryIndex.row],
       postedTime: new Date()
-    } 
+    }
+    if(questionData.question == '') {
+      Alert.alert(
+        "You cannot submit a blank question!"
+      );
+    }
     if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
       questionData = {
         ...questionData,
@@ -70,12 +75,19 @@ export default function CreateQuestionsScreen({navigation}) {
         answerList: filteredListOfAns
       }
     }
-    
-    questionCollection
-      .add(questionData)
-      .then(() => submitAlert())
-      .catch(err => console.log(err))
+    else {
+      questionCollection
+        .add(questionData)
+        .then(() => submitAlert())
+        .catch(err => console.log(err))
+    }
   }
+
+  //function to alert user that they cannot submit a blank question
+  const isEmpty = () =>
+    Alert.alert(
+      "You cannot submit a blank question!"
+    );
 
   //function to alert user that they submitted their question successfully
   const submitAlert = () => 
@@ -132,6 +144,7 @@ export default function CreateQuestionsScreen({navigation}) {
               textStyle={{ minHeight: 100}}
               placeholder='Type your question here'
               value={question}
+
               onChangeText={input => setQuestion(input)}
             />
             {
