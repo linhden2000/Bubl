@@ -104,12 +104,6 @@ export default function ProfileScreen({navigation}) {
                       <TouchableOpacity style={style.inputView} onPress={onMyProfile}>
                         <Text style={style.TextInput}>My Profile</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={style.inputView} onPress={onPrefence}>
-                        <Text style={style.TextInput}>Preference</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={style.inputView} onPress={onAccountSettings}>
-                        <Text style={style.TextInput}>Account Settings</Text>
-                      </TouchableOpacity>
                       <TouchableOpacity style={style.inputView}>
                         <Text style={style.TextInput}>Customer Service</Text>
                       </TouchableOpacity>
