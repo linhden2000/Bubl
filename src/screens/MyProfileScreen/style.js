@@ -58,14 +58,9 @@ export default StyleSheet.create({
       height: height/15,
       textAlign: "left",
       justifyContent: "center",
-<<<<<<< HEAD
       // backgroundColor: "#FFFFFF",
       //borderBottomColor: 'black',
       //borderBottomWidth: 1,
-=======
-      borderBottomColor: 'black',
-      borderBottomWidth: 1,
->>>>>>> bfa5b645251eae67718d5a53c53edddb27a22c13
   },
 
   text:{

@@ -94,16 +94,16 @@ export default function ProfileScreen({navigation}) {
                 {/* White box container */}
                 <View style={style.box}>
                     {/* 1. The avatar */}
-                    <View style={style.avatar}>
+                    {/*<View style={style.avatar}>*/}
+                    <View style={style.biobox}>
                         <Image style= {{ alignSelf: "center", borderRadius: 100, marginTop: -width/10, width: width/3.5, height: height/8, position: "relative"}} source={avatar} />
                         <Text style={{marginTop: width/20, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/20 }}>{firstName}, {age}</Text>
                         <Text style={{marginTop: width/50, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/25 }}>{city}, {USState}</Text>
-                        {/* <Text style={{marginTop: width/50, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/25 }}>San Franciso, CA</Text> */}
-                        <View style={style.biobox}>
+                        {/* <Text style={{marginTop: width/50, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/25 }}>San Franciso, CA</Text>*/}
                           <Text style={{color:"#7e27ed", fontFamily: "OleoScript_400Regular", fontSize: width/30 }}>BIO</Text>
                           <Text style={{color:"#b584f4", fontSize: width/35 }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
                           <Text></Text>
-                        </View>
+                        {/*</View>*/}
                     </View>
                     {/* 2. Setting Choices */}
                     <View style={style.choice}>

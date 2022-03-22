@@ -95,8 +95,8 @@ export default StyleSheet.create({
 
   biobox: {
     borderColor: '#FCBACB',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    //borderTopWidth: 1,
+    //borderBottomWidth: 1,
     alignItems:'center',
     width: width/1.5,
     position: 'relative',
