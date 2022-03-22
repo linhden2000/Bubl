@@ -7,6 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 
 //commented below because it was breaking the app
 
+<<<<<<< HEAD
  import { FontAwesome} from '@expo/vector-icons';
  import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
  import {
@@ -17,6 +18,18 @@ import { TextInput } from 'react-native-gesture-handler';
          // some icons
          faMicrophone, faInfo, faComments
          } from '@fortawesome/free-solid-svg-icons';
+=======
+import { FontAwesome} from '@expo/vector-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import {
+    // some icons
+    faSmile, faImage
+    } from '@fortawesome/free-regular-svg-icons';
+    import {
+        // some icons
+        faMicrophone, faInfo, faComments
+        } from '@fortawesome/free-solid-svg-icons';
+>>>>>>> bfa5b645251eae67718d5a53c53edddb27a22c13
 
 
 export default function ChatScreen({navigation}) {
@@ -57,9 +70,7 @@ export default function ChatScreen({navigation}) {
                 <View style={style.root}>
                     <View style={style.inputContainer}>
                         <FontAwesomeIcon icon={faSmile} size={25} style={style.icon}/>
-                        
                         <TextInput style={style.input} placeholder="Signal message..."/>
-
                         <FontAwesomeIcon icon={faImage} size={25} style={style.icon}/>
                         <FontAwesomeIcon icon={faMicrophone} size={25} style={style.icon}/>
                     </View>

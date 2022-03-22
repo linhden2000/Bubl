@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
 import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { Image, Text, View, TouchableOpacity, ScrollView, Dimensions, ImageBackground, Alert } from 'react-native'
+import { Image, Text, View, TouchableOpacity, ScrollView, Dimensions, ImageBackground, Alert, TextInput, FlatList } from 'react-native'
 import { Input, Icon, Button, Select, IndexPath, SelectItem, Datepicker} from '@ui-kitten/components';
 import RangeSlider from 'react-native-range-slider-expo';
 import { auth, firestore } from '../../firebase/config';
@@ -180,7 +180,7 @@ export default function ProfileScreen({navigation}) {
       return () => { isMounted = false }; // cleanup toggles value, if unmounted 
     }, [])
 
-    //** Render the information **/
+    //** Render the information **/ 
     return (
       <View style={style.container}>
         {editMode ? (

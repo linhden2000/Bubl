@@ -35,22 +35,21 @@ export default StyleSheet.create({
       height:height/3.3
     },
 
+    avatar: {
+      justifyContent: "flex-end",
+    },
+
     editButton: {
       position: "absolute",
-      //marginTop: width/3,
-      marginLeft: width/4,
+      alignSelf: "flex-end",
       borderRadius: 20,
       borderColor: "#bdbdbd",
       width: width/20,
       height: width/20,
-      //backgroundColor: "red",
     },
 
     content: {
       flex: 2,
-      // alignItems: "center",
-      // justifyContent: "center",
-      //marginTop: height/20,
     },
 
     Btn: {
@@ -59,9 +58,14 @@ export default StyleSheet.create({
       height: height/15,
       textAlign: "left",
       justifyContent: "center",
+<<<<<<< HEAD
       // backgroundColor: "#FFFFFF",
       //borderBottomColor: 'black',
       //borderBottomWidth: 1,
+=======
+      borderBottomColor: 'black',
+      borderBottomWidth: 1,
+>>>>>>> bfa5b645251eae67718d5a53c53edddb27a22c13
   },
 
   text:{
