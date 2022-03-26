@@ -76,11 +76,11 @@ export default function DashboardScreen({navigation}) {
 
     
     useEffect(() => {
-      const unsubscribe = navigation.addListeneer('focus', () => {
+      const unsubscribe = navigation.addListener('focus', () => {
         fetchMyQuestions()
       }) ;
       return unsubscribe;
-    },[unsubscribe]);
+    },[navigation]);
     
 
     /* 
