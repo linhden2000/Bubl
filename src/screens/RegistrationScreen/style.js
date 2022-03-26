@@ -21,14 +21,14 @@ export default StyleSheet.create({
     marginTop: -width/5,
     alignSelf: "center",
     color:"#8898AA",
-    fontFamily: "OleoScript_400Regular",
+    // fontFamily: "OleoScript_400Regular",
     fontSize: width/10,
   },
 
   textDescription: {
     alignSelf: "center",
     color:"#8898AA",
-    fontFamily: "OleoScript_400Regular",
+    // fontFamily: "OleoScript_400Regular",
     fontSize: width/20,
     marginTop: 15,
     marginBottom: 20,

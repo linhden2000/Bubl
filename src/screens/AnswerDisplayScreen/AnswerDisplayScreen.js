@@ -1,15 +1,26 @@
 import React, {useState} from 'react'
 import style from './style';
-import {View} from 'react-native';
+import {View, FlatList, Animated, SectionList} from 'react-native';
+import ListItem, {Separator} from "react-native-elements";
 import {Text, Button, Card, Icon, Divider} from '@ui-kitten/components';
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import { styles } from 'styled-system';
+import { Swipeable } from 'react-native-gesture-handler';
 
 //Icons
 const BackIcon = (props) => (
     <Icon {...props} name='arrow-back-outline'/>
 );
-
+const answers = [
+    {id: "0", text: "Bread"},
+    {id: "1", text: "Carrot"},
+    {id: "2", text: "Potato Chips"},
+    {id: "3", text: "Burger"},
+    {id: "4", text: "Soup"},
+]
 export default function AnswerDisplayScreen({navigation}) {
+    const [answerList, setAnswerList] = useState(answers);
+    
     //Load fonts
     //Source: https://github.com/expo/google-fonts
     let [fontsLoaded] = useFonts ({
@@ -22,13 +33,59 @@ export default function AnswerDisplayScreen({navigation}) {
     const navigateToDashboard = () => {
         navigation.navigate('DashboardNavigation');
     }
+    
+    const LeftActions = (progress, dragX) => {
+        const scale = dragX.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0,1],
+            extrapolate: 'clamp',
+        })
+        return (
+            <View style={style.leftAction}>
+                <Animated.Text style={[style.actionText, {transform: [{scale}]}]}>Remove</Animated.Text>
+            </View>
+        )
+    }
+
+    const RightActions = (progress, dragX) => {
+        const scale = dragX.interpolate({
+            inputRange: [-100,0],
+            outputRange: [1,0],
+            extrapolate: 'clamp',
+        })
+        return (
+            <View style={style.rightAction}>
+                <Animated.Text style={[style.actionText, {transform: [{scale}]}]}>Add</Animated.Text>
+            </View>
+        )
+    }
+
+    const ListItem = ({text, onSwipeFromLeft, onSwipeFromRight}) => (
+        <Swipeable
+            renderLeftActions={LeftActions}
+            onSwipeableLeftOpen={onSwipeFromLeft}
+            renderRightActions={RightActions}
+            onSwipeableRightOpen={onSwipeFromRight}
+        >
+            <Card style={style.answerCard}>
+                <Text>{text}</Text>
+            </Card>
+        </Swipeable>
+    );
+
+    const deleteItem = index => {
+        console.log("yeet")
+        const arr = [...answerList];
+        arr.splice(index, 1);
+        setAnswerList(arr);
+        
+    }
 
     if (!fontsLoaded) {
     }
 
     return (
         <View style={style.mainView}>
-
             <View>
                 <Card style={style.headerCard}>
                 <Text style={style.pageTitle} category='S1'>Answers</Text>
@@ -43,26 +100,42 @@ export default function AnswerDisplayScreen({navigation}) {
                         <Text style={style.question}>What is your favorite food?</Text>
                         <Divider/>
                     </View>
-                    <View>
-                        <Card style={style.answerCard}>
-                            <Text>Bread</Text>
-                        </Card>
-                        <Card style={style.answerCard}>
-                            <Text>Carrot</Text>
-                        </Card>
-                        <Card style={style.answerCard}>
-                            <Text>Potato Chips</Text>
-                        </Card>
-                        <Card style={style.answerCard}>
-                            <Text>Burger</Text>
-                        </Card>
-                        <Card style={style.answerCard}>
-                            <Text>Soup</Text>
-                        </Card>
-                    </View>
+                    <FlatList
+                        data={answerList}
+                        keyExtractor={item => item.id}
+                        renderItem={({item, index}) => (
+                            <ListItem
+                                {...item}
+                                onSwipeFromLeft={() => deleteItem(index)}
+                                onSwipeFromRight={() => alert("swiped from right!")}
+                            />
+                        )}
+                    />
                 </Card>
             </View>
 
         </View>
     )
 }
+
+
+
+/*
+<View>
+                            <Card style={style.answerCard}>
+                                <Text>Bread</Text>
+                            </Card>
+                            <Card style={style.answerCard}>
+                                <Text>Carrot</Text>
+                            </Card>
+                            <Card style={style.answerCard}>
+                                <Text>Potato Chips</Text>
+                            </Card>
+                            <Card style={style.answerCard}>
+                                <Text>Burger</Text>
+                            </Card>
+                            <Card style={style.answerCard}>
+                                <Text>Soup</Text>
+                            </Card>
+                        </View>
+*/
