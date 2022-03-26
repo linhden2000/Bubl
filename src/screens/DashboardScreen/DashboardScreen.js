@@ -74,10 +74,14 @@ export default function DashboardScreen({navigation}) {
         );
     };
 
+    
     useEffect(() => {
-      fetchMyQuestions()
-    }, [])
-
+      const unsubscribe = navigation.addListeneer('focus', () => {
+        fetchMyQuestions()
+      }) ;
+      return unsubscribe;
+    },[unsubscribe]);
+    
 
     /* 
     Messing around with date.
