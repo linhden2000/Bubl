@@ -22,11 +22,32 @@ export default StyleSheet.create({
     question: {
         alignSelf: "center",
         fontSize: 20,
-        fontFamily: "PublicSans_500Medium",
+        // fontFamily: "PublicSans_500Medium",
     },
 
     //Answers
     answerCard: {
         marginVertical: 10,
+    },
+
+    leftAction:{
+        justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fc0303',
+    },
+
+    rightAction:{
+        justifyContent: 'center',
+        backgroundColor: '#49a300',
+        flex: 1,
+        alignItems: 'flex-end',
+    },
+
+    actionText: {
+        color: '#fff',
+        fontWeight: '600',
+        padding: 20,
     }
+
+
 })
