@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
-import { Image, Text, TextInput, View, TouchableOpacity, FlatList, Dimensions, ImageBackground } from 'react-native'
+import { Image, Text, TextInput, View, TouchableOpacity, FlatList, ScrollView, Dimensions, ImageBackground } from 'react-native'
 import { Icon, Button} from '@ui-kitten/components';
 import { auth, firestore } from '../../firebase/config';
 import moment from 'moment';
@@ -71,7 +71,7 @@ export default function ProfileScreen({navigation}) {
       fetchUserData()
     }, [])
 
-    //** Render the information **/
+    //** Render the information **/ 
     return (
       <View style={style.container}>
         <View style={style.profile} >
@@ -86,13 +86,13 @@ export default function ProfileScreen({navigation}) {
             </TouchableOpacity>
           </View>
 
-          <View>
-            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
+          <View style={style.avatar}>
+            <Image style={{width: height/6, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
             <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
           </View>
         </View>
 
-        <FlatList style={style.content}>
+        <ScrollView style={style.content}>
           <View style={style.Btn}>
             <Text style={{color:"#8898AA"}}> First Name</Text>
             <TextInput> {firstName}</TextInput>
@@ -152,7 +152,7 @@ export default function ProfileScreen({navigation}) {
             <Text  style={{color:"#8898AA"}}>Preferred Age Range</Text>
             <TextInput> From {fromValue} to {toValue} </TextInput>
           </View>
-        </FlatList>       
+        </ScrollView>       
       </View>
     )
 }

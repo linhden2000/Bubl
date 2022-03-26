@@ -28,5 +28,26 @@ export default StyleSheet.create({
     //Answers
     answerCard: {
         marginVertical: 10,
+    },
+
+    leftAction:{
+        justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fc0303',
+    },
+
+    rightAction:{
+        justifyContent: 'center',
+        backgroundColor: '#49a300',
+        flex: 1,
+        alignItems: 'flex-end',
+    },
+
+    actionText: {
+        color: '#fff',
+        fontWeight: '600',
+        padding: 20,
     }
+
+
 })

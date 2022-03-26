@@ -21,6 +21,7 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
   shadow:{
+    backgroundColor: '#FFFFFF',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
