@@ -56,7 +56,7 @@ export default function CreateQuestionsScreen({navigation}) {
       category: categoryProp[selectedCategoryIndex.row],
       postedTime: new Date()
     }
-    
+
     if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
       questionData = {
         ...questionData,
@@ -79,6 +79,7 @@ export default function CreateQuestionsScreen({navigation}) {
         "You cannot submit a blank question!"
       ); 
     }
+    
     //alert user that they submitted their question successfully
     else if(questionData.question != '') {
       questionCollection
