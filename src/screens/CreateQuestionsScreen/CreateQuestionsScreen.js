@@ -72,7 +72,7 @@ export default function CreateQuestionsScreen({navigation}) {
         answerList: filteredListOfAns
       }
     }
-
+    
     //alert user that they cannot submit a blank question
     if(questionData.question == '') {
       Alert.alert(
