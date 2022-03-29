@@ -56,12 +56,14 @@ export default function CreateQuestionsScreen({navigation}) {
       category: categoryProp[selectedCategoryIndex.row],
       postedTime: new Date()
     }
+    
     if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
       questionData = {
         ...questionData,
         questionType: "Short Answer"
       } 
     }
+
    if(questionTypesProp[selectedQuestionTypeIndex.row] == "Multiple Choice") {
       let filteredListOfAns = listOfAns.filter(ans => ans != '')
       questionData = {
@@ -73,12 +75,11 @@ export default function CreateQuestionsScreen({navigation}) {
 
     //alert user that they cannot submit a blank question
     if(questionData.question == '') {
-    Alert.alert(
-      "You cannot submit a blank question!"
-    );
-      
+      Alert.alert(
+        "You cannot submit a blank question!"
+      ); 
     }
-  //alert user that they submitted their question successfully
+    //alert user that they submitted their question successfully
     else if(questionData.question != '') {
       questionCollection
       .add(questionData)
