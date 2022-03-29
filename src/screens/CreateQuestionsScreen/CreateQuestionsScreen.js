@@ -87,8 +87,9 @@ export default function CreateQuestionsScreen({navigation}) {
       Alert.alert(
         "Your question was submitted successfully!"
       );
+
+      setQuestion('');
     }
-    
   }
 
   // Add new answer choice modal to the UI
