@@ -203,7 +203,7 @@ export default function CreateUserScreen({navigation}){
             <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
             <ScrollView>
             <View style={style.profilePicContainer}>
-                <Avatar source={{ uri: profilePic }} style={{ width: 200, height: 200 }} 
+                <Avatar source={{ uri: profilePic }} 
                 style={style.profilePic}/>
                 <Button style={style.editButton} status="control" accessoryLeft={editIcon}
                 onPress={pickImage}/> 
