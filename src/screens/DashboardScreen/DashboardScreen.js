@@ -226,7 +226,8 @@ export default function DashboardScreen({navigation}) {
       questionDoc.collection('answers').add({
         replierId: postedById,
         content: answer,
-        postedTime: new Date()
+        postedTime: new Date(),
+        read: false
       })
     }
     
