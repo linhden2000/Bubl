@@ -7,8 +7,8 @@ import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout,
 import {useFonts, PublicSans_600SemiBold, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import moment from 'moment'
 import AppLoading from 'expo-app-loading';
-import {auth, firestore} from '../../firebase/config';
-import { log } from 'react-native-reanimated';
+import {auth, firestore, firebase} from '../../firebase/config';
+import { cos, log } from 'react-native-reanimated';
 import { LogBox } from 'react-native';
 
 
@@ -25,12 +25,12 @@ export default function DashboardScreen({navigation}) {
     const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
     const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
     const [answer, setAnswer] = useState("");
-    const [displayAnswerInputBox, setDisplayAnswerInputBox] = useState(false);
     const [date, setDate] = useState(new Date('01/4/2022'));
     const [questionsList, setQuestionsList] = useState([])
     const shouldLoadComponent = (index) => index === selectedIndex;
     const usersRef = firestore.collection('users')
     const currentUserUID = auth?.currentUser.uid
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
     let sexualPref = ''
 
     /* 
@@ -80,15 +80,18 @@ export default function DashboardScreen({navigation}) {
                         .get()
                         .then(quesList => {
                           quesList.docs.forEach(ques => {
-                            let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
                           let postedTimeStamp = new Date(epochMilliseconds)
                           let actualDate = postedTimeStamp.getDate()
                           let actualMonth = postedTimeStamp.getMonth()
                           let actualYear = postedTimeStamp.getFullYear()
                           let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
                           const data = {
+                            questionId:ques.id,
                             question: ques.data().question,
-                            postedTime: postedTimeString 
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id,
                           }
                             setQuestionsList(prevState => [...prevState, data])
                           })
@@ -107,8 +110,11 @@ export default function DashboardScreen({navigation}) {
                           let actualYear = postedTimeStamp.getFullYear()
                           let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
                           const data = {
+                            questionId:ques.id,
                             question: ques.data().question,
-                            postedTime: postedTimeString 
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id, 
                           }
                           setQuestionsList(prevState => [...prevState, data])
                         })
@@ -132,15 +138,18 @@ export default function DashboardScreen({navigation}) {
                         .get()
                         .then(quesList => {
                           quesList.docs.forEach(ques => {
-                            let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
                           let postedTimeStamp = new Date(epochMilliseconds)
                           let actualDate = postedTimeStamp.getDate()
                           let actualMonth = postedTimeStamp.getMonth()
                           let actualYear = postedTimeStamp.getFullYear()
                           let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
                           const data = {
+                            questionId:ques.id,
                             question: ques.data().question,
-                            postedTime: postedTimeString 
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id, 
                           }
                             setQuestionsList(prevState => [...prevState, data])
                           })
@@ -159,8 +168,11 @@ export default function DashboardScreen({navigation}) {
                           let actualYear = postedTimeStamp.getFullYear()
                           let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
                           const data = {
+                            questionId:ques.id,
                             question: ques.data().question,
-                            postedTime: postedTimeString 
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id,
                           }
                           setQuestionsList(prevState => [...prevState, data])
                         })
@@ -179,7 +191,6 @@ export default function DashboardScreen({navigation}) {
     const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions
     const [showAllQuestions, setShowAllQuestions] = useState(true); //Display questions from other users
     const tabSelect = (input) => {
-      console.log("question button pushed");
       if (input == 0){ //User selects 'Questions' tab
         setShowMyQuestions(false);
         setShowAllQuestions(true);
@@ -199,15 +210,25 @@ export default function DashboardScreen({navigation}) {
       navigation.navigate('AnswerDisplay')
     }
     
-
-    const answerQuestion = () => {
-      if(displayAnswerInputBox == false)
-        setDisplayAnswerInputBox(true);
-      else if(displayAnswerInputBox == true)
-        setDisplayAnswerInputBox(false);
+    //** Toggle the submit answer form  **//
+    const answerQuestion = (index) => {
+      const updatedQuesionList = questionsList.map((ques, mapIndex) => {
+        return mapIndex == index ? {...ques, displayAnswerInputBox: !ques.displayAnswerInputBox} : {...ques}
+      })
+      setQuestionsList(updatedQuesionList)
     }
-    const submitAnswer = () => {
-      console.log("yeet2")
+
+    //** Submit answer to database **//
+    const submitAnswer = (index) => {
+      const postedById = questionsList[index].postedBy
+      const questionId = questionsList[index].questionId
+      const questionDoc = usersRef.doc(postedById).collection('questions').doc(questionId)
+      questionDoc.collection('answers').add({
+        replierId: postedById,
+        content: answer,
+        postedTime: new Date(),
+        read: false
+      })
     }
     
     const renderedQuestions = () => {
@@ -216,7 +237,7 @@ export default function DashboardScreen({navigation}) {
         <View key={index}>
           <View style={style.shadow}>
             <Card style={style.questionCards}>
-            <TouchableOpacity onPress={() => answerQuestion()}>
+            <TouchableOpacity onPress={() => answerQuestion(index)}>
               <View style={{flexDirection:"row"}}>
                 <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
                 <Text style={style.questionUserName}>Anonymous</Text>
@@ -225,7 +246,7 @@ export default function DashboardScreen({navigation}) {
               <Divider style={style.questionDivider}/>
               <Text style={style.questionContent}>{ques.question}</Text>
               </TouchableOpacity>
-              { displayAnswerInputBox ? (
+              { ques.displayAnswerInputBox ? (
               <View>
                 <Input
                   style={style.answerBox}
@@ -235,7 +256,7 @@ export default function DashboardScreen({navigation}) {
                   value={answer}
                   onChangeText={input => setAnswer(input)}
                 />
-                <Button style={style.submitBtn} onPress={() => submitAnswer()}>
+                <Button style={style.submitBtn} onPress={() => submitAnswer(index)}>
                   <Text>Submit Answer</Text>
                 </Button>
               </View>
@@ -250,7 +271,7 @@ export default function DashboardScreen({navigation}) {
       return <AppLoading />;
     }
     return (
-      <View style={style.mainView}>
+      <ScrollView style={style.mainView}>
         <ScrollView showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[6]}>
           <Text style={style.header} category='h5'>Your Top Matches</Text>
@@ -353,10 +374,11 @@ export default function DashboardScreen({navigation}) {
                   onSelect={index => setSelectedCategoryIndex(index)}>
                   {dashboardCategoryProp.map(renderCategoryOption)}
                 </Select>
+                {renderedQuestions()}
               </View>
-            ): null}
+            )
+            : null}
           </Card>
-          {renderedQuestions()}
           {showMyQuestions &&
           <View>
             <View>
@@ -392,7 +414,7 @@ export default function DashboardScreen({navigation}) {
           </View>
           }
         </ScrollView>
-      </View>
+      </ScrollView>
     )
 }
 
