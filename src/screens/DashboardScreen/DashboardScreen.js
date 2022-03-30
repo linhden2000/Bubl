@@ -7,7 +7,9 @@ import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon,
 import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import moment from 'moment'
 import AppLoading from 'expo-app-loading';
-import { auth, firestore } from '../../firebase/config';
+import {auth, firestore, firebase} from '../../firebase/config';
+import { cos, log } from 'react-native-reanimated';
+import { LogBox } from 'react-native';
 
 
 export default function DashboardScreen({navigation}) {
@@ -23,15 +25,32 @@ export default function DashboardScreen({navigation}) {
     const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
     const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
     const [answer, setAnswer] = useState("");
-    const [displayAnswerInputBox, setDisplayAnswerInputBox] = useState(false);
+    const [questionsList, setQuestionsList] = useState([])
     const [date, setDate] = useState(new Date('01/4/2022'));
-    const shouldLoadComponent = (index) => index === selectedIndex;
-
     //Store myQuestions
     const [myQuestions, setMyQuestions] = useState([]);
-    //const myQuestions = [];
-    //Grab 'My Questions'
-    const fetchMyQuestions = async() => {
+    const shouldLoadComponent = (index) => index === selectedIndex;
+    const usersRef = firestore.collection('users')
+    const currentUserUID = auth?.currentUser.uid
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+    let sexualPref = ''
+
+    /* 
+    Messing around with date.
+    var now = moment(date).format('MMMM D, YYYY'); 
+    console.log(now)
+    console.log(date)
+    */
+
+    //Categories Tab
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(new IndexPath(0));
+    const displayCategory= dashboardCategoryProp[selectedCategoryIndex.row];
+    const renderCategoryOption = (label, key) => (
+      <SelectItem key={key} title={label}/>
+    );
+
+     //Grab 'My Questions'
+     const fetchMyQuestions = async() => {
       const currentUser = auth?.currentUser
       const uid = currentUser.uid
       const questions = firestore.collection('users').doc(uid).collection('questions');
@@ -47,9 +66,10 @@ export default function DashboardScreen({navigation}) {
         myQuestions.push(question);
       })
     }
+
     //Dynamically render the list of MyQuesitons
     const renderMyQuestion = (obj) => {
-      
+
       return(
           <View style={style.shadow}>
             <Card style={style.myQuestionCards}>
@@ -75,29 +95,164 @@ export default function DashboardScreen({navigation}) {
     };
 
     useEffect(() => {
-      fetchMyQuestions()
-    }, [])
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchMyQuestions()
+      }) ;
+      return unsubscribe;
+    },[navigation]);
 
+    // useEffect(() => {
+    //   fetchMyQuestions();
+    //   return () => {
+    //     setMyQuestions([]);
+    //   };
+    // }, []);
 
-    /* 
-    Messing around with date.
-    var now = moment(date).format('MMMM D, YYYY'); 
-    console.log(now)
-    console.log(date)
-    */
-
-    //Categories Tab
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(new IndexPath(0));
-    const displayCategory= dashboardCategoryProp[selectedCategoryIndex.row];
-    const renderCategoryOption = (label, key) => (
-      <SelectItem key={key} title={label}/>
-    );
-
+    // Fetch user data
+    useEffect(() => {
+      usersRef
+        .doc(currentUserUID)
+        .onSnapshot(snapshot =>{
+          sexualPref = snapshot.data().sexualPref
+        })
+    })
+    // Listen to the change in category choice
+    useEffect(() => {
+      let queryGender = ''
+      // Query for single sexual preference
+      if(sexualPref == 'male' || sexualPref == 'female') {
+        if(sexualPref == 'male') {
+          queryGender = 'man'
+        }
+        else{
+          queryGender = 'woman'
+        }
+        usersRef
+        .where('gender', '==', queryGender)
+        .get()
+        .then(snapshot => {
+          if(snapshot.empty) {
+            console.log("There's no matching profile");
+          }
+          else {
+            snapshot.docs.forEach(doc => {
+              const selectedCategory = dashboardCategoryProp[selectedCategoryIndex.row]
+              if(selectedCategory == "All") {
+                usersRef.doc(doc.data().id).collection('questions')
+                        .get()
+                        .then(quesList => {
+                          quesList.docs.forEach(ques => {
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            questionId:ques.id,
+                            question: ques.data().question,
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id,
+                          }
+                            setQuestionsList(prevState => [...prevState, data])
+                          })
+                        })
+              }
+              else {
+                usersRef.doc(doc.data().id).collection('questions')
+                      .where('category', '==', selectedCategory)
+                      .get()
+                      .then(quesList => {
+                        quesList.docs.forEach(ques => {
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            questionId:ques.id,
+                            question: ques.data().question,
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id, 
+                          }
+                          setQuestionsList(prevState => [...prevState, data])
+                        })
+                      })
+                      .catch(err => console.log(err))
+              }
+            })
+          }
+        })
+        .catch(err => console.log(err))  
+      }
+      // Query for both sexual preferences
+      else{
+        usersRef
+          .get()
+          .then(snapshot => { 
+            snapshot.docs.forEach(doc => {
+              const selectedCategory = dashboardCategoryProp[selectedCategoryIndex.row]
+              if(selectedCategory == "All") {
+                usersRef.doc(doc.data().id).collection('questions')
+                        .get()
+                        .then(quesList => {
+                          quesList.docs.forEach(ques => {
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            questionId:ques.id,
+                            question: ques.data().question,
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id, 
+                          }
+                            setQuestionsList(prevState => [...prevState, data])
+                          })
+                        })
+              }
+              else {
+                usersRef.doc(doc.data().id).collection('questions')
+                      .where('category', '==', selectedCategory)
+                      .get()
+                      .then(quesList => {
+                        quesList.docs.forEach(ques => {
+                          let epochMilliseconds = ques.data().postedTime.seconds * 1000
+                          let postedTimeStamp = new Date(epochMilliseconds)
+                          let actualDate = postedTimeStamp.getDate()
+                          let actualMonth = postedTimeStamp.getMonth()
+                          let actualYear = postedTimeStamp.getFullYear()
+                          let postedTimeString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
+                          const data = {
+                            questionId:ques.id,
+                            question: ques.data().question,
+                            postedTime: postedTimeString,
+                            displayAnswerInputBox: false,
+                            postedBy: doc.data().id,
+                          }
+                          setQuestionsList(prevState => [...prevState, data])
+                        })
+                      })
+                      .catch(err => console.log(err))
+              }
+            })
+          })
+      }
+      const unsubscribe = () => {
+        setQuestionsList(prevState => [])
+      }
+      return unsubscribe
+    }, [selectedCategoryIndex])
     //Show/hide tabs
     const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions
     const [showAllQuestions, setShowAllQuestions] = useState(true); //Display questions from other users
     const tabSelect = (input) => {
-      console.log("question button pushed");
       if (input == 0){ //User selects 'Questions' tab
         setShowMyQuestions(false);
         setShowAllQuestions(true);
@@ -117,22 +272,68 @@ export default function DashboardScreen({navigation}) {
       navigation.navigate('AnswerDisplay')
     }
     
-
-    const answerQuestion = () => {
-      if(displayAnswerInputBox == false)
-        setDisplayAnswerInputBox(true);
-      else if(displayAnswerInputBox == true)
-        setDisplayAnswerInputBox(false);
-    }
-    const submitAnswer = () => {
-      console.log("yeet2")
+    //** Toggle the submit answer form  **//
+    const answerQuestion = (index) => {
+      const updatedQuesionList = questionsList.map((ques, mapIndex) => {
+        return mapIndex == index ? {...ques, displayAnswerInputBox: !ques.displayAnswerInputBox} : {...ques}
+      })
+      setQuestionsList(updatedQuesionList)
     }
 
+    //** Submit answer to database **//
+    const submitAnswer = (index) => {
+      const postedById = questionsList[index].postedBy
+      const questionId = questionsList[index].questionId
+      const questionDoc = usersRef.doc(postedById).collection('questions').doc(questionId)
+      questionDoc.collection('answers').add({
+        replierId: postedById,
+        content: answer,
+        postedTime: new Date(),
+        read: false
+      })
+    }
+    
+    const renderedQuestions = () => {
+      return questionsList.map((ques, index) => {
+        return (
+        <View key={index}>
+          <View style={style.shadow}>
+            <Card style={style.questionCards}>
+            <TouchableOpacity onPress={() => answerQuestion(index)}>
+              <View style={{flexDirection:"row"}}>
+                <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
+                <Text style={style.questionUserName}>Anonymous</Text>
+                <Text style={style.questionTimeStamp}>{ques.postedTime}</Text>
+              </View>
+              <Divider style={style.questionDivider}/>
+              <Text style={style.questionContent}>{ques.question}</Text>
+              </TouchableOpacity>
+              { ques.displayAnswerInputBox ? (
+              <View>
+                <Input
+                  style={style.answerBox}
+                  multiline={true}
+                  textStyle={{ minHeight: 70}}
+                  placeholder='Type your answer here...'
+                  value={answer}
+                  onChangeText={input => setAnswer(input)}
+                />
+                <Button style={style.submitBtn} onPress={() => submitAnswer(index)}>
+                  <Text>Submit Answer</Text>
+                </Button>
+              </View>
+              ): null}
+            </Card>
+          </View>
+        </View>
+        )
+      })
+    } 
     if (!fontsLoaded) {
       // return <AppLoading />;
     }
     return (
-      <View style={style.mainView}>
+      <ScrollView style={style.mainView}>
         <ScrollView showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[6]}>
           <Text style={style.header} category='h5'>Your Top Matches</Text>
@@ -235,109 +436,11 @@ export default function DashboardScreen({navigation}) {
                   onSelect={index => setSelectedCategoryIndex(index)}>
                   {dashboardCategoryProp.map(renderCategoryOption)}
                 </Select>
+                {renderedQuestions()}
               </View>
-            ): null}
+            )
+            : null}
           </Card>
-          {showAllQuestions ? ( //If multiple choice
-            <View>
-              
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                <TouchableOpacity onPress={() => answerQuestion()}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 4, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Are you a dog or a cat person?</Text>
-                  </TouchableOpacity>
-                  { displayAnswerInputBox ? (
-                  <View>
-                    <Input
-                      style={style.answerBox}
-                      multiline={true}
-                      textStyle={{ minHeight: 70}}
-                      placeholder='Type your answer here...'
-                      value={answer}
-                      onChangeText={input => setAnswer(input)}
-                    />
-                    <Button style={style.submitBtn} onPress={() => submitAnswer()}>
-                      <Text>Submit Answer</Text>
-                    </Button>
-                  </View>
-                  ): null}
-                </Card>
-              </View>
-              
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 4, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>KU or K-State?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 3, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>If you could travel anywhere, where would it be?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 2, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>What is your favorite pizza flavor?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Do you play video games? If so, what is your favorite or currently playing right now?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Are you looking for a long-term relationship or are you only looking for a fling?</Text>
-                </Card>
-              </View>
-              <View style={style.shadow}>
-                <Card style={style.questionCards}>
-                  <View style={{flexDirection:"row"}}>
-                    <Icon style={style.questionUserIcon} fill='#7f7aff' name='person-outline'/>
-                    <Text style={style.questionUserName}>Anonymous</Text>
-                    <Text style={style.questionTimeStamp}>January 1, 2022</Text>
-                  </View>
-                  <Divider style={style.questionDivider}/>
-                  <Text style={style.questionContent}>Marvel or DC? And who is your favorite characters?</Text>
-                </Card>
-              </View>
-            </View>
-          ): null}
           {showMyQuestions &&
           <View>
             <View>
@@ -348,11 +451,11 @@ export default function DashboardScreen({navigation}) {
             <View>
               <Text style={style.timeStamp}>Posted on January 28, 2022</Text>
               <Divider style={style.timeStampDivider}/>
-                {myQuestions.map(renderMyQuestion)}
+                {myQuestions.map(ques => renderMyQuestion(ques))}
             </View>
           </View>
           }
         </ScrollView>
-      </View>
+      </ScrollView>
     )
 }
