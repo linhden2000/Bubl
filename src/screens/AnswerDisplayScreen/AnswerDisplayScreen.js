@@ -7,28 +7,39 @@ import { useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300L
 import { styles } from 'styled-system';
 import { auth, firestore } from '../../firebase/config';
 import { Swipeable } from 'react-native-gesture-handler';
+import { log } from 'react-native-reanimated';
 
 //Icons
 const BackIcon = (props) => (
     <Icon {...props} name='arrow-back-outline' />
 );
-const answers = [
-    { id: "0", text: "Bread" },
-    { id: "1", text: "Carrot" },
-    { id: "2", text: "Potato Chips" },
-    { id: "3", text: "Burger" },
-    { id: "4", text: "Soup" },
-
-]
 
 export default function AnswerDisplayScreen({ navigation, route}) {
-    const [answerList, setAnswerList] = useState(answers);
+    //Load fonts
+    //Source: https://github.com/expo/google-fonts
+    let [fontsLoaded] = useFonts({
+        PublicSans_600SemiBold,
+        PublicSans_500Medium,
+        PublicSans_400Regular,
+        PublicSans_300Light,
+    });
+    const [question, setQuestion] = useState('')
+    const [answerList, setAnswerList] = useState([]);
 
-    useEffect(() => {
-        console.log(route.params.usersId)
-    })
-
+    const uid = auth?.currentUser.uid
+    const qid = route.params.qid
+    const fetchQuestion = async() => {
+        const questionsCollection = firestore
+        .collection('users')
+        .doc(uid)
+        .collection('questions')
+        const questionRef = questionsCollection.doc(qid)
+        questionRef.onSnapshot(snapshot => {
+            setQuestion(snapshot.data().question)
+        })
+    }
     const fetchAnswer = async () => {
+        setAnswerList([])
         const answersCollection = firestore
             .collection('users')
             .doc(uid)
@@ -43,20 +54,15 @@ export default function AnswerDisplayScreen({ navigation, route}) {
                 "read": ans.data().read,
                 "replierId": ans.data().replierId,
             }
-            let updatedAnswerList = [...answerList, answer]
-            setAnswerList (updatedAnswerList)
+            setAnswerList(prevState => [...prevState, answer])
         })
     }
-
-    //Load fonts
-    //Source: https://github.com/expo/google-fonts
-    let [fontsLoaded] = useFonts({
-        PublicSans_600SemiBold,
-        PublicSans_500Medium,
-        PublicSans_400Regular,
-        PublicSans_300Light,
-    });
-
+    useEffect(() => {
+        if(navigation.isFocused()){
+            fetchQuestion()
+            fetchAnswer()
+        }
+    }, [])
     const navigateToDashboard = () => {
         navigation.navigate('DashboardNavigation');
     }
@@ -87,7 +93,7 @@ export default function AnswerDisplayScreen({ navigation, route}) {
         )
     }
 
-    const ListItem = ({ text, onSwipeFromLeft, onSwipeFromRight }) => (
+    const ListItem = ({ content, onSwipeFromLeft, onSwipeFromRight }) => (
         <Swipeable
             renderLeftActions={LeftActions}
             onSwipeableLeftOpen={onSwipeFromLeft}
@@ -95,7 +101,7 @@ export default function AnswerDisplayScreen({ navigation, route}) {
             onSwipeableRightOpen={onSwipeFromRight}
         >
             <Card style={style.answerCard}>
-                <Text>{text}</Text>
+                <Text>{content}</Text>
             </Card>
         </Swipeable>
     );
@@ -124,7 +130,7 @@ export default function AnswerDisplayScreen({ navigation, route}) {
             <View>
                 <Card>
                     <View>
-                        <Text style={style.question}>What is your favorite food?</Text>
+                        <Text style={style.question}>{question}</Text>
                         <Divider />
                     </View>
                     <FlatList
