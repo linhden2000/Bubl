@@ -55,14 +55,16 @@ export default function CreateQuestionsScreen({navigation}) {
       question: question,
       category: categoryProp[selectedCategoryIndex.row],
       postedTime: new Date()
-    } 
+    }
+
     if(questionTypesProp[selectedQuestionTypeIndex.row] == "Short Answer") {
       questionData = {
         ...questionData,
         questionType: "Short Answer"
       } 
     }
-    else if(questionTypesProp[selectedQuestionTypeIndex.row] == "Multiple Choice") {
+
+   if(questionTypesProp[selectedQuestionTypeIndex.row] == "Multiple Choice") {
       let filteredListOfAns = listOfAns.filter(ans => ans != '')
       questionData = {
         ...questionData,
@@ -70,20 +72,27 @@ export default function CreateQuestionsScreen({navigation}) {
         answerList: filteredListOfAns
       }
     }
-
-    setQuestion(''); // CLEARS QUESTION FIELD
     
-    questionCollection
+    //alert user that they cannot submit a blank question
+    if(questionData.question == '') {
+      Alert.alert(
+        "You cannot submit a blank question!"
+      ); 
+    }
+    
+    //alert user that they submitted their question successfully
+    else if(questionData.question != '') {
+      questionCollection
       .add(questionData)
-      .then(() => submitAlert())
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err)) 
 
-  //function to alert user that they submitted their question successfully
-  const submitAlert = () => 
-    Alert.alert(
-      "Your question was submitted successfully!"
-    );
+      Alert.alert(
+        "Your question was submitted successfully!"
+      );
+
+      setQuestion('');
+    }
+  }
 
   // Add new answer choice modal to the UI
   const handleAddAnswer = () => {
@@ -134,6 +143,7 @@ export default function CreateQuestionsScreen({navigation}) {
               textStyle={{ minHeight: 100}}
               placeholder='Type your question here'
               value={question}
+
               onChangeText={input => setQuestion(input)}
             />
             {
