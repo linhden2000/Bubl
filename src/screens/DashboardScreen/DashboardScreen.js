@@ -95,7 +95,7 @@ export default function DashboardScreen({navigation}) {
     };
 
     useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
+      const unsubscribe = navigation.addListener('willFocus', () => {
         fetchMyQuestions()
       }) ;
       return unsubscribe;
@@ -270,7 +270,7 @@ export default function DashboardScreen({navigation}) {
       navigation.navigate('CreateQuestions');
     }
     const displayAnswers  = () => {
-      navigation.navigate('AnswerDisplay')
+      navigation.navigate('AnswerDisplay', {userId: currentUserUID})
     }
     
     //** Toggle the submit answer form  **//
