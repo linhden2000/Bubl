@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import style from './style';
-import { StyleSheet,ScrollView, View, TouchableOpacity, FlatList, SnapshotViewIOS } from 'react-native';
+import { StyleSheet,ScrollView, View, TouchableOpacity} from 'react-native';
 import {dashboardCategoryProp} from '../../properties'
-import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon, Layout, 
-        Select, SelectItem, IndexPath, Input, List, ListItem } from '@ui-kitten/components';
-import {useFonts, PublicSans_600SemiBold, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import { Button, Card, Text, Tab, TabBar, Divider, Avatar, Icon,
+        Select, SelectItem, IndexPath, Input } from '@ui-kitten/components';
+import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
 import moment from 'moment'
 import AppLoading from 'expo-app-loading';
 import {auth, firestore, firebase} from '../../firebase/config';
@@ -13,11 +13,11 @@ import { LogBox } from 'react-native';
 
 
 export default function DashboardScreen({navigation}) {
-    LogBox.ignoreLogs(['Setting a timer']);
     //Load fonts
     //Source: https://github.com/expo/google-fonts
     let [fontsLoaded] = useFonts ({
       PublicSans_600SemiBold,
+      PublicSans_500Medium,
       PublicSans_400Regular,
       PublicSans_300Light,
     });
@@ -25,8 +25,10 @@ export default function DashboardScreen({navigation}) {
     const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
     const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
     const [answer, setAnswer] = useState("");
-    const [date, setDate] = useState(new Date('01/4/2022'));
     const [questionsList, setQuestionsList] = useState([])
+    const [date, setDate] = useState(new Date('01/4/2022'));
+    //Store myQuestions
+    const [myQuestions, setMyQuestions] = useState([]);
     const shouldLoadComponent = (index) => index === selectedIndex;
     const usersRef = firestore.collection('users')
     const currentUserUID = auth?.currentUser.uid
@@ -46,6 +48,67 @@ export default function DashboardScreen({navigation}) {
     const renderCategoryOption = (label, key) => (
       <SelectItem key={key} title={label}/>
     );
+
+     //Grab 'My Questions'
+     const fetchMyQuestions = async() => {
+      const currentUser = auth?.currentUser
+      const uid = currentUser.uid
+      const questions = firestore.collection('users').doc(uid).collection('questions');
+      const questionsSnapShot = await questions.get();
+      questionsSnapShot.forEach(doc => {
+        let question = {
+          "category" : doc.data().category,
+          "postedTime" : doc.data().postedTime,
+          "question" : doc.data().question,
+          "questionType" : doc.data().questionType,
+        }
+       // setMyQuestions(oldArray => [...oldArray, question]);
+        myQuestions.push(question);
+      })
+    }
+
+    //Dynamically render the list of MyQuesitons
+    const renderMyQuestion = (obj) => {
+
+      return(
+          <View style={style.shadow}>
+            <Card style={style.myQuestionCards}>
+            <TouchableOpacity onPress={() => displayAnswers()}>
+              <Text style={style.questionContent}>{obj.question}</Text>
+              <Divider style={style.myQuestionDivider}/>
+              <View style={{flexDirection:"row"}}>
+                <Text style={style.myQuestionInfo}>Unread answers: </Text>
+                <Text style={style.myQuestionInfo}>15</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={style.myQuestionInfo}>Read answers: </Text>
+                <Text style={style.myQuestionInfo}>2</Text>
+              </View>
+              <View style={{flexDirection:"row"}}>
+                <Text style={style.myQuestionInfo}>Total answers: </Text>
+                <Text style={style.myQuestionInfo}>17</Text>
+              </View>
+              </TouchableOpacity>
+            </Card>
+          </View>
+        );
+    };
+
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchMyQuestions()
+      }) ;
+      return unsubscribe;
+    },[navigation]);
+    
+
+    // useEffect(() => {
+    //   fetchMyQuestions();
+    //   return () => {
+    //     setMyQuestions([]);
+    //   };
+    // }, []);
+
     // Fetch user data
     useEffect(() => {
       usersRef
@@ -268,7 +331,7 @@ export default function DashboardScreen({navigation}) {
       })
     } 
     if (!fontsLoaded) {
-      return <AppLoading />;
+      // return <AppLoading />;
     }
     return (
       <ScrollView style={style.mainView}>
@@ -389,27 +452,7 @@ export default function DashboardScreen({navigation}) {
             <View>
               <Text style={style.timeStamp}>Posted on January 28, 2022</Text>
               <Divider style={style.timeStampDivider}/>
-              
-                <View style={style.shadow}>
-                  <Card style={style.myQuestionCards}>
-                  <TouchableOpacity onPress={() => displayAnswers()}>
-                    <Text style={style.questionContent}>What is your favorite food?</Text>
-                    <Divider style={style.myQuestionDivider}/>
-                    <View style={{flexDirection:"row"}}>
-                      <Text style={style.myQuestionInfo}>Unread answers: </Text>
-                      <Text style={style.myQuestionInfo}>15</Text>
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                      <Text style={style.myQuestionInfo}>Read answers: </Text>
-                      <Text style={style.myQuestionInfo}>2</Text>
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                      <Text style={style.myQuestionInfo}>Total answers: </Text>
-                      <Text style={style.myQuestionInfo}>17</Text>
-                    </View>
-                    </TouchableOpacity>
-                  </Card>
-                </View>
+                {myQuestions.map(ques => renderMyQuestion(ques))}
             </View>
           </View>
           }
@@ -417,6 +460,3 @@ export default function DashboardScreen({navigation}) {
       </ScrollView>
     )
 }
-
-
-
