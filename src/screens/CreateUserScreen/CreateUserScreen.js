@@ -21,6 +21,7 @@ export default function CreateUserScreen({navigation}){
     // The following are inputted to input fields
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+    const [bio, setBio] = useState('')
     const [KUID, setKUID] = useState('')
     const [email, setEmail] = useState('')
     const [address, setAddress] = useState('')
@@ -42,6 +43,7 @@ export default function CreateUserScreen({navigation}){
     //Validation
     const [isValidFirstName, setValidFirstName] = useState(true)
     const [isValidLastName, setValidLastName] = useState(true)
+    const [isValidBio, setValidBio] = useState(true)
     const [isValidKUID, setValidKUID] = useState(true)
     const [isValidEmail, setValidEmail] = useState(true)
     const [isValidAddress, setValidAddress] = useState(true)
@@ -121,6 +123,7 @@ export default function CreateUserScreen({navigation}){
             email: currentUser.email,
             firstName: firstName,
             lastName: lastName,
+            bio: bio,
             kuid: KUID,
             address: address,
             city: city,
@@ -162,6 +165,13 @@ export default function CreateUserScreen({navigation}){
             setValidLastName(false)
         }
     }
+    const handleBioChange = (val) => {
+        if( val.trim().length > 0 ) {
+            setValidBio(true)
+        } else {
+            setValidBio(false)
+        }
+    } 
     const handleKUIDChange = (val) => {
         if( val.trim().length > 0 ) {
             setValidKUID(true)
@@ -236,6 +246,20 @@ export default function CreateUserScreen({navigation}){
                 { isValidLastName ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
                         <Text style={style.errorMsg}>Last Name is required .</Text>
+                        </Animatable.View>
+                }
+                <View style={style.inputView}>
+                    <Input
+                        label = 'Profile Bio'
+                        placeholder='Place your Text'
+                        value={bio}
+                        onChangeText={nextValue => setBio(nextValue)}
+                        onEndEditing={text=>handleBioChange(text.nativeEvent.text)}
+                    />    
+                </View>
+                { isValidBio ? null : 
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={style.errorMsg}>Profile Bio is optional .</Text>
                         </Animatable.View>
                 }
                 <View style={style.inputView}>

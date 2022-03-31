@@ -1,66 +1,99 @@
-import React, {useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './style';
-import {View, FlatList, Animated, SectionList} from 'react-native';
-import ListItem, {Separator} from "react-native-elements";
-import {Text, Button, Card, Icon, Divider} from '@ui-kitten/components';
-import {useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular} from '@expo-google-fonts/public-sans';
+import { View, FlatList, Animated, SectionList } from 'react-native';
+import ListItem, { Separator } from "react-native-elements";
+import { Text, Button, Card, Icon, Divider } from '@ui-kitten/components';
+import { useFonts, PublicSans_600SemiBold, PublicSans_500Medium, PublicSans_300Light, PublicSans_400Regular } from '@expo-google-fonts/public-sans';
 import { styles } from 'styled-system';
+import { auth, firestore } from '../../firebase/config';
 import { Swipeable } from 'react-native-gesture-handler';
+import { log } from 'react-native-reanimated';
 
 //Icons
 const BackIcon = (props) => (
-    <Icon {...props} name='arrow-back-outline'/>
+    <Icon {...props} name='arrow-back-outline' />
 );
-const answers = [
-    {id: "0", text: "Bread"},
-    {id: "1", text: "Carrot"},
-    {id: "2", text: "Potato Chips"},
-    {id: "3", text: "Burger"},
-    {id: "4", text: "Soup"},
-]
-export default function AnswerDisplayScreen({navigation}) {
-    const [answerList, setAnswerList] = useState(answers);
-    
+
+export default function AnswerDisplayScreen({ navigation, route}) {
     //Load fonts
     //Source: https://github.com/expo/google-fonts
-    let [fontsLoaded] = useFonts ({
+    let [fontsLoaded] = useFonts({
         PublicSans_600SemiBold,
         PublicSans_500Medium,
         PublicSans_400Regular,
         PublicSans_300Light,
     });
+    const [question, setQuestion] = useState('')
+    const [answerList, setAnswerList] = useState([]);
 
+    const uid = auth?.currentUser.uid
+    const qid = route.params.qid
+    const fetchQuestion = async() => {
+        const questionsCollection = firestore
+        .collection('users')
+        .doc(uid)
+        .collection('questions')
+        const questionRef = questionsCollection.doc(qid)
+        questionRef.onSnapshot(snapshot => {
+            setQuestion(snapshot.data().question)
+        })
+    }
+    const fetchAnswer = async () => {
+        setAnswerList([])
+        const answersCollection = firestore
+            .collection('users')
+            .doc(uid)
+            .collection('questions')
+            .doc(qid)
+            .collection('answers')
+        const answerSnapShot = await answersCollection.get();
+        answerSnapShot.forEach(ans => {
+            let answer = {
+                "content" : ans.data().content,
+                "postedTime": ans.data().postedTime,
+                "read": ans.data().read,
+                "replierId": ans.data().replierId,
+            }
+            setAnswerList(prevState => [...prevState, answer])
+        })
+    }
+    useEffect(() => {
+        if(navigation.isFocused()){
+            fetchQuestion()
+            fetchAnswer()
+        }
+    }, [])
     const navigateToDashboard = () => {
         navigation.navigate('DashboardNavigation');
     }
-    
+
     const LeftActions = (progress, dragX) => {
         const scale = dragX.interpolate({
             inputRange: [0, 100],
-            outputRange: [0,1],
+            outputRange: [0, 1],
             extrapolate: 'clamp',
         })
         return (
             <View style={style.leftAction}>
-                <Animated.Text style={[style.actionText, {transform: [{scale}]}]}>Remove</Animated.Text>
+                <Animated.Text style={[style.actionText, { transform: [{ scale }] }]}>Remove</Animated.Text>
             </View>
         )
     }
 
     const RightActions = (progress, dragX) => {
         const scale = dragX.interpolate({
-            inputRange: [-100,0],
-            outputRange: [1,0],
+            inputRange: [-100, 0],
+            outputRange: [1, 0],
             extrapolate: 'clamp',
         })
         return (
             <View style={style.rightAction}>
-                <Animated.Text style={[style.actionText, {transform: [{scale}]}]}>Add</Animated.Text>
+                <Animated.Text style={[style.actionText, { transform: [{ scale }] }]}>Add</Animated.Text>
             </View>
         )
     }
 
-    const ListItem = ({text, onSwipeFromLeft, onSwipeFromRight}) => (
+    const ListItem = ({ content, onSwipeFromLeft, onSwipeFromRight }) => (
         <Swipeable
             renderLeftActions={LeftActions}
             onSwipeableLeftOpen={onSwipeFromLeft}
@@ -68,7 +101,7 @@ export default function AnswerDisplayScreen({navigation}) {
             onSwipeableRightOpen={onSwipeFromRight}
         >
             <Card style={style.answerCard}>
-                <Text>{text}</Text>
+                <Text>{content}</Text>
             </Card>
         </Swipeable>
     );
@@ -78,7 +111,7 @@ export default function AnswerDisplayScreen({navigation}) {
         const arr = [...answerList];
         arr.splice(index, 1);
         setAnswerList(arr);
-        
+
     }
 
     if (!fontsLoaded) {
@@ -88,22 +121,22 @@ export default function AnswerDisplayScreen({navigation}) {
         <View style={style.mainView}>
             <View>
                 <Card style={style.headerCard}>
-                <Text style={style.pageTitle} category='S1'>Answers</Text>
-                <Button style={style.backBtn} onPress={navigateToDashboard} 
-                        accessoryLeft={BackIcon} appearance='ghost'/>
+                    <Text style={style.pageTitle} category='S1'>Answers</Text>
+                    <Button style={style.backBtn} onPress={navigateToDashboard}
+                        accessoryLeft={BackIcon} appearance='ghost' />
                 </Card>
             </View>
 
             <View>
                 <Card>
                     <View>
-                        <Text style={style.question}>What is your favorite food?</Text>
-                        <Divider/>
+                        <Text style={style.question}>{question}</Text>
+                        <Divider />
                     </View>
                     <FlatList
                         data={answerList}
                         keyExtractor={item => item.id}
-                        renderItem={({item, index}) => (
+                        renderItem={({ item, index }) => (
                             <ListItem
                                 {...item}
                                 onSwipeFromLeft={() => deleteItem(index)}
