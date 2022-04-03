@@ -45,6 +45,7 @@ export default function DashboardScreen({ navigation }) {
   const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
   const [answer, setAnswer] = useState("");
   const [questionsList, setQuestionsList] = useState([]);
+  const [topMatches, setTopMatches] = useState([])
   const [date, setDate] = useState(new Date("01/4/2022"));
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
@@ -70,7 +71,25 @@ export default function DashboardScreen({ navigation }) {
     <SelectItem key={key} title={label} />
   );
 
-  //Grab 'My Questions'
+  //** Fetch 'Top Matches' **//
+  const fetchTopMatches = async () => {
+    const usersCollection = firestore.collection('users')
+    const userDoc = usersCollection.doc(currentUserUID)
+    const snapshot = await userDoc.get()
+    const topMatches = snapshot.data().topMatches
+    // Get other users data in top matches array
+    for (const match of topMatches) {
+      const matchSnapshot = await usersCollection.doc(match).get()
+      const matchData = {
+        matchId: matchSnapshot.id,
+        matchName: matchSnapshot.data().firstName,
+        matchImg: matchSnapshot.data().profilePic
+      }
+      setTopMatches(prevState => [...prevState, matchData])
+    }
+  }
+
+  //** Fetch 'My Questions' **//
   const fetchMyQuestions = async () => {
     const currentUser = auth?.currentUser;
     const uid = currentUser.uid;
@@ -94,6 +113,7 @@ export default function DashboardScreen({ navigation }) {
 
   //Dynamically render the list of MyQuesitons
   const renderMyQuestion = (obj, index) => {
+
     return (
       <View style={style.shadow} key={obj.questionId}>
         <Card style={style.myQuestionCards}>
@@ -120,7 +140,12 @@ export default function DashboardScreen({ navigation }) {
 
   useEffect(() => {
     if (navigation.isFocused()) {
+      fetchTopMatches();
       fetchMyQuestions();
+    }
+    return () => {
+      setTopMatches([])
+      setMyQuestions([])
     }
   }, [navigation]);
 
@@ -293,6 +318,7 @@ export default function DashboardScreen({ navigation }) {
   const createQuestion = () => {
     navigation.navigate("CreateQuestions");
   };
+
   const displayAnswers = (qid) => {
     navigation.navigate("AnswerDisplay", { qid });
   };
@@ -323,10 +349,11 @@ export default function DashboardScreen({ navigation }) {
     });
   };
 
+  //** render suggested Questions **//
   const renderedQuestions = () => {
     return questionsList.map((ques, index) => {
       return (
-        <View key={index}>
+        <View key={ques.questionId}>
           <View style={style.shadow}>
             <Card style={style.questionCards}>
               <TouchableOpacity onPress={() => answerQuestion(index)}>
@@ -366,6 +393,43 @@ export default function DashboardScreen({ navigation }) {
       );
     });
   };
+
+  //** render Top Matches **//
+  const renderedTopMatches = () => {
+    return topMatches.length == 0 ? <Text>No one iteresting?</Text> : topMatches.map(match => {
+      return (<View key={match.id} style={style.shadow}>
+      <Card style={style.matchCards}>
+        <View style={{ flexDirection: "row" }}>
+          <Avatar
+            style={style.profilePic}
+            source={{uri: match.matchImg}}
+          />
+          <View>
+            <Text style={style.profileName}>{match.matchName}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Icon
+                style={[style.chatBubbleIcon, style.matchIcons]}
+                fill="#7f7aff"
+                name="message-circle-outline"
+              />
+              <Icon
+                style={[style.addPersonIcon, style.matchIcons]}
+                fill="#7f7aff"
+                name="person-add-outline"
+              />
+              <Icon
+                style={[style.moreVerticalIcon, style.matchIcons]}
+                fill="#7f7aff"
+                name="more-vertical-outline"
+              />
+            </View>
+          </View>
+        </View>
+      </Card>
+    </View>)
+    })
+  }
+
   if (!fontsLoaded) {
     // return <AppLoading />;
   }
@@ -379,162 +443,7 @@ export default function DashboardScreen({ navigation }) {
           Your Top Matches
         </Text>
 
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/lordFarquad.png")}
-              />
-              <View>
-                <Text style={style.profileName}>Lord Farquad</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/princeCharming.jpg")}
-              />
-              <View>
-                <Text style={style.profileName}>Prince Charming</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/gingerbreadMan.png")}
-              />
-              <View>
-                <Text style={style.profileName} t>
-                  Gingerbread Man
-                </Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/fairyMother.png")}
-              />
-              <View>
-                <Text style={style.profileName}>Fairy Godmother</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/pussInBoots.png")}
-              />
-              <View>
-                <Text style={style.profileName}>Puss in Boots</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
+        {renderedTopMatches()}
 
         <Card style={style.questionHeaderContainer}>
           <TabBar
