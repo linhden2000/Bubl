@@ -34,6 +34,8 @@ export default function ProfileScreen({navigation}) {
     const now = new Date();
     const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
     const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
+    const [bio, setBio] = useState('');
+
 
     const [editMode, setEditMode] = useState(''); //Editing or viewing
 
@@ -107,6 +109,7 @@ export default function ProfileScreen({navigation}) {
                     setToValue(userData.toAge)
                     setSexualPref(userData.sexualPref)
                     setGender(userData.gender)
+                    setBio(userData.bio)
                     if(userData.birthday) {
                       let epochMilliseconds = userData.birthday.seconds * 1000
                       let birthdayTimeStamp = new Date(epochMilliseconds)
@@ -153,6 +156,7 @@ export default function ProfileScreen({navigation}) {
           gender: gender,
           profilePic: profilePic,
           sexualPref: sexualPref,
+          bio: bio,
           state: USStatesProp[parseInt(selectedStateIndex.toString()) - 1]
       }
 
@@ -342,6 +346,14 @@ export default function ProfileScreen({navigation}) {
               {USStatesProp.map(renderStateOption)}
           </Select>
           </View>
+          <View style={style.Btn}>
+              <Input
+                  label = 'Bio'
+                  placeholder='Place your Text'
+                  value={bio}
+                  onChangeText={nextValue => setBio(nextValue)}
+              />
+          </View>
         </ScrollView>) :
         (<ScrollView style={style.content}>
           <View style={style.Btn}>
@@ -402,6 +414,11 @@ export default function ProfileScreen({navigation}) {
           <View style={style.Btn}>
             <Text  style={{color:"#8898AA"}}>Preferred Age Range</Text>
             <Text> From {fromValue} to {toValue} </Text>
+          </View>
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#8898AA"}}> Bio </Text>
+            <Text> {bio} </Text>
           </View>
         </ScrollView>)}   
         

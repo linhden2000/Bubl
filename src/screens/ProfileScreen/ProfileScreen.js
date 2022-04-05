@@ -25,6 +25,7 @@ export default function ProfileScreen({navigation}) {
     const [fromValue, setFromValue] = useState(0);
     const [birthday, setBirthday] = useState('');
     const [age, setAge] = useState('');
+    const [bio, setBio] = useState('');
 
     const onLogout = () => {
       auth
@@ -62,6 +63,7 @@ export default function ProfileScreen({navigation}) {
                     const userData = documentSnapshot.data()
                     setFirstName(userData.firstName)
                     setCity(userData.city)
+                    setBio(userData.bio)
                     if(userData.birthday) {
                       let epochMilliseconds = userData.birthday.seconds * 1000
                       let birthdayTimeStamp = new Date(epochMilliseconds)
@@ -101,7 +103,7 @@ export default function ProfileScreen({navigation}) {
                         <Text style={{marginTop: width/50, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/25 }}>{city}, {USState}</Text>
                         {/* <Text style={{marginTop: width/50, alignSelf: "center",color:"#8898AA", fontFamily: "OleoScript_400Regular", fontSize: width/25 }}>San Franciso, CA</Text>*/}
                           <Text style={{color:"#7e27ed", fontFamily: "OleoScript_400Regular", fontSize: width/30 }}>BIO</Text>
-                          <Text style={{color:"#b584f4", fontSize: width/35 }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+                          <Text style={{color:"#b584f4", fontSize: width/35 }}>{bio}</Text>
                           <Text></Text>
                         {/*</View>*/}
                     </View>
