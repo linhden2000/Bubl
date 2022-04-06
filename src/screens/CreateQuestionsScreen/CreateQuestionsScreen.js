@@ -4,6 +4,7 @@ import {questionTypesProp, categoryProp} from '../../properties'
 import { StyleSheet,SafeAreaView, View,ScrollView, Alert} from 'react-native';
 import { Button, Input, Text, Card, Icon, Select, SelectItem, IndexPath} from '@ui-kitten/components';
 import {auth, firestore} from '../../firebase/config';
+import * as Animatable from 'react-native-animatable';
 
 //Icons
 const BackIcon = (props) => (
@@ -15,7 +16,11 @@ const PlusIcon = (props) => (
 export default function CreateQuestionsScreen({navigation}) {
   //Show/Hide components
   const [shouldShow, setShouldShow] = useState(false);
+  const [isValidInput, setValidInput] = useState(false);
 
+  const [questionPostSuccess, setPostSuccess] = useState(false);
+  const [determineQuestionState, setQuestionState] = useState(false);
+  
   //Variables
   const [question, setQuestion] = useState('');
   const [listOfAns, setListOfAns] = useState([])
@@ -75,9 +80,8 @@ export default function CreateQuestionsScreen({navigation}) {
     
     //alert user that they cannot submit a blank question
     if(questionData.question == '') {
-      Alert.alert(
-        "You cannot submit a blank question!"
-      ); 
+      setValidInput(false);
+      setQuestionState(true);
     }
     
     //alert user that they submitted their question successfully
@@ -86,9 +90,9 @@ export default function CreateQuestionsScreen({navigation}) {
       .add(questionData)
       .catch(err => console.log(err)) 
 
-      Alert.alert(
-        "Your question was submitted successfully!"
-      );
+      setValidInput(true);
+      setPostSuccess(true);
+      setQuestionState(false);
 
       setQuestion('');
     }
@@ -107,6 +111,21 @@ export default function CreateQuestionsScreen({navigation}) {
     let newListOfAns = [...listOfAns]
     newListOfAns[index] = input
     setListOfAns(newListOfAns)
+  }
+
+  const setQuestionField = (input) => {
+    setQuestion(input)
+    input ? setValidInput(true) : setValidInput(false);
+  }
+
+  const fadeOut = () => {
+    Animated.timing(                  
+       this.state.fadeIn,            
+       {
+         toValue: 0,                   
+         duration: 3000,              
+       }
+    ).start();                        
   }
 
     return (
@@ -143,8 +162,8 @@ export default function CreateQuestionsScreen({navigation}) {
               textStyle={{ minHeight: 100}}
               placeholder='Type your question here'
               value={question}
-
-              onChangeText={input => setQuestion(input)}
+              onFocus={() => setQuestionState(true)}
+              onChangeText={input => setQuestionField(input)}
             />
             {
             }{shouldShow ? ( //If multiple choice
@@ -160,7 +179,21 @@ export default function CreateQuestionsScreen({navigation}) {
                 <Button style={style.plusIcon} onPress={handleAddAnswer} accessoryLeft={PlusIcon} appearance='ghost'/>
               </View>
             ): null}
-            <Button style={style.submitBtn} onPress={handlePostQuesion}>Post Question</Button>
+            
+            <Button style={style.submitBtn} disabled={!isValidInput} onPress={handlePostQuesion}>Post Question</Button>
+                { questionPostSuccess && !determineQuestionState ?
+                  <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
+                    Question submitted successfully
+                  </Animatable.Text>
+                  : <></>
+                }
+                { !isValidInput && determineQuestionState ?
+                  <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
+                    Invalid question format
+                  </Animatable.Text>
+                  : <></>
+                  // fadeOut();
+                }
           </Card>
         </Card>
         </ScrollView>
