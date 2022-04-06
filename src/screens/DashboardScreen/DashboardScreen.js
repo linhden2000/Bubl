@@ -394,6 +394,9 @@ export default function DashboardScreen({ navigation }) {
     });
   };
 
+  const onChat= () => {
+    navigation.navigate('Chat')
+  }
   //** render Top Matches **//
   const renderedTopMatches = () => {
     return topMatches.length == 0 ? <Text>No one iteresting?</Text> : topMatches.map(match => {
@@ -411,6 +414,7 @@ export default function DashboardScreen({ navigation }) {
                 style={[style.chatBubbleIcon, style.matchIcons]}
                 fill="#7f7aff"
                 name="message-circle-outline"
+                onPress={onChat}
               />
               <Icon
                 style={[style.addPersonIcon, style.matchIcons]}
