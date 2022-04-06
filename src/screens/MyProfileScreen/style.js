@@ -12,6 +12,13 @@ export default StyleSheet.create({
         justifyContent: "space-between",
     },
 
+    navbar:{
+      flexDirection: 'row',
+      backgroundColor: "#F4BCD9",
+      height: 50,
+      marginTop: 50,
+    },
+
     profile:{
       flex: 0.5,
       width: width,
@@ -51,8 +58,9 @@ export default StyleSheet.create({
       height: height/15,
       textAlign: "left",
       justifyContent: "center",
-      borderBottomColor: 'black',
-      borderBottomWidth: 1,
+      // backgroundColor: "#FFFFFF",
+      //borderBottomColor: 'black',
+      //borderBottomWidth: 1,
   },
 
   text:{
@@ -76,4 +84,14 @@ export default StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center'
   },
+
+  slider: {
+    paddingTop: 10,
+    paddingBottom: 1,
+    width: width*7/8,
+    textAlign: "left",
+    justifyContent: "center",
+    color:'#8898AA',
+    
+  }
 })
