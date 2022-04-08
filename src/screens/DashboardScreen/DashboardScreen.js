@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import style from "./style";
-import { StyleSheet, ScrollView, View, TouchableOpacity } from "react-native";
+import { StyleSheet, ScrollView, View, TouchableOpacity, Modal, Pressable } from "react-native";
 import { dashboardCategoryProp } from "../../properties";
 import {
   Button,
@@ -29,6 +29,7 @@ import { auth, firestore, firebase } from "../../firebase/config";
 import { cos, log } from "react-native-reanimated";
 import { LogBox } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { top } from "styled-system";
 
 export default function DashboardScreen({ navigation }) {
   LogBox.ignoreLogs(["Setting a timer"]);
@@ -54,6 +55,7 @@ export default function DashboardScreen({ navigation }) {
   const currentUserUID = auth?.currentUser.uid;
   const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
   let sexualPref = "";
+  const arrayRemove = firebase.firestore.FieldValue.arrayRemove
 
   /* 
     Messing around with date.
@@ -88,6 +90,16 @@ export default function DashboardScreen({ navigation }) {
       setTopMatches(prevState => [...prevState, matchData])
     }
   }
+  //** Delete user from Top Matches**/
+  const deleteTopMatches = async (matchId) => {
+    const usersCollection = firestore.collection('users')
+    const userDoc = usersCollection.doc(currentUserUID)
+    await userDoc.update({
+      topMatches: arrayRemove(matchId)
+    })
+    const updatedTopMatches = topMatches.filter(match => match.matchId !== matchId) 
+    setTopMatches(updatedTopMatches)
+  } 
 
   //** Fetch 'My Questions' **//
   const fetchMyQuestions = async () => {
@@ -397,6 +409,8 @@ export default function DashboardScreen({ navigation }) {
   const onChat= () => {
     navigation.navigate('Chat')
   }
+  //Modal
+  const [modalVisible, setModalVisible] = useState(false);
   //** render Top Matches **//
   const renderedTopMatches = () => {
     return topMatches.length == 0 ? <Text>No one iteresting?</Text> : topMatches.map(match => {
@@ -409,7 +423,7 @@ export default function DashboardScreen({ navigation }) {
           />
           <View>
             <Text style={style.profileName}>{match.matchName}</Text>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row", marginTop: -30 }}>
               <Icon
                 style={[style.chatBubbleIcon, style.matchIcons]}
                 fill="#7f7aff"
@@ -417,15 +431,38 @@ export default function DashboardScreen({ navigation }) {
                 onPress={onChat}
               />
               <Icon
-                style={[style.addPersonIcon, style.matchIcons]}
+                style={[style.deletePersonIcon, style.matchIcons]}
                 fill="#7f7aff"
-                name="person-add-outline"
+                name="person-delete-outline"
+                onPress={()=> deleteTopMatches(match.matchId)}
               />
               <Icon
                 style={[style.moreVerticalIcon, style.matchIcons]}
                 fill="#7f7aff"
                 name="more-vertical-outline"
+                onPress={() => setModalVisible(true)}
               />
+              <Modal transparent={true} visible={modalVisible}>
+                <View style={{backgroundColor: "#000000aa",flex:1, justifyContent:"center", alignItems: "center"}}>
+                  <View style={style.modal}>
+                    <Text style = {{fontSize: 30, alignSelf: "center"}}>Report</Text>
+                    <Text style={{fontSize: 15, alignSelf: "center" }}>I'm concerning about this user</Text>
+                    <View style={{flexDirection: "row",justifyContent:"space-between" }}>
+                        <Text style={{backgroundColor: "red"}}>Report</Text>
+                        <Pressable
+                          onPress={() => setModalVisible(!modalVisible)}
+                          style={{backgroundColor: "lightblue", alignSelf: "center"}}
+                        >
+                          
+                          <Text>Close</Text>
+                        </Pressable>
+                        
+                      </View>
+                    
+                  </View>
+                </View>
+                
+              </Modal>
             </View>
           </View>
         </View>
