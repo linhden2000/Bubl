@@ -1,5 +1,6 @@
 // Style for dashboard goes here
 import { StyleSheet, Dimensions } from 'react-native';
+import { flex } from 'styled-system';
 const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
   mainView:{
@@ -52,9 +53,10 @@ export default StyleSheet.create({
     height: width*0.25,
   },
   profileName:{
-    fontSize: 20,
+    fontSize: width*.07,
     alignContent: 'center',
     marginLeft: width *0.05,
+    marginTop: width *0.04,
     //marginLeft: width *0.15,
   },
   pointsLabel: {
@@ -76,7 +78,7 @@ export default StyleSheet.create({
     marginTop: height * 0.01,
     
   },
-  addPersonIcon: {
+  deletePersonIcon: {
     marginLeft: width *0.13,
     marginTop: height * 0.01,
   },
@@ -84,7 +86,17 @@ export default StyleSheet.create({
     marginLeft: width *0.13,
     marginTop: height * 0.01,
   },
-
+  //Modal
+  modal:{
+    backgroundColor: "#ffffff", 
+    borderRadius: 10, 
+    width:width*0.75,
+    height: height*0.5,
+    padding: height*0.1,
+    margin: height*0.1,
+    flex: 0.3, 
+    justifyContent: "space-evenly",
+  },
   //Question Cards
   questionTimeStamp: {
     color: "#878787",
