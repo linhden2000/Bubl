@@ -97,9 +97,9 @@ export default function DashboardScreen({ navigation }) {
     await userDoc.update({
       topMatches: arrayRemove(matchId)
     })
-    const updatedTopMatches = topMatches.filter(match => match.matchId !== matchId) 
+    const updatedTopMatches = topMatches.filter(match => match.matchId !== matchId)
     setTopMatches(updatedTopMatches)
-  } 
+  }
 
   //** Fetch 'My Questions' **//
   const fetchMyQuestions = async () => {
@@ -405,9 +405,43 @@ export default function DashboardScreen({ navigation }) {
       );
     });
   };
+  //** Navigate to the chat screen **//
+  const onChat = async (partnerId) => {
+    // Query for chatroom that has the partner
+    const chatroomsCollection = firestore.collection('chatrooms')
+    const chatroomSnapshot = await chatroomsCollection.get()
+    // First create chatroom
+    if(!chatroomSnapshot.size) {
+      const newChatroom = await chatroomsCollection.add({
+        userslist: [currentUserUID, partnerId],
+        lastMessageId: null,
+        messagesId: [],
+        emptyChat: true
+      })
+      navigation.navigate('Chat', {chatroomId: newChatroom.id})
+      return
+    }
+    const chatroomsCollectionRef = await chatroomsCollection.get()
+    chatroomsCollectionRef.forEach(chatroom => {
+      console.log(chatroom.data())
+    })
 
-  const onChat= () => {
-    navigation.navigate('Chat')
+    const chatroomfirstquery = chatroomsCollection
+      .where('userslist', 'array-contains-any', [partnerId, currentUserUID])
+    const chatroomRef = await chatroomfirstquery.get()
+    // If chatroom does not exist
+    if(chatroomRef.empty) {
+      // Create chatroom
+      const newChatroom = await chatroomsCollection.add({
+        userslist: [currentUserUID, partnerId],
+        lastMessageId: null,
+        messagesId: [], 
+        emptyChat: true
+      })
+      navigation.navigate('Chat', {chatroomId: newChatroom.id})
+      return;
+    }
+    navigation.navigate('Chat', {chatroomId: chatroomRef.id})
   }
   //Modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -415,59 +449,59 @@ export default function DashboardScreen({ navigation }) {
   const renderedTopMatches = () => {
     return topMatches.length == 0 ? <Text>No one iteresting?</Text> : topMatches.map(match => {
       return (<View key={match.id} style={style.shadow}>
-      <Card style={style.matchCards}>
-        <View style={{ flexDirection: "row" }}>
-          <Avatar
-            style={style.profilePic}
-            source={{uri: match.matchImg}}
-          />
-          <View>
-            <Text style={style.profileName}>{match.matchName}</Text>
-            <View style={{ flexDirection: "row", marginTop: -30 }}>
-              <Icon
-                style={[style.chatBubbleIcon, style.matchIcons]}
-                fill="#7f7aff"
-                name="message-circle-outline"
-                onPress={onChat}
-              />
-              <Icon
-                style={[style.deletePersonIcon, style.matchIcons]}
-                fill="#7f7aff"
-                name="person-delete-outline"
-                onPress={()=> deleteTopMatches(match.matchId)}
-              />
-              <Icon
-                style={[style.moreVerticalIcon, style.matchIcons]}
-                fill="#7f7aff"
-                name="more-vertical-outline"
-                onPress={() => setModalVisible(true)}
-              />
-              <Modal transparent={true} visible={modalVisible}>
-                <View style={{backgroundColor: "#000000aa",flex:1, justifyContent:"center", alignItems: "center"}}>
-                  <View style={style.modal}>
-                    <Text style = {{fontSize: 30, alignSelf: "center"}}>Report</Text>
-                    <Text style={{fontSize: 15, alignSelf: "center" }}>I'm concerning about this user</Text>
-                    <View style={{flexDirection: "row",justifyContent:"space-between" }}>
-                        <Text style={{backgroundColor: "red"}}>Report</Text>
+        <Card style={style.matchCards}>
+          <View style={{ flexDirection: "row" }}>
+            <Avatar
+              style={style.profilePic}
+              source={{ uri: match.matchImg }}
+            />
+            <View>
+              <Text style={style.profileName}>{match.matchName}</Text>
+              <View style={{ flexDirection: "row", marginTop: -30 }}>
+                <Icon
+                  style={[style.chatBubbleIcon, style.matchIcons]}
+                  fill="#7f7aff"
+                  name="message-circle-outline"
+                  onPress={() => onChat(match.matchId)}
+                />
+                <Icon
+                  style={[style.deletePersonIcon, style.matchIcons]}
+                  fill="#7f7aff"
+                  name="person-delete-outline"
+                  onPress={() => deleteTopMatches(match.matchId)}
+                />
+                <Icon
+                  style={[style.moreVerticalIcon, style.matchIcons]}
+                  fill="#7f7aff"
+                  name="more-vertical-outline"
+                  onPress={() => setModalVisible(true)}
+                />
+                <Modal transparent={true} visible={modalVisible}>
+                  <View style={{ backgroundColor: "#000000aa", flex: 1, justifyContent: "center", alignItems: "center" }}>
+                    <View style={style.modal}>
+                      <Text style={{ fontSize: 30, alignSelf: "center" }}>Report</Text>
+                      <Text style={{ fontSize: 15, alignSelf: "center" }}>I'm concerning about this user</Text>
+                      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                        <Text style={{ backgroundColor: "red" }}>Report</Text>
                         <Pressable
                           onPress={() => setModalVisible(!modalVisible)}
-                          style={{backgroundColor: "lightblue", alignSelf: "center"}}
+                          style={{ backgroundColor: "lightblue", alignSelf: "center" }}
                         >
-                          
+
                           <Text>Close</Text>
                         </Pressable>
-                        
+
                       </View>
-                    
+
+                    </View>
                   </View>
-                </View>
-                
-              </Modal>
+
+                </Modal>
+              </View>
             </View>
           </View>
-        </View>
-      </Card>
-    </View>)
+        </Card>
+      </View>)
     })
   }
 
