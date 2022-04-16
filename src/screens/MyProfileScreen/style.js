@@ -52,6 +52,16 @@ export default StyleSheet.create({
       flex: 2,
     },
 
+    customerServiceMsg: {
+      marginTop: 10,
+      width: width*7/8,
+      height: height/15,
+      textAlign: "left",
+      justifyContent: "center",
+      fontSize: 11,
+      color:"#570CBC",
+    },
+
     Btn: {
       marginTop: 10,
       width: width*7/8,

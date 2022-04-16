@@ -1,18 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
-import {USStatesProp, genderProp, sexualPrefProp} from '../../properties'
-import { Image, Text, View, TouchableOpacity, ScrollView, Dimensions, ImageBackground, Alert, TextInput, FlatList } from 'react-native'
-import { Input, Icon, Button, Select, IndexPath, SelectItem, Datepicker} from '@ui-kitten/components';
-import RangeSlider from 'react-native-range-slider-expo';
+import { Image, Text, TextInput, View, TouchableOpacity, FlatList, ScrollView, Dimensions, ImageBackground } from 'react-native'
+import { Icon, Button} from '@ui-kitten/components';
 import { auth, firestore } from '../../firebase/config';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHome, faComment, faUser} from '@fortawesome/free-solid-svg-icons'
 const { width, height } = Dimensions.get("screen");
-
-const CalendarIcon = (props) => (
-  <Icon {...props} name='calendar'/>
-);
 
 export default function ProfileScreen({navigation}) {
     //** Set intial states for user's information **//
@@ -30,46 +22,8 @@ export default function ProfileScreen({navigation}) {
     const [profilePic, setProfilePic] = useState('')
     const [city, setCity] = useState('')
     const [USState, setUSState] = useState('')
-    const [date, setDate] = useState(new Date());
-    const now = new Date();
-    const minDatePicker = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate()); //max age: 100 years old
-    const maxDatePicker = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());  //min age: 18 years old
     const [bio, setBio] = useState('');
 
-
-    const [editMode, setEditMode] = useState(''); //Editing or viewing
-
-
-    // Current User
-    const currentUser = -auth?.currentUser
-    // "users" collection
-    const usersRef = firestore.collection('users')
-
-    //The following are inputted by dropdown
-    //** States drop down **/
-    const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
-    const displayStateValue = USStatesProp[selectedStateIndex.row];
-    const renderStateOption = (label, key) => (
-        <SelectItem key={key} title={label}/>
-    );
-    //** Gender drop down **/
-    const [selectedGenderIndex, setSelectedGenderIndex] = useState(new IndexPath(0));
-    const displayGenderValue = genderProp[selectedGenderIndex.row];
-    const renderGenderOption = (label, key) => (
-        <SelectItem key={key} title={label}/>
-    );
-    //** Gender Preference drop down (Multi Select)**/
-    const [selectedSexualPrefIndex, setSelectedSexualPrefIndex] = useState([
-        new IndexPath(0),
-        new IndexPath(1),
-    ]);
-
-    const groupDisplayValues = selectedSexualPrefIndex.map(index => {
-      return sexualPrefProp[index.row];
-    });
-    const renderSexualPrefOption = (label, key) => (
-        <SelectItem key={key} title={label}/>
-    );
 
     const onLogout = () => {
         navigation.navigate('Login')
@@ -77,14 +31,6 @@ export default function ProfileScreen({navigation}) {
     const onProfile = () => {
       navigation.navigate('Profile')
   }
-
-    const onMessage = () => {
-      navigation.navigate('Message')
-    }
-
-    const onDashBoard = () => {
-      navigation.navigate('Dashboard')
-    }
 
     const editIcon = (props) => (
       <Icon {...props} name='edit-outline'/>
@@ -109,7 +55,6 @@ export default function ProfileScreen({navigation}) {
                     setToValue(userData.toAge)
                     setSexualPref(userData.sexualPref)
                     setGender(userData.gender)
-                    setBio(userData.bio)
                     if(userData.birthday) {
                       let epochMilliseconds = userData.birthday.seconds * 1000
                       let birthdayTimeStamp = new Date(epochMilliseconds)
@@ -121,320 +66,113 @@ export default function ProfileScreen({navigation}) {
                     }
                     setProfilePic(userData.profilePic)
                     setUSState(userData.state)
+                    setBio(userData.bio)
                   });
     }
-    const onSave = () => { 
-      const uid = auth?.currentUser.uid
-      const selectedGender = selectedGenderIndex.toString()
-      // Convert Index Path to String
-      const gender = selectedGenderIndex.toString() == "1"? "man" : "woman"
-      let sexualPref = "both"
-      if(selectedSexualPrefIndex == "1,2") {
-          sexualPref = "both"
-      }
-      else if(selectedSexualPrefIndex == "1") {
-          sexualPref = "male"
-      }
-      else {
-          sexualPref = "female"
-      }
-
-      
-      
-      const userData = {
-          id: uid,
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          kuid: kuId,
-          address: address,
-          city: city,
-          zipCode: zipCode,
-          fromAge: fromValue,
-          toAge: toValue,
-          birthday: date,
-          gender: gender,
-          profilePic: profilePic,
-          sexualPref: sexualPref,
-          bio: bio,
-          state: USStatesProp[parseInt(selectedStateIndex.toString()) - 1]
-      }
-
-
-      setEditMode(false);
-      // Set users data, navigate to Dashboard if succeed
-      usersRef
-      .doc(uid)
-      .update(userData)
-      .then(() => submitAlert())
-      .catch(err => console.log(err))
-  }
-  
-  //function to alert user that they submitted their question successfully
-  const submitAlert = () => 
-  Alert.alert(
-    "Your edit was saved!"
-  );
-
     //** Fecth User Data when the screen is loaded **/
     useEffect(() => {
-      let isMounted = true;
       fetchUserData()
-      setEditMode(false);
-      return () => { isMounted = false }; // cleanup toggles value, if unmounted 
     }, [])
 
     //** Render the information **/ 
     return (
       <View style={style.container}>
-        {editMode ? (
         <View style={style.profile} >
           <Image style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
           <View style={{flexDirection: "row", justifyContent: "space-between", width: width* 7/8, marginTop: height/25}}>
-            <TouchableOpacity onPress={() => setEditMode(false)}>
-              <Text>Cancel</Text>
+            <TouchableOpacity onPress={onLogout}>
+              <Text>LOGOUT</Text>
             </TouchableOpacity>
             <Text style={{alignSelf: "center", fontWeight: "bold", fontSize: width/17}}>Edit Profile</Text>
-            <View>
-              <TouchableOpacity onPress={onSave}>
-            <Text>SAVE</Text>
-          </TouchableOpacity>
-          </View> 
-          </View>
-
-          <View>
-            <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={profilePic ? {uri: profilePic} : undefined} />
-            <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
-          </View>
-        </View> ) :
-        (<View style={style.profile} >
-        <Image style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
-        <View style={{flexDirection: "row", justifyContent: "space-between", width: width* 7/8, marginTop: height/25}}>
-          <TouchableOpacity onPress={onLogout}>
-            <Text>LOGOUT</Text>
-          </TouchableOpacity>
-          <Text style={{alignSelf: "center", fontWeight: "bold", fontSize: width/17}}>Edit Profile</Text>
-          <View>
-            <TouchableOpacity onPress={() => setEditMode(true)}>
-              <Text>EDIT</Text>
+            <TouchableOpacity onPress={onProfile}>
+              <Text>SAVE</Text>
             </TouchableOpacity>
           </View>
+
+          <View style={style.avatar}>
+            <Image style={{width: height/6, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
+            <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
+          </View>
+          <Text style={style.customerServiceMsg}>Contact Customer Service for changes in your Name, KUID or Birthday</Text>
         </View>
 
-        <View>
-          <Image style={{width: width/3, height: height/6, borderRadius: 100, marginTop: width/20}} source={profilePic ? {uri: profilePic} : undefined} />
-          <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
-        </View>
-      </View>) }
-
-
-        {editMode ? 
-        (<ScrollView style={style.content}>
+        <ScrollView style={style.content}>
           <View style={style.Btn}>
-              <Input
-                  label = 'First Name'
-                  placeholder='Place your Text'
-                  value={firstName}
-                  onChangeText={nextValue => setFirstName(nextValue)}
-              />    
-          </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'Last Name'
-                  placeholder='Place your Text'
-                  value={lastName}
-                  onChangeText={nextValue => setLastName(nextValue)}
-              />
-          </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'KU ID'
-                  placeholder='Place your Text'
-                  value={kuId}
-                  onChangeText={nextValue => setKUID(nextValue)}
-              />
-          </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'Email'
-                  placeholder='Place your Text'
-                  value={email}
-                  onChangeText={nextValue => setKUID(nextValue)}
-              />
-          </View>
-          <View style={style.Btn}>
-              <Datepicker
-                  label='Birthday'
-                  placeholder='Pick Date'
-                  min={minDatePicker}
-                  max={maxDatePicker}
-                  date={date}
-                  onSelect={nextDate => setDate(nextDate)}
-                  accessoryRight={CalendarIcon}
-              />
-          </View>
-          <View style={style.Btn}>
-              <Select
-                  label="Gender"
-                  style={style.select}
-                  placeholder='Default'
-                  value={displayGenderValue}
-                  onSelect={index => setSelectedGenderIndex(index)}>
-                  {genderProp.map(renderGenderOption)}
-              </Select>
-          </View>
-          <View style={style.Btn}>
-              <Select
-                  label="Sexual Preference"
-                  style={style.select}
-                  placeholder='You may select multiple options'
-
-                  multiSelect={true}
-                  value={groupDisplayValues.join(', ')}
-                  selectedIndex={selectedSexualPrefIndex}
-
-                  onSelect={index => setSelectedSexualPrefIndex(index)}>
-                  {sexualPrefProp.map(renderSexualPrefOption)}
-              </Select>
-          </View>
-          <View style={style.slider}>
-              <Text >Age Range: {fromValue} - {toValue}</Text>
-              <RangeSlider min={18} max={100}
-                   //inRangeBarColor={'#5e72e4'}
-                   //fromKnobColor={'#5e72e4'}
-                   //toKnobColor={'#5e72e4'}
-                   //outOfRangeBarColor={'#C8C8C8'}
-                   showRangeLabels={false}
-                   fromValueOnChange={value => setFromValue(value)}
-                   toValueOnChange={value => setToValue(value)}
-                   initialFromValue={18}
-                   initialToValue={30}
-              />
-        </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'Address'
-                  placeholder='Place your Text'
-                  value={address}
-                  onChangeText={nextValue => setAddress(nextValue)}
-              />
-          </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'City'
-                  placeholder='Place your Text'
-                  value={city}
-                  onChangeText={nextValue => setCity(nextValue)}
-              />
-          </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'Zip Code'
-                  placeholder='Place your Text'
-                  value={zipCode}
-                  onChangeText={nextValue => setZipCode(nextValue)}
-              />
-          </View>
-          <View style={style.Btn}>
-          <Select
-              label="States"
-              style={style.select}
-              placeholder='Default'
-
-              value={displayStateValue}
-              onSelect={index => setSelectedStateIndex(index)}>
-              {USStatesProp.map(renderStateOption)}
-          </Select>
-          </View>
-          <View style={style.Btn}>
-              <Input
-                  label = 'Bio'
-                  placeholder='Place your Text'
-                  value={bio}
-                  onChangeText={nextValue => setBio(nextValue)}
-              />
-          </View>
-        </ScrollView>) :
-        (<ScrollView style={style.content}>
-          <View style={style.Btn}>
-            <Text style={{color:"#8898AA"}}> First Name</Text>
-            <Text> {firstName}</Text>
+            <Text style={{color:"#570CBC"}}> First Name</Text>
+            <Text  style={{color:"#8898AA"}}> {firstName}</Text>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Last Name</Text>
-            <Text> {lastName} </Text>
+            <Text  style={{color:"#570CBC"}}> Last Name</Text>
+            <Text  style={{color:"#8898AA"}}> {lastName}</Text>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> KU ID</Text>
-            <Text> {kuId} </Text>
+            <Text  style={{color:"#570CBC"}}> KU ID</Text>
+            <Text  style={{color:"#8898AA"}}> {kuId}</Text>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Email</Text>
-            <Text> {email} </Text>
+            <Text  style={{color:"#570CBC"}}> Biography </Text>
+            <TextInput> 
+              {bio}
+              {/* onChangeText={newBio => setBio(newBio)} */}
+            </TextInput>
+          </View>
+
+          {/* <Input
+              placeholder = {bio}
+              onChangeText={newBio => setBio(newBio)}
+            /> */}
+
+          <View style={style.Btn}>
+            <Text  style={{color:"#570CBC"}}> Email</Text>
+            <TextInput> {email} </TextInput>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Birthday</Text>
-            <Text> {birthday} </Text>
+            <Text  style={{color:"#570CBC"}}> Birthday</Text>
+            <Text  style={{color:"#8898AA"}}> {birthday}</Text>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Address</Text>
-            <Text> {address} </Text>
+            <Text  style={{color:"#570CBC"}}> Address</Text>
+            <TextInput> {address} </TextInput>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> City</Text>
-            <Text> {city} </Text>
+            <Text  style={{color:"#570CBC"}}> City</Text>
+            <TextInput> {city} </TextInput>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> State</Text>
-            <Text> {USState} </Text>
+            <Text  style={{color:"#570CBC"}}> State</Text>
+            <TextInput> {USState} </TextInput>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Zip code</Text>
-            <Text> {zipCode} </Text>
+            <Text  style={{color:"#570CBC"}}> Zip code</Text>
+            <TextInput> {zipCode} </TextInput>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Gender</Text>
-            <Text> {gender} </Text>
+            <Text  style={{color:"#570CBC"}}> Gender</Text>
+            <TextInput> {gender} </TextInput>
           </View>
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Sexual Preference</Text>
-            <Text> both </Text>
+            <Text  style={{color:"#570CBC"}}> Sexual Preference</Text>
+            <TextInput> both </TextInput>
           </View>
+
+          {/* Dark Purple: #570CBC
+          Light Purple: #A971F4 */}
 
           <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}>Preferred Age Range</Text>
-            <Text> From {fromValue} to {toValue} </Text>
+            <Text  style={{color:"#570CBC"}}>Preferred Age Range</Text>
+            <TextInput> From {fromValue} to {toValue} </TextInput>
           </View>
-
-          <View style={style.Btn}>
-            <Text  style={{color:"#8898AA"}}> Bio </Text>
-            <Text> {bio} </Text>
-          </View>
-        </ScrollView>)}   
-        
-        <View style={style.navbar}>
-          <TouchableOpacity style={style.messageBtn} onPress={onMessage}>
-            <FontAwesomeIcon icon={faComment} />
-          </TouchableOpacity> 
-
-          <TouchableOpacity style={style.homeBtn} onPress={onDashBoard}>
-            <FontAwesomeIcon icon={faHome} />
-          </TouchableOpacity> 
-
-          <TouchableOpacity style={style.profileBtn} onPress={onProfile}>
-              <FontAwesomeIcon icon={faUser} />
-          </TouchableOpacity> 
-        </View>          
+        </ScrollView>       
       </View>
     )
 }
