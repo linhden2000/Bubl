@@ -102,4 +102,15 @@ export default StyleSheet.create({
     position: 'relative',
     alignSelf: "center",
   },
+  //Modal
+  modal:{
+    backgroundColor: "#ffffff", 
+    borderRadius: 10, 
+    width:width,
+    height: height*0.5,
+    padding: height*0.1,
+    margin: height*0.1,
+    flex: 0.3, 
+    justifyContent: "space-evenly",
+  },
 })
