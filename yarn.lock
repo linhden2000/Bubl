@@ -7475,6 +7475,13 @@
   "resolved" "https://registry.npmjs.org/sax/-/sax-1.2.4.tgz"
   "version" "1.2.4"
 
+"schedule@^0.3.0":
+  "integrity" "sha512-20+1KVo517sR7Nt+bYBN8a+bEJDKLPEx7Ohtts1kX05E4/HY53YUNuhfkVNItmWAnBYHcpG9vsd2/CJxG+aPCQ=="
+  "resolved" "https://registry.npmjs.org/schedule/-/schedule-0.3.0.tgz"
+  "version" "0.3.0"
+  dependencies:
+    "object-assign" "^4.1.1"
+
 "scheduler@^0.19.1", "scheduler@0.19.1":
   "integrity" "sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA=="
   "resolved" "https://registry.npmjs.org/scheduler/-/scheduler-0.19.1.tgz"
