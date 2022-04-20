@@ -181,5 +181,16 @@ export default StyleSheet.create({
       backgroundColor: '#55c242',
       borderColor: 'transparent',
   },
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: width/30,
+    alignSelf: 'center',
+    // animation: "fade"
+  },
+  submitMsg: {
+      color: '#00e600',
+      fontSize: width/30,
+      alignSelf: 'center',
+  }
   
 })

@@ -3,6 +3,7 @@ import style from "./style";
 import { View, FlatList, Animated, SectionList } from "react-native";
 import ListItem, { Separator } from "react-native-elements";
 import { Text, Button, Card, Icon, Divider } from "@ui-kitten/components";
+import * as Animatable from 'react-native-animatable';
 import {
   useFonts,
   PublicSans_600SemiBold,
@@ -34,6 +35,10 @@ export default function AnswerDisplayScreen({ navigation, route }) {
 
   const [question, setQuestion] = useState("");
   const [answerList, setAnswerList] = useState([]);
+  const [isUserInTopMatches, setUserInTopMatches] = useState(false);
+  const [addSuccess, setAddSuccess] = useState(false);
+  const [FullTopMatches, setFullTopMatches] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   const uid = auth?.currentUser.uid;
   const qid = route.params.qid;
@@ -155,9 +160,14 @@ export default function AnswerDisplayScreen({ navigation, route }) {
     }
     if (topMatchesArray.includes(replierId)) {
       console.log("This user is already in the top matches");
+      setUserInTopMatches(true);
+      setAddSuccess(false);
       return;
     } else {
       if (topMatchesArray.length <= 5) {
+        //User are not in Top Matches
+        setUserInTopMatches(false);
+        setAddSuccess(true);
         // Add replierId to the TopMatchesId array in firestore
         const unionRes = await userDoc.update({
           topMatches: arrayUnion(replierId),
@@ -165,9 +175,7 @@ export default function AnswerDisplayScreen({ navigation, route }) {
         // Remove the liked answer from answerList
         removeAnswer(index, answerId)
       } else {
-        alert(
-          "There are 5 members in your top matches. Please remove one to add this new member"
-        );
+        setFullTopMatches(true);
       }
     }
     alert("swiped from right!");
@@ -182,6 +190,7 @@ export default function AnswerDisplayScreen({ navigation, route }) {
       .doc(answerId);
     const deleteRes = await answerDoc.delete();
     deleteItem(index);
+    setDeleteSuccess(true);
   }
 
   if (!fontsLoaded) {
@@ -219,31 +228,36 @@ export default function AnswerDisplayScreen({ navigation, route }) {
                 onSwipeFromRight={() =>
                   handleSwipeRight(index, item.id, item.replierId)
                 }
-              />
+              /> 
             )}
           />
+          { isUserInTopMatches ?
+              <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
+                This user is already in the Top Matches
+              </Animatable.Text>
+                  : <></>
+          }
+          { FullTopMatches ?
+              <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
+                Your Top Matches are full. Please remove one to add this new member
+              </Animatable.Text>
+                  : <></>
+          }
+          {  addSuccess ?
+              <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
+                Successfully added
+              </Animatable.Text>
+                  : <></>
+          }
+          {  deleteSuccess ?
+              <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
+                Successfully deleted
+              </Animatable.Text>
+                  : <></>
+          }
+
         </Card>
       </View>
     </View>
   );
 }
-
-/*
-<View>
-                            <Card style={style.answerCard}>
-                                <Text>Bread</Text>
-                            </Card>
-                            <Card style={style.answerCard}>
-                                <Text>Carrot</Text>
-                            </Card>
-                            <Card style={style.answerCard}>
-                                <Text>Potato Chips</Text>
-                            </Card>
-                            <Card style={style.answerCard}>
-                                <Text>Burger</Text>
-                            </Card>
-                            <Card style={style.answerCard}>
-                                <Text>Soup</Text>
-                            </Card>
-                        </View>
-*/

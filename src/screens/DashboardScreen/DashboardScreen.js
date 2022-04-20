@@ -24,6 +24,7 @@ import {
   PublicSans_400Regular,
 } from "@expo-google-fonts/public-sans";
 import moment from "moment";
+import * as Animatable from 'react-native-animatable';
 import AppLoading from "expo-app-loading";
 import { auth, firestore, firebase } from "../../firebase/config";
 import { cos, log } from "react-native-reanimated";
@@ -48,6 +49,10 @@ export default function DashboardScreen({ navigation }) {
   const [questionsList, setQuestionsList] = useState([]);
   const [topMatches, setTopMatches] = useState([])
   const [date, setDate] = useState(new Date("01/4/2022"));
+
+  //Notification system
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isValidInput, setValidInput] = useState(false);
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
   const shouldLoadComponent = (index) => index === selectedIndex;
@@ -353,12 +358,28 @@ export default function DashboardScreen({ navigation }) {
       .doc(postedById)
       .collection("questions")
       .doc(questionId);
-    questionDoc.collection("answers").add({
-      replierId: postedById,
-      content: answer,
-      postedTime: new Date(),
-      read: false,
-    });
+    // questionDoc.collection("answers").add({
+    //   replierId: postedById,
+    //   content: answer,
+    //   postedTime: new Date(),
+    //   read: false,
+    // });
+
+    //User cannot submit a blank answer
+    if(questionDoc.content == ''){
+      setValidInput(false);
+    }
+    //User successful submit question
+    else if (questionDoc.content != ''){
+      setSubmitSuccess(true);
+      setValidInput(true);
+      questionDoc.collection("answers").add({
+        replierId: postedById,
+        content: answer,
+        postedTime: new Date(),
+        read: false,
+      });
+    }
   };
 
   //** render suggested Questions **//
@@ -397,8 +418,23 @@ export default function DashboardScreen({ navigation }) {
                   >
                     <Text>Submit Answer</Text>
                   </Button>
+                  { !isValidInput ?
+                    <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
+                      Submit Answer unsuccessfully
+                    </Animatable.Text>
+                    : <></>
+                    // fadeOut();
+                  }
+                  { submitSuccess && isValidInput ?
+                    <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
+                      Submit Answer successfully
+                    </Animatable.Text>
+                    : <></>
+                    // fadeOut();
+                  }
                 </View>
               ) : null}
+              
             </Card>
           </View>
         </View>
@@ -447,7 +483,12 @@ export default function DashboardScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   //** render Top Matches **//
   const renderedTopMatches = () => {
-    return topMatches.length == 0 ? <Text>No one iteresting?</Text> : topMatches.map(match => {
+    return topMatches.length == 0 ? 
+    
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 20, alignSelf: "center" }}>No one iteresting?</Text> 
+    </View>
+    : topMatches.map(match => {
       return (<View key={match.id} style={style.shadow}>
         <Card style={style.matchCards}>
           <View style={{ flexDirection: "row" }}>
