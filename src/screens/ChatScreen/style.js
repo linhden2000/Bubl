@@ -10,6 +10,7 @@ export default StyleSheet.create({
         borderRadius: 15,
         marginTop: 0.05 * width,
         width: 0.75*width,
+        flexDirection: 'row',
     },
     page:{
         flex: 1,
@@ -35,7 +36,7 @@ export default StyleSheet.create({
     },
 
     leftContainer:{
-        backgroundColor: '#3777f0',
+        backgroundColor: '#7e27ed',
         marginLeft: 10,
         marginRight: 'auto',
     },
@@ -67,7 +68,7 @@ export default StyleSheet.create({
     buttonContainer:{
         width: 0.1 * width,
         height: 0.05 * height,
-        backgroundColor: '#3777f0',
+        // backgroundColor: '#FCBACB',
         borderRadius: 25,
         justifyContent: 'center',
         alignContent: 'center',

@@ -1,5 +1,6 @@
 import { Autocomplete } from '@ui-kitten/components';
 import { StyleSheet, Dimensions } from 'react-native';
+import { EasingNode } from 'react-native-reanimated';
 const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
     backBtn: {
@@ -44,4 +45,15 @@ export default StyleSheet.create({
         flex: 1,
         alignSelf: 'flex-end',
     },
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: width/30,
+        alignSelf: 'center',
+        // animation: "fade"
+    },
+    submitMsg: {
+        color: '#00e600',
+        fontSize: width/30,
+        alignSelf: 'center',
+    }
 })

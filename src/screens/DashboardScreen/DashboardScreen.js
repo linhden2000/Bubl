@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import style from "./style";
-import { StyleSheet, ScrollView, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  TouchableOpacity,
+  Modal,
+  Pressable,
+} from "react-native";
 import { dashboardCategoryProp } from "../../properties";
 import {
   Button,
@@ -29,6 +36,9 @@ import { auth, firestore, firebase } from "../../firebase/config";
 import { cos, log } from "react-native-reanimated";
 import { LogBox } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { top } from "styled-system";
+import { LongPressGestureHandler } from "react-native-gesture-handler";
+import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 export default function DashboardScreen({ navigation }) {
   LogBox.ignoreLogs(["Setting a timer"]);
@@ -45,6 +55,7 @@ export default function DashboardScreen({ navigation }) {
   const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
   const [answer, setAnswer] = useState("");
   const [questionsList, setQuestionsList] = useState([]);
+  const [topMatches, setTopMatches] = useState([]);
   const [date, setDate] = useState(new Date("01/4/2022"));
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
@@ -53,6 +64,7 @@ export default function DashboardScreen({ navigation }) {
   const currentUserUID = auth?.currentUser.uid;
   const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
   let sexualPref = "";
+  const arrayRemove = firebase.firestore.FieldValue.arrayRemove;
 
   /* 
     Messing around with date.
@@ -70,7 +82,39 @@ export default function DashboardScreen({ navigation }) {
     <SelectItem key={key} title={label} />
   );
 
-  //Grab 'My Questions'
+  //** Fetch 'Top Matches' **//
+  const fetchTopMatches = async () => {
+    const usersCollection = firestore.collection("users");
+    const userDoc = usersCollection.doc(currentUserUID);
+    const snapshot = await userDoc.get();
+    const topMatches = snapshot.data().topMatches;
+    // Get other users data in top matches array
+    let currentTopMatches = [];
+    for (const match of topMatches) {
+      const matchSnapshot = await usersCollection.doc(match).get();
+      const matchData = {
+        matchId: matchSnapshot.id,
+        matchName: matchSnapshot.data().firstName,
+        matchImg: matchSnapshot.data().profilePic,
+      };
+      currentTopMatches.push(matchData);
+    }
+    setTopMatches(currentTopMatches);
+  };
+  //** Delete user from Top Matches**/
+  const deleteTopMatches = async (matchId) => {
+    const usersCollection = firestore.collection("users");
+    const userDoc = usersCollection.doc(currentUserUID);
+    await userDoc.update({
+      topMatches: arrayRemove(matchId),
+    });
+    const updatedTopMatches = topMatches.filter(
+      (match) => match.matchId !== matchId
+    );
+    setTopMatches(updatedTopMatches);
+  };
+
+  //** Fetch 'My Questions' **//
   const fetchMyQuestions = async () => {
     const currentUser = auth?.currentUser;
     const uid = currentUser.uid;
@@ -119,10 +163,24 @@ export default function DashboardScreen({ navigation }) {
   };
 
   useEffect(() => {
-    if (navigation.isFocused()) {
-      fetchMyQuestions();
-    }
-  }, [navigation]);
+    let mounted = true;
+      if (mounted) {
+        fetchTopMatches();
+      }
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+      if (mounted) {
+        fetchMyQuestions();
+      }
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Fetch user data
   useEffect(() => {
@@ -293,6 +351,7 @@ export default function DashboardScreen({ navigation }) {
   const createQuestion = () => {
     navigation.navigate("CreateQuestions");
   };
+
   const displayAnswers = (qid) => {
     navigation.navigate("AnswerDisplay", { qid });
   };
@@ -316,17 +375,18 @@ export default function DashboardScreen({ navigation }) {
       .collection("questions")
       .doc(questionId);
     questionDoc.collection("answers").add({
-      replierId: postedById,
+      replierId: currentUserUID,
       content: answer,
       postedTime: new Date(),
       read: false,
     });
   };
 
+  //** render suggested Questions **//
   const renderedQuestions = () => {
     return questionsList.map((ques, index) => {
       return (
-        <View key={index}>
+        <View key={ques.questionId}>
           <View style={style.shadow}>
             <Card style={style.questionCards}>
               <TouchableOpacity onPress={() => answerQuestion(index)}>
@@ -366,6 +426,151 @@ export default function DashboardScreen({ navigation }) {
       );
     });
   };
+  //** Navigate to the chat screen **//
+  const onChat = async (partnerId) => {
+    // Query for chatroom that has the partner
+    const chatroomsCollection = firestore.collection("chatrooms");
+    const chatroomSnapshot = await chatroomsCollection.get();
+    // First create chatroom
+    if (!chatroomSnapshot.size) {
+      const newChatroom = await chatroomsCollection.add({
+        userslist: [currentUserUID, partnerId],
+        lastMessageId: null,
+        messagesId: [],
+        emptyChat: true,
+      });
+      navigation.navigate("Chat", { chatroomId: newChatroom.id });
+      return;
+    }
+
+    const chatroomRef = await chatroomsCollection
+      .where("userslist", "array-contains", currentUserUID)
+      .get();
+    // If user does not have a chatroom
+    if (chatroomRef.empty) {
+      // Create chatroom
+      const newChatroom = await chatroomsCollection.add({
+        userslist: [currentUserUID, partnerId],
+        lastMessageId: null,
+        messagesId: [],
+        emptyChat: true,
+      });
+      console.log(currentUserUID + " does not have a chatroom");
+      navigation.navigate("Chat", { chatroomId: newChatroom.id });
+      return;
+    } else {
+      // If user has multiple chatrooms
+      let chatroomExists = false;
+      chatroomRef.forEach((doc) => {
+        // If the chatroom between the two users does exist
+        const usersList = doc.data().userslist;
+        if (usersList.includes(partnerId)) {
+          console.log(doc.id);
+          console.log("Chatroom exists");
+          navigation.navigate("Chat", { chatroomId: doc.id });
+          chatroomExists = true;
+          return;
+        }
+      });
+      // If not create a new chatroom for 2 users
+      if (!chatroomExists) {
+        console.log("Creat chatroom for 2 users");
+        const newChatroom = await chatroomsCollection.add({
+          userslist: [currentUserUID, partnerId],
+          lastMessageId: null,
+          messagesId: [],
+          emptyChat: true,
+        });
+        navigation.navigate("Chat", { chatroomId: newChatroom.id });
+        return;
+      }
+    }
+  };
+  //Modal
+  const [modalVisible, setModalVisible] = useState(false);
+  //** render Top Matches **//
+  const renderedTopMatches = () => {
+    return topMatches.length == 0 ? (
+      <Text>No one iteresting?</Text>
+    ) : (
+      topMatches.map((match) => {
+        return (
+          <View key={match.id} style={style.shadow}>
+            <Card style={style.matchCards}>
+              <View style={{ flexDirection: "row" }}>
+                <Avatar
+                  style={style.profilePic}
+                  source={{ uri: match.matchImg }}
+                />
+                <View>
+                  <Text style={style.profileName}>{match.matchName}</Text>
+                  <View style={{ flexDirection: "row", marginTop: -30 }}>
+                    <Icon
+                      style={[style.chatBubbleIcon, style.matchIcons]}
+                      fill="#7f7aff"
+                      name="message-circle-outline"
+                      onPress={() => onChat(match.matchId)}
+                    />
+                    <Icon
+                      style={[style.deletePersonIcon, style.matchIcons]}
+                      fill="#7f7aff"
+                      name="person-delete-outline"
+                      onPress={() => deleteTopMatches(match.matchId)}
+                    />
+                    <Icon
+                      style={[style.moreVerticalIcon, style.matchIcons]}
+                      fill="#7f7aff"
+                      name="more-vertical-outline"
+                      onPress={() => setModalVisible(true)}
+                    />
+                    <Modal transparent={true} visible={modalVisible}>
+                      <View
+                        style={{
+                          backgroundColor: "#000000aa",
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <View style={style.modal}>
+                          <Text style={{ fontSize: 30, alignSelf: "center" }}>
+                            Report
+                          </Text>
+                          <Text style={{ fontSize: 15, alignSelf: "center" }}>
+                            I'm concerning about this user
+                          </Text>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text style={{ backgroundColor: "red" }}>
+                              Report
+                            </Text>
+                            <Pressable
+                              onPress={() => setModalVisible(!modalVisible)}
+                              style={{
+                                backgroundColor: "lightblue",
+                                alignSelf: "center",
+                              }}
+                            >
+                              <Text>Close</Text>
+                            </Pressable>
+                          </View>
+                        </View>
+                      </View>
+                    </Modal>
+                  </View>
+                </View>
+              </View>
+            </Card>
+          </View>
+        );
+      })
+    );
+  };
+
   if (!fontsLoaded) {
     // return <AppLoading />;
   }
@@ -379,162 +584,7 @@ export default function DashboardScreen({ navigation }) {
           Your Top Matches
         </Text>
 
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/lordFarquad.png")}
-              />
-              <View>
-                <Text style={style.profileName}>Lord Farquad</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/princeCharming.jpg")}
-              />
-              <View>
-                <Text style={style.profileName}>Prince Charming</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/gingerbreadMan.png")}
-              />
-              <View>
-                <Text style={style.profileName} t>
-                  Gingerbread Man
-                </Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/fairyMother.png")}
-              />
-              <View>
-                <Text style={style.profileName}>Fairy Godmother</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
-
-        <View style={style.shadow}>
-          <Card style={style.matchCards}>
-            <View style={{ flexDirection: "row" }}>
-              <Avatar
-                style={style.profilePic}
-                source={require("../../../assets/pussInBoots.png")}
-              />
-              <View>
-                <Text style={style.profileName}>Puss in Boots</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Icon
-                    style={[style.chatBubbleIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="message-circle-outline"
-                  />
-                  <Icon
-                    style={[style.addPersonIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="person-add-outline"
-                  />
-                  <Icon
-                    style={[style.moreVerticalIcon, style.matchIcons]}
-                    fill="#7f7aff"
-                    name="more-vertical-outline"
-                  />
-                </View>
-              </View>
-            </View>
-          </Card>
-        </View>
+        {renderedTopMatches()}
 
         <Card style={style.questionHeaderContainer}>
           <TabBar
