@@ -178,7 +178,6 @@ export default function AnswerDisplayScreen({ navigation, route }) {
         setFullTopMatches(true);
       }
     }
-    alert("swiped from right!");
   }
 
   //** Handle swipe left action **//
