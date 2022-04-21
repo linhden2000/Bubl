@@ -95,13 +95,19 @@ export default function ChatScreen({ navigation, route }) {
       return (
         <View key={mes.mesId} style={{ flexDirection: "row" }}>
           <Image
-            style={{
-              alignSelf: "center",
-              marginLeft: 10,
-              borderRadius: 100,
-              width: height / 25,
-              height: height / 25,
-            }}
+            // style={{
+            //   alignSelf: "center",
+            //   marginLeft: 10,
+            //   borderRadius: 100,
+            //   width: height / 25,
+            //   height: height / 25,
+            // }}
+            style={[
+              style.container,
+              mes.sentBy == currentUserUID
+                ? style.leftAvar
+                : style.rightAvar,
+            ]}
             source={{
               uri:
                 mes.sentBy == currentUserUID
