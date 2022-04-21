@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import style from "./style";
 import {
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  Animated
 } from "react-native";
 import { dashboardCategoryProp } from "../../properties";
 import {
@@ -62,6 +63,8 @@ export default function DashboardScreen({ navigation }) {
   //Notification system
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isValidInput, setValidInput] = useState(false);
+  const [determineQuestionState, setQuestionState] = useState(false);
+
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
   const shouldLoadComponent = (index) => index === selectedIndex;
@@ -389,11 +392,14 @@ export default function DashboardScreen({ navigation }) {
     //User cannot submit a blank answer
     if(questionDoc.content == ''){
       setValidInput(false);
+      setQuestionState(true);
     }
     //User successful submit question
     else if (questionDoc.content != ''){
       setSubmitSuccess(true);
       setValidInput(true);
+      setQuestionState(false);
+
       questionDoc.collection("answers").add({
         replierId: postedById,
         content: answer,
@@ -401,7 +407,24 @@ export default function DashboardScreen({ navigation }) {
         read: false,
       });
     }
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   };
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn=()=>{
+    Animated.timing(fadeAnim, {
+        toValue:1,
+        duration:2000,
+    }).start();
+}
+const fadeOut = () => {
+  Animated.timing(fadeAnim, {
+    toValue: 0,
+    duration: 4000
+  }).start();
+};
+
 
   //** render suggested Questions **//
   const renderedQuestions = () => {
@@ -439,20 +462,24 @@ export default function DashboardScreen({ navigation }) {
                   >
                     <Text>Submit Answer</Text>
                   </Button>
-                  { !isValidInput ?
-                    <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
-                      Submit Answer unsuccessfully
-                    </Animatable.Text>
-                    : <></>
-                    // fadeOut();
-                  }
-                  { submitSuccess && isValidInput ?
-                    <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
-                      Submit Answer successfully
-                    </Animatable.Text>
-                    : <></>
-                    // fadeOut();
-                  }
+                    { !isValidInput && determineQuestionState ?
+                      <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={50}>
+                        
+                        <Text style={style.errorMsg}>Submit Answer unsuccessfully
+                          </Text>
+                      </Animatable.View>
+                      : <></>
+                    }
+                    { submitSuccess && !determineQuestionState ?
+                    <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={50}>
+                        
+                      <Text style={style.submitMsg}>Submit Answer successfully
+                        </Text>
+                    </Animatable.View>
+                      
+                      : <></>
+                      
+                    }
                 </View>
               ) : null}
               
