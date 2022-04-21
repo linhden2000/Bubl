@@ -28,28 +28,65 @@ export default function ChatScreen({ navigation, route }) {
   const { width, height } = Dimensions.get("screen");
   const [messagesList, setMessagesList] = useState([]);
   const [message, setMessage] = useState("");
+  const [userInfo, setUserInfo] = useState({});
+  const [partnerInfo, setPartnerInfo] = useState({});
   const chatroomId = route.params.chatroomId;
   const currentUserUID = auth?.currentUser.uid;
   const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
   // Functions
+  //** Get users **//
+  const fetchUsers = async () => {
+    const usersCollection = firestore.collection("users");
+    const chatroomsCollection = firestore.collection("chatrooms");
+    // Current user info
+    const currentUserSnapshot = await usersCollection.doc(currentUserUID).get();
+    const userData = {
+      username: currentUserSnapshot.data().firstName,
+      userProfilePic: currentUserSnapshot.data().profilePic,
+    };
+    setUserInfo(userData);
+
+    // Partner Info
+    const chatroomSnapshot = await chatroomsCollection.doc(chatroomId).get();
+    const usersList = chatroomSnapshot.data().userslist;
+    const filtered = usersList.filter(
+      (partnerId) => partnerId != currentUserUID
+    );
+
+    let partnerData = {};
+    if (!filtered.length) {
+      partnerData = userData;
+    } else {
+      const partnerId = filtered[0];
+      const partnerSnapshot = await usersCollection.doc(partnerId).get();
+      partnerData = {
+        username: partnerSnapshot.data().firstName,
+        partnerProfilePic: partnerSnapshot.data().profilePic,
+      };
+    }
+    setUserInfo(userData);
+    setPartnerInfo(partnerData);
+  };
+
+  //** Get all the messages **//
   const fetchMessages = async () => {
-      const messagesCollection = firestore.collection('messages')
-      const chatroomDoc = firestore.collection('chatrooms').doc(chatroomId)
-      const chatroomSnapshot = await chatroomDoc.get()
-      const messagesList = chatroomSnapshot.data().messagesId
-      for(let mes of messagesList) {
-          //Get every message   
-          const mesDoc = messagesCollection.doc(mes)
-          const mesSnapshot = await mesDoc.get()
-          const mesData = {
-              mesId: mesSnapshot.id,
-              content: mesSnapshot.data().content,
-              sentAt: mesSnapshot.data().sentAt,
-              sentBy: mesSnapshot.data().sentBy
-          }
-          setMessagesList(prevState => [...prevState, mesData])
-      }
+    const messagesCollection = firestore.collection("messages");
+    const chatroomDoc = firestore.collection("chatrooms").doc(chatroomId);
+    const chatroomSnapshot = await chatroomDoc.get();
+    const messagesList = chatroomSnapshot.data().messagesId;
+    for (let mes of messagesList) {
+      //Get every message
+      const mesDoc = messagesCollection.doc(mes);
+      const mesSnapshot = await mesDoc.get();
+      const mesData = {
+        mesId: mesSnapshot.id,
+        content: mesSnapshot.data().content,
+        sentAt: mesSnapshot.data().sentAt,
+        sentBy: mesSnapshot.data().sentBy,
+      };
+      setMessagesList((prevState) => [...prevState, mesData]);
+    }
   };
 
   // Render Messages
@@ -58,38 +95,60 @@ export default function ChatScreen({ navigation, route }) {
       return (
         <View key={mes.mesId} style={{ flexDirection: "row" }}>
           <Image
-            style={{
-              alignSelf: "center",
-              marginLeft: 10,
-              borderRadius: 100,
-              width: height / 25,
-              height: height / 25,
+            // style={{
+            //   alignSelf: "center",
+            //   marginLeft: 10,
+            //   borderRadius: 100,
+            //   width: height / 25,
+            //   height: height / 25,
+            // }}
+            style={[
+              style.container,
+              mes.sentBy == currentUserUID
+                ? style.leftAvar
+                : style.rightAvar,
+            ]}
+            source={{
+              uri:
+                mes.sentBy == currentUserUID
+                  ? userInfo.userProfilePic
+                  : partnerInfo.partnerProfilePic,
             }}
-            source={user}
           />
-          <LinearGradient
+          <View
             colors={["#6DA1FC", "#9795ef", "#FCBACB"]}
             style={[
               style.container,
-              mes.sentBy == currentUserUID ? style.leftContainer : style.rightContainer,
+              mes.sentBy == currentUserUID
+                ? style.leftContainer
+                : style.rightContainer,
             ]}
           >
             <Text style={{ color: "white" }}>{mes.content}</Text>
-          </LinearGradient>
+          </View>
         </View>
       );
     });
   };
 
-  // Fetch chatrooms
   useEffect(() => {
-    let mounted = true
-    if(mounted) {
-      fetchMessages(chatroomId)
+    let mounted = true;
+    if (mounted) {
+      fetchUsers();
     }
     return () => {
-      mounted = false
+      mounted = false;
+    };
+  }, []);
+  // Fetch chatrooms
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      fetchMessages(chatroomId);
     }
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const onMessage = () => {
@@ -105,20 +164,20 @@ export default function ChatScreen({ navigation, route }) {
       content: message,
       sentAt: new Date(),
       sentBy: currentUserUID,
-    }
+    };
     const storeMessRes = await messagesCollection.add(messageData);
     await firestore
       .collection("chatrooms")
       .doc(chatroomId)
       .update({
         messagesId: arrayUnion(storeMessRes.id),
-        lastMessageId: storeMessRes.id
+        lastMessageId: storeMessRes.id,
       });
 
     setMessage("");
-    setMessagesList(prevState => [...prevState, messageData])
+    setMessagesList((prevState) => [...prevState, messageData]);
   };
-  
+
   const handleChangeText = (text) => {
     setMessage(text);
   };
@@ -132,7 +191,7 @@ export default function ChatScreen({ navigation, route }) {
           style={style.icon}
           onPress={onMessage}
         />
-        <Text style={{ fontSize: 20 }}>Fiona</Text>
+        <Text style={{ fontSize: 20 }}>{partnerInfo.username}</Text>
         <FontAwesomeIcon icon={faInfo} size={20} style={style.icon} />
       </View>
       <View style={style.box}>

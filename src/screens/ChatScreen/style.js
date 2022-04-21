@@ -37,13 +37,27 @@ export default StyleSheet.create({
 
     leftContainer:{
         backgroundColor: '#7e27ed',
-        marginLeft: 10,
+        marginLeft: 15,
         marginRight: 'auto',
     },
     rightContainer:{
         backgroundColor: 'lightgrey',
-        marginRight: 10,
+        marginRight: 15 + height / 20,
         marginLeft: 'auto'
+    },
+    rightAvar:{
+        alignSelf: "center",
+        marginLeft: width - height/20,
+        borderRadius: 100,
+        width: height / 25,
+        height: height / 25,
+    },
+    leftAvar:{
+        alignSelf: "center",
+        marginLeft: 10,
+        borderRadius: 100,
+        width: height / 25,
+        height: height / 25,
     },
     root:{
         flexDirection:'row',
