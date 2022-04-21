@@ -60,14 +60,16 @@ export default function AnswerDisplayScreen({ navigation, route }) {
       .collection("answers");
     const answerSnapShot = await answersCollection.get();
     answerSnapShot.forEach((ans) => {
-      let answer = {
-        id: ans.id,
-        content: ans.data().content,
-        postedTime: ans.data().postedTime,
-        read: ans.data().read,
-        replierId: ans.data().replierId,
-      };
-      setAnswerList((prevState) => [...prevState, answer]);
+      if(ans.data().content != "") {
+        let answer = {
+          id: ans.id,
+          content: ans.data().content,
+          postedTime: ans.data().postedTime,
+          read: ans.data().read,
+          replierId: ans.data().replierId,
+        };
+        setAnswerList((prevState) => [...prevState, answer]);
+      }
     });
   };
 
