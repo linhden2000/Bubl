@@ -164,7 +164,7 @@ export default function AnswerDisplayScreen({ navigation, route }) {
       setAddSuccess(false);
       return;
     } else {
-      if (topMatchesArray.length <= 5) {
+      if (topMatchesArray.length < 5) {
         //User are not in Top Matches
         setUserInTopMatches(false);
         setAddSuccess(true);

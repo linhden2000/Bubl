@@ -141,9 +141,9 @@ export default function ProfileScreen({navigation}) {
                         <Text style={style.TextInput}>What Works</Text>
                       </TouchableOpacity>
 
-                      <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
-                        <Text style={{color:"white" }}>LOGOUT</Text>
-                      </TouchableOpacity>
+                        <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
+                          <Text style={{color:"white" }}>LOGOUT</Text>
+                        </TouchableOpacity>
                       
                     </View>
                 </View>    
