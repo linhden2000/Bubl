@@ -21,6 +21,7 @@ import {
   faInfo,
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
+import Icon from "react-native-vector-icons"
 
 export default function ChatScreen({ navigation, route }) {
   // Variables
