@@ -567,7 +567,9 @@ const fadeOut = () => {
       <Text style={{ fontSize: 20, alignSelf: "center" }}>No one iteresting?</Text> 
     </View>
     : topMatches.map(match => {
-      return (<View key={match.id} style={style.shadow}>
+      return (
+    <View>
+      <View key={match.id} style={style.shadow}>
         <Card style={style.matchCards}>
           <View style={{ flexDirection: "row" }}>
             <Avatar
@@ -638,20 +640,16 @@ const fadeOut = () => {
                 </View>
               </View>
             </Card>
-            { isDeleteTop ?
-                  <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}  duration={1000}>
-                    <Text style={style.submitMsg}>Top Match is deleted successfully</Text>
-                    
-                  </Animatable.View>
-                  : <></>
-                }
+            
+            
           </View>
+        </View>
         );
       })
   };
 
   if (!fontsLoaded) {
-    // return <AppLoading />;
+    // return <AppLoading />
   }
   return (
     <ScrollView style={style.mainView}>
@@ -664,6 +662,13 @@ const fadeOut = () => {
         </Text>
 
         {renderedTopMatches()}
+        { isDeleteTop ?
+            <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}  duration={1000}>
+              <Text style={style.submitMsg}>Top Match is deleted successfully</Text>
+              
+            </Animatable.View>
+            : <></>
+          }
 
         <Card style={style.questionHeaderContainer}>
           <TabBar
