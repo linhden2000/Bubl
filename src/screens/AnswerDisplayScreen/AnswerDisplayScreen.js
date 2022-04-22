@@ -177,13 +177,13 @@ export default function AnswerDisplayScreen({ navigation, route }) {
         topMatches: arrayUnion(replierId),
       });
       removeAnswer(index, answerId)
-      return;
+      // return;
     }
     if (topMatchesArray.includes(replierId)) {
       setUserInTopMatches(true);
       setQuestionState(true);
       console.log("This user is already in the top matches");
-      return;
+      // return;
     } else {
       if (topMatchesArray.length < 5) {
         //User are not in Top Matches
@@ -198,6 +198,7 @@ export default function AnswerDisplayScreen({ navigation, route }) {
         removeAnswer(index, answerId)
       } else {
         setFullTopMatches(true);
+        console.log("Full");
       }
     }
     fadeIn();
@@ -257,7 +258,7 @@ export default function AnswerDisplayScreen({ navigation, route }) {
               /> 
             )}
           />
-          { isUserInTopMatches && determineQuestionState?
+          { isUserInTopMatches && determineQuestionState ?
               <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}>
                 <Text style={style.errorMsg}>This user is already in the Top Matches
 
@@ -283,13 +284,10 @@ export default function AnswerDisplayScreen({ navigation, route }) {
               </Animatable.View>
                   : <></>
           }
-          {  deleteSuccess && !determineQuestionState?
-            <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={1000}>
-            <Text style={style.submitMsg}>Successfully deleted
-
-            </Text>
-            
-          </Animatable.View>
+          { deleteSuccess && !determineQuestionState?
+              <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={1000}>
+                <Text style={style.submitMsg}>Successfully deleted</Text>
+              </Animatable.View>
               
                   : <></>
           }

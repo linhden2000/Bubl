@@ -65,6 +65,8 @@ export default function DashboardScreen({ navigation }) {
   const [isValidInput, setValidInput] = useState(false);
   const [determineQuestionState, setQuestionState] = useState(false);
 
+  const [isDeleteTop, setDeleteTop] = useState(false);
+
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
   const shouldLoadComponent = (index) => index === selectedIndex;
@@ -120,6 +122,9 @@ export default function DashboardScreen({ navigation }) {
       (match) => match.matchId !== matchId
     );
     setTopMatches(updatedTopMatches);
+    setDeleteTop(true);
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   };
 
   //** Fetch 'My Questions' **//
@@ -416,12 +421,14 @@ export default function DashboardScreen({ navigation }) {
     Animated.timing(fadeAnim, {
         toValue:1,
         duration:2000,
+        useNativeDriver: true,
     }).start();
 }
 const fadeOut = () => {
   Animated.timing(fadeAnim, {
     toValue: 0,
-    duration: 4000
+    duration: 4000,
+    useNativeDriver: true,
   }).start();
 };
 
@@ -549,6 +556,7 @@ const fadeOut = () => {
       }
     }
   };
+  
   //Modal
   const [modalVisible, setModalVisible] = useState(false);
   //** render Top Matches **//
@@ -625,10 +633,18 @@ const fadeOut = () => {
                         </View>
                       </View>
                     </Modal>
+                    
                   </View>
                 </View>
               </View>
             </Card>
+            { isDeleteTop ?
+                  <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}  duration={1000}>
+                    <Text style={style.submitMsg}>Top Match is deleted successfully</Text>
+                    
+                  </Animatable.View>
+                  : <></>
+                }
           </View>
         );
       })

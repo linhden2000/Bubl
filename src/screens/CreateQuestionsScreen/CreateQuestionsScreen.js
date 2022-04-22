@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import style from './style';
 import {questionTypesProp, categoryProp} from '../../properties'
-import { StyleSheet,SafeAreaView, View,ScrollView, Alert} from 'react-native';
+import { StyleSheet,SafeAreaView, View,ScrollView, Alert, Animated} from 'react-native';
 import { Button, Input, Text, Card, Icon, Select, SelectItem, IndexPath} from '@ui-kitten/components';
 import {auth, firestore} from '../../firebase/config';
 import * as Animatable from 'react-native-animatable';
@@ -96,6 +96,8 @@ export default function CreateQuestionsScreen({navigation}) {
 
       setQuestion('');
     }
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   }
 
   // Add new answer choice modal to the UI
@@ -118,15 +120,22 @@ export default function CreateQuestionsScreen({navigation}) {
     input ? setValidInput(true) : setValidInput(false);
   }
 
-  const fadeOut = () => {
-    Animated.timing(                  
-       this.state.fadeIn,            
-       {
-         toValue: 0,                   
-         duration: 3000,              
-       }
-    ).start();                        
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn=()=>{
+    Animated.timing(fadeAnim, {
+        toValue:1,
+        duration:2000,
+        useNativeDriver: true,
+    }).start();
   }
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 4000,
+      useNativeDriver: true,
+    }).start();
+  };
 
     return (
       <View style={{flex: 1}}>
@@ -182,17 +191,18 @@ export default function CreateQuestionsScreen({navigation}) {
             
             <Button style={style.submitBtn} disabled={!isValidInput} onPress={handlePostQuesion}>Post Question</Button>
                 { questionPostSuccess && !determineQuestionState ?
-                  <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
-                    Question submitted successfully
-                  </Animatable.Text>
+                  <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}  duration={1000}>
+                    <Text style={style.submitMsg}>Question submitted successfully</Text>
+                    
+                  </Animatable.View>
                   : <></>
                 }
                 { !isValidInput && determineQuestionState ?
-                  <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
-                    Invalid question format
-                  </Animatable.Text>
+                  <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={1000}>
+                    <Text style={style.errorMsg}>Invalid question format</Text>
+                    
+                  </Animatable.View>
                   : <></>
-                  // fadeOut();
                 }
           </Card>
         </Card>
