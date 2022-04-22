@@ -198,6 +198,7 @@ export default function AnswerDisplayScreen({ navigation, route }) {
         removeAnswer(index, answerId)
       } else {
         setFullTopMatches(true);
+        setQuestionState(true);
         console.log("Full");
       }
     }

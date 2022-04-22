@@ -387,30 +387,22 @@ export default function DashboardScreen({ navigation }) {
       .doc(postedById)
       .collection("questions")
       .doc(questionId);
-    // questionDoc.collection("answers").add({
-    //   replierId: postedById,
-    //   content: answer,
-    //   postedTime: new Date(),
-    //   read: false,
-    // });
-
+    questionDoc.collection("answers").add({
+      replierId: currentUserUID,
+      content: answer,
+      postedTime: new Date(),
+      read: false,
+    });
     //User cannot submit a blank answer
-    if(questionDoc.content == ''){
+    if(answer == ""){
       setValidInput(false);
       setQuestionState(true);
     }
     //User successful submit question
-    else if (questionDoc.content != ''){
+    else {
       setSubmitSuccess(true);
       setValidInput(true);
       setQuestionState(false);
-
-      questionDoc.collection("answers").add({
-        replierId: postedById,
-        content: answer,
-        postedTime: new Date(),
-        read: false,
-      });
     }
     fadeIn();
     setTimeout(fadeOut, 2000);
@@ -477,7 +469,7 @@ const fadeOut = () => {
                       </Animatable.View>
                       : <></>
                     }
-                    { submitSuccess && !determineQuestionState ?
+                    { isValidInput && !determineQuestionState ?
                     <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={50}>
                         
                       <Text style={style.submitMsg}>Submit Answer successfully
