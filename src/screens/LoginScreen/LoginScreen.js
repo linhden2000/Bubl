@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import style from './style';
-import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { Modal, Pressable, StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native'
 import { FontAwesome} from '@expo/vector-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons'
@@ -25,6 +25,7 @@ export default function LoginScreen({navigation}) {
     const [isValidEmail, setValidEmail] = useState(true)
     const [isValidPassword, setValidPassword] = useState(true)
     const [authError, setAuthError] = useState(false) //Displays message if auth fails
+    const [modalVisible, setModalVisible] = useState(false);
     
     // Navigate to Registration Screen
     const onRegistration = () => {
@@ -108,9 +109,26 @@ export default function LoginScreen({navigation}) {
                     <View style={style.login}>
                         <Text style={style.text}> Or log in the classic way</Text>
                         {}{authError ?(
-                        <Card style={style.authErrorCard}>
-                            <Text style={style.authErrorMsg}> <FontAwesomeIcon icon={faExclamationTriangle} color={ 'red' }/>  Wrong email or password. Please try again.</Text>
-                        </Card>
+                                <Modal
+                                    animationType="slide"
+                                    transparent={true}
+                                    visible={modalVisible}
+                                    onRequestClose={() => {
+                                    setModalVisible(!modalVisible);
+                                    }}
+                                >
+                                    <View style={style.centeredView}>
+                                    <View style={style.modalView}>
+                                        <Text style={style.modalText}>Error</Text>
+                                        <Pressable
+                                        style={[style.button, style.buttonClose]}
+                                        onPress={() => setModalVisible(!modalVisible)}
+                                        >
+                                        <Text style={style.textStyle}>OK</Text>
+                                        </Pressable>
+                                    </View>
+                                    </View>
+                                </Modal>
                         ): null}
                         {/* Email inputView */}
                         <View style={style.inputView}>
