@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import style from "./style";
 import { View, FlatList, Animated, SectionList } from "react-native";
 import ListItem, { Separator } from "react-native-elements";
@@ -36,9 +36,30 @@ export default function AnswerDisplayScreen({ navigation, route }) {
   const [question, setQuestion] = useState("");
   const [answerList, setAnswerList] = useState([]);
   const [isUserInTopMatches, setUserInTopMatches] = useState(false);
+  const [determineQuestionState, setQuestionState] = useState(false);
+
+  //Notification System
   const [addSuccess, setAddSuccess] = useState(false);
   const [FullTopMatches, setFullTopMatches] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
+
+  //Animation Fading In & Out
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn=()=>{
+    Animated.timing(fadeAnim, {
+        toValue:1,
+        duration:2000,
+        useNativeDriver: true,
+    }).start();
+  }
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 4000,
+      useNativeDriver: true,
+    }).start();
+  };
 
   const uid = auth?.currentUser.uid;
   const qid = route.params.qid;
@@ -159,15 +180,16 @@ export default function AnswerDisplayScreen({ navigation, route }) {
       return;
     }
     if (topMatchesArray.includes(replierId)) {
-      console.log("This user is already in the top matches");
       setUserInTopMatches(true);
-      setAddSuccess(false);
+      setQuestionState(true);
+      console.log("This user is already in the top matches");
       return;
     } else {
       if (topMatchesArray.length < 5) {
         //User are not in Top Matches
         setUserInTopMatches(false);
         setAddSuccess(true);
+        setQuestionState(false);
         // Add replierId to the TopMatchesId array in firestore
         const unionRes = await userDoc.update({
           topMatches: arrayUnion(replierId),
@@ -178,6 +200,8 @@ export default function AnswerDisplayScreen({ navigation, route }) {
         setFullTopMatches(true);
       }
     }
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   }
 
   //** Handle swipe left action **//
@@ -190,6 +214,9 @@ export default function AnswerDisplayScreen({ navigation, route }) {
     const deleteRes = await answerDoc.delete();
     deleteItem(index);
     setDeleteSuccess(true);
+    setQuestionState(false);
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   }
 
   if (!fontsLoaded) {
@@ -230,28 +257,40 @@ export default function AnswerDisplayScreen({ navigation, route }) {
               /> 
             )}
           />
-          { isUserInTopMatches ?
-              <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
-                This user is already in the Top Matches
-              </Animatable.Text>
+          { isUserInTopMatches && determineQuestionState?
+              <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}>
+                <Text style={style.errorMsg}>This user is already in the Top Matches
+
+                </Text>
+                
+                
+              </Animatable.View>
                   : <></>
           }
-          { FullTopMatches ?
-              <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
-                Your Top Matches are full. Please remove one to add this new member
-              </Animatable.Text>
+          { FullTopMatches && determineQuestionState?
+              <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={1000}>
+                <Text style={style.errorMsg}>Your Top Matches are full. Please remove one to add this new member
+
+                </Text>
+              
+            </Animatable.View>
                   : <></>
           }
-          {  addSuccess ?
-              <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
-                Successfully added
-              </Animatable.Text>
+          {  addSuccess && !determineQuestionState?
+              <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={1000}>
+                <Text style={style.submitMsg}>Successfully added
+                </Text>
+              </Animatable.View>
                   : <></>
           }
-          {  deleteSuccess ?
-              <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
-                Successfully deleted
-              </Animatable.Text>
+          {  deleteSuccess && !determineQuestionState?
+            <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={1000}>
+            <Text style={style.submitMsg}>Successfully deleted
+
+            </Text>
+            
+          </Animatable.View>
+              
                   : <></>
           }
 
