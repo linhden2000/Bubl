@@ -53,7 +53,6 @@ export default function DashboardScreen({ navigation }) {
   });
   //Variables
   const [selectedQuestionTabIndex, setSelectedQuestionTabIndex] = useState(0);
-  const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
   const [answer, setAnswer] = useState("");
   const [questionsList, setQuestionsList] = useState([]);
   const [topMatches, setTopMatches] = useState([]);
@@ -64,6 +63,7 @@ export default function DashboardScreen({ navigation }) {
   const [isValidInput, setValidInput] = useState(false);
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
+  const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
   const shouldLoadComponent = (index) => index === selectedIndex;
   const usersRef = firestore.collection("users");
   const currentUserUID = auth?.currentUser.uid;
@@ -127,6 +127,7 @@ export default function DashboardScreen({ navigation }) {
       .collection("users")
       .doc(uid)
       .collection("questions");
+    const currentQuestions = []
     const questionsSnapShot = await questions.get();
     questionsSnapShot.forEach((doc) => {
       let question = {
@@ -136,9 +137,9 @@ export default function DashboardScreen({ navigation }) {
         question: doc.data().question,
         questionType: doc.data().questionType,
       };
-      //  setMyQuestions(oldArray => [...oldArray, question]);
-      myQuestions.push(question);
+      currentQuestions.push(question)
     });
+    setMyQuestions(currentQuestions)
   };
 
   //Dynamically render the list of MyQuesitons
@@ -195,7 +196,9 @@ export default function DashboardScreen({ navigation }) {
   });
   // Listen to the change in category choice
   useEffect(() => {
-    let queryGender = "";
+    let mounted = true
+    if (mounted) {
+      let queryGender = "";
     // Query for single sexual preference
     if (sexualPref == "male" || sexualPref == "female") {
       if (sexualPref == "male") {
@@ -331,10 +334,11 @@ export default function DashboardScreen({ navigation }) {
         });
       });
     }
-    const unsubscribe = () => {
-      setQuestionsList((prevState) => []);
+    }
+  
+    return () => {
+      mounted = false
     };
-    return unsubscribe;
   }, [selectedCategoryIndex]);
   //Show/hide tabs
   const [showMyQuestions, setShowMyQuestions] = useState(false); //Display the user's (you) questions

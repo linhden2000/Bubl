@@ -22,9 +22,13 @@ export default function MessageScreen({ navigation }) {
     const charoomsSnapshot = await chatroomsCollection
       .where("userslist", "array-contains", currentUserUID)
       .get();
+    let currentChatrooms = []
+    // Get users' top matches
+    const userRef = await usersCollection.doc(currentUserUID).get()
+    const userTopMatches = userRef.data().topMatches
     for (let chatroom of charoomsSnapshot.docs) {
       // Get last message information
-      console.log(chatroom.data().lastMessageId);
+      
       if (chatroom.data().lastMessageId != null) {
         const lastMessageSnapshot = await messagesCollection
           .doc(chatroom.data().lastMessageId)
@@ -43,6 +47,10 @@ export default function MessageScreen({ navigation }) {
         } else {
           partnerId = filteredList[0];
         }
+        let active = true
+        if(!userTopMatches.includes(partnerId)) {
+          active = false
+        }
         const partnerRef = await usersCollection.doc(partnerId).get();
         const partner = {
           partnerId,
@@ -55,10 +63,13 @@ export default function MessageScreen({ navigation }) {
           lastMessageContent,
           lastMessageSentAt,
           partner,
+          active
         };
-        setChatroomsList((prevState) => [...prevState, chatroomData]);
+        currentChatrooms.push(chatroomData)
       }
     }
+    setChatroomsList(currentChatrooms)
+    console.log(currentChatrooms);
   };
 
   useEffect(() => {
@@ -71,12 +82,18 @@ export default function MessageScreen({ navigation }) {
       mounted = false;
     };
   }, []);
-  const onChat = (chatroomId) => {
-    navigation.navigate("Chat", { chatroomId });
+  const onChat = (chatroomId, active) => {
+    console.log(active);
+    if(active) {
+      navigation.navigate("Chat", { chatroomId });
+    }
+    else {
+      console.log("The current user is not in your top matches, please add them to top matches to start conversation");
+    }
   }
   const renderedChatrooms = () => {
       return chatroomsList.map(chatroom => {
-          return <TouchableOpacity key={chatroom.chatroomId} style={style.container} onPress={() => onChat(chatroom.chatroomId)}>
+          return <TouchableOpacity key={chatroom.chatroomId} style={style.container} onPress={() => onChat(chatroom.chatroomId, chatroom.active)}>
           <Image
             style={style.avatar}
             source={{uri: chatroom.partner.partnerProfilePic}}

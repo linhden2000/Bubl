@@ -21,6 +21,7 @@ import {
   faInfo,
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
+import Icon from "react-native-vector-icons"
 
 export default function ChatScreen({ navigation, route }) {
   // Variables
@@ -75,6 +76,7 @@ export default function ChatScreen({ navigation, route }) {
     const chatroomDoc = firestore.collection("chatrooms").doc(chatroomId);
     const chatroomSnapshot = await chatroomDoc.get();
     const messagesList = chatroomSnapshot.data().messagesId;
+    let currentMessages = []
     for (let mes of messagesList) {
       //Get every message
       const mesDoc = messagesCollection.doc(mes);
@@ -85,8 +87,10 @@ export default function ChatScreen({ navigation, route }) {
         sentAt: mesSnapshot.data().sentAt,
         sentBy: mesSnapshot.data().sentBy,
       };
-      setMessagesList((prevState) => [...prevState, mesData]);
+      currentMessages.push(mesData)
+      
     }
+    setMessagesList(currentMessages);
   };
 
   // Render Messages
