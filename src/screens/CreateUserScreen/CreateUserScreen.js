@@ -49,6 +49,13 @@ export default function CreateUserScreen({navigation}){
     const [isValidAddress, setValidAddress] = useState(true)
     const [isValidCity, setValidCity] = useState(true)
     const [isValidZipCode, setValidZipCode] = useState(true)
+
+    //Boolean Values to indicate if a field is filled out
+    const[isEnteredFirstName, setFirstNameEntry] = useState(false)
+    const[isEnteredLastName, setLastNameEntry] = useState(false)
+    const[isEnteredBirthday, setBirthdayEntry] = useState(false)
+    const[isEnteredKUID, setKUIDEntry] = useState(false)
+
     //The following are inputted by dropdown
     //** States drop down **/
     const [selectedStateIndex, setSelectedStateIndex] = useState(new IndexPath(0));
@@ -82,8 +89,8 @@ export default function CreateUserScreen({navigation}){
         (async () => {
             if (Platform.OS !== 'web') {
                 const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if(status !== 'granted'){
-                    alert('Sorry, this app requires your permission to access cameral roll.');
+                if(status != "granted"){   //TODO: ASK USER FOR CAMERA ROLL ACCESS THEN IF NO ACCESS, DISPLAY THIS ALERT.
+                    // alert('Sorry, this app requires your permission to access cameral roll.');
                 }
             }
         })();
@@ -101,6 +108,25 @@ export default function CreateUserScreen({navigation}){
         }
     };
 
+     //Boolean Entry Validation
+     const hasRequiredFields = () => {
+        if(isEnteredFirstName && isEnteredLastName && isEnteredKUID && hasBirthdayEntry() === true) {
+            return(true)
+        }
+        else{
+            return(false)
+        }
+    }
+
+    const hasBirthdayEntry = (nextDate) => {
+        if(setDate(nextDate)){
+            return(true)
+        }
+        else{
+            return(false)
+        }
+    }
+
     //** Submit User Information and Navigate to Dashboard **//
     const onSubmit = () => { 
         const uid = currentUser.uid
@@ -108,45 +134,52 @@ export default function CreateUserScreen({navigation}){
         // Convert Index Path to String
         const gender = selectedGenderIndex.toString() == "1"? "man" : "woman"
         let sexualPref = "both"
-        if(selectedSexualPrefIndex == "1,2") {
-            sexualPref = "both"
+
+        if(hasRequiredFields() === true) {
+            if(selectedSexualPrefIndex == "1,2") {
+                sexualPref = "both"
+            }
+            else if(selectedSexualPrefIndex == "1") {
+                sexualPref = "male"
+            }
+            else {
+                sexualPref = "female"
+            }
+            
+            const userData = {
+                id: uid,
+                email: currentUser.email,
+                firstName: firstName,
+                lastName: lastName,
+                bio: bio,
+                kuid: KUID,
+                address: address,
+                city: city,
+                zipCode: zipCode,
+                fromAge: fromValue,
+                toAge: toValue,
+                birthday: date,
+                gender: gender,
+                profilePic: profilePic,
+                sexualPref: sexualPref,
+                state: USStatesProp[parseInt(selectedStateIndex.toString()) - 1]
+            }
+    
+            // Set users data, navigate to Dashboard if succeed
+            usersRef
+            .doc(uid)
+            .set(userData)
+            .then(() => {
+                navigation.navigate('DashboardNavigation');
+            })
+            .catch(error => {
+                alert(error)
+            })
         }
-        else if(selectedSexualPrefIndex == "1") {
-            sexualPref = "male"
-        }
-        else {
-            sexualPref = "female"
+        else{
+            alert("First Name, Last Name, KUID or Birthday may be missing.")
         }
         
-        const userData = {
-            id: uid,
-            email: currentUser.email,
-            firstName: firstName,
-            lastName: lastName,
-            bio: bio,
-            kuid: KUID,
-            address: address,
-            city: city,
-            zipCode: zipCode,
-            fromAge: fromValue,
-            toAge: toValue,
-            birthday: date,
-            gender: gender,
-            profilePic: profilePic,
-            sexualPref: sexualPref,
-            state: USStatesProp[parseInt(selectedStateIndex.toString()) - 1]
-        }
-
-        // Set users data, navigate to Dashboard if succeed
-        usersRef
-        .doc(uid)
-        .set(userData)
-        .then(() => {
-            navigation.navigate('DashboardNavigation');
-        })
-        .catch(error => {
-            alert(error)
-        })
     }
 
     //Validation
@@ -154,6 +187,7 @@ export default function CreateUserScreen({navigation}){
     const handleFirstNameChange = (val) => {
         if( val.trim().length > 0 ) {
             setValidFirstName(true)
+            setFirstNameEntry(true)
         } else {
             setValidFirstName(false)
         }
@@ -161,6 +195,7 @@ export default function CreateUserScreen({navigation}){
     const handleLastNameChange= (val) => {
         if( val.trim().length > 0 ) {
             setValidLastName(true)
+            setLastNameEntry(true)
         } else {
             setValidLastName(false)
         }
@@ -175,6 +210,7 @@ export default function CreateUserScreen({navigation}){
     const handleKUIDChange = (val) => {
         if( val.trim().length > 0 ) {
             setValidKUID(true)
+            setKUIDEntry(true)
         } else {
             setValidKUID(false)
         }
@@ -207,6 +243,8 @@ export default function CreateUserScreen({navigation}){
             setValidZipCode(false)
         }
     }
+
+   
     // ******* Render input fields and drop downs ******///
     return (
         <View style={style.form}>
@@ -231,7 +269,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 { isValidFirstName ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>First Name is required .</Text>
+                        <Text style={style.errorMsg}>First Name is required</Text>
                         </Animatable.View>
                 }
                 <View style={style.inputView}>
@@ -245,7 +283,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 { isValidLastName ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Last Name is required .</Text>
+                        <Text style={style.errorMsg}>Last Name is required</Text>
                         </Animatable.View>
                 }
                 <View style={style.inputView}>
@@ -258,9 +296,7 @@ export default function CreateUserScreen({navigation}){
                     />    
                 </View>
                 { isValidBio ? null : 
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Profile Bio is optional .</Text>
-                        </Animatable.View>
+                        <Animatable.View animation="fadeInLeft" duration={500}></Animatable.View>
                 }
                 <View style={style.inputView}>
                     <Input
@@ -273,7 +309,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 { isValidKUID ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>KU ID is required .</Text>
+                        <Text style={style.errorMsg}>KU ID is required</Text>
                         </Animatable.View>
                 }
                 <View style={style.inputView}>
@@ -286,9 +322,7 @@ export default function CreateUserScreen({navigation}){
                     />
                 </View>
                 { isValidEmail ? null : 
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Email is required .</Text>
-                        </Animatable.View>
+                        <Animatable.View animation="fadeInLeft" duration={500}></Animatable.View>
                 }
                 <View style={style.inputView}>
                     <Datepicker
@@ -297,7 +331,7 @@ export default function CreateUserScreen({navigation}){
                         min={minDatePicker}
                         max={maxDatePicker}
                         date={date}
-                        onSelect={nextDate => setDate(nextDate)}
+                        onSelect={nextDate => hasBirthdayEntry(nextDate)}
                         accessoryRight={CalendarIcon}
                     />
                 </View>
@@ -350,7 +384,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 { isValidAddress ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Adress is required .</Text>
+                        {/* <Text style={style.errorMsg}>Adresss is required</Text> */}
                         </Animatable.View>
                 }
                 <View style={style.inputView}>
@@ -364,7 +398,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 { isValidCity ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>City is required .</Text>
+                        {/* <Text style={style.errorMsg}>City is required</Text> */}
                         </Animatable.View>
                 }
                 <View style={style.inputView}>
@@ -379,7 +413,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 { isValidZipCode ? null : 
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={style.errorMsg}>Zip Code is required .</Text>
+                        {/* <Text style={style.errorMsg}>Zip Code is required</Text> */}
                         </Animatable.View>
                 }
                 <View style={style.inputView}>
@@ -395,7 +429,7 @@ export default function CreateUserScreen({navigation}){
                 </View>
                 <TouchableOpacity style={style.submitBtn} onPress={onSubmit}>
                     <Text>Submit</Text>
-                </TouchableOpacity>   
+                </TouchableOpacity>
             </View>
             </Card>
             </ScrollView>
