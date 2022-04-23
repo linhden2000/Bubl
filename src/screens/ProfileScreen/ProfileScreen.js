@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import style from './style';
-import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image, ImageBackground, Modal, Pressable } from 'react-native'
+import { StyleSheet, Dimensions, Text, TextInput, SafeAreaView, View, Button, TouchableOpacity, Image,Pressable, ImageBackground, Modal } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import logo from '../../../assets/bublLogo.png';
 import avatar from '../../../assets/shrek.jpg';
@@ -90,7 +90,7 @@ export default function ProfileScreen({navigation}) {
       return () => { isMounted = false }; // cleanup toggles value, if unmounted 
     }, [])
     //Modal
-    const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
     return (
       <View style={style.container}>
                 <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} />
@@ -111,35 +111,35 @@ export default function ProfileScreen({navigation}) {
                     {/* 2. Setting Choices */}
                     <View style={style.choice}>
                       <TouchableOpacity style={style.inputView} onPress={onMyProfile}>
-                          <Text style={style.TextInput}>My Profile</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.inputView} onPress={() => setModalVisible(true)}>
-                          <Text style={style.TextInput}>Customer Service</Text>
-                        </TouchableOpacity>
-                        <Modal transparent={true} visible={modalVisible}>
-                          <View style={{ backgroundColor: "#000000aa", flex: 1, justifyContent: "center", alignItems: "center" }}>
-                            <View style={style.modal}>
-                              <Text style={{ fontSize: 25, alignSelf: "center" }}>Customer Service</Text>
-                              <Text style={{ fontSize: 15, alignSelf: "center" }}>Contact us if you have any questions or concerns</Text>
-                              <View style={{ flexDirection: "row", justifyContent: "space-between", marginLeft: 40, marginRight: 40 }}>
-                                <Text style={{ backgroundColor: "red" }}>Email</Text>
-                                <Pressable
-                                  onPress={() => setModalVisible(!modalVisible)}
-                                  style={{ backgroundColor: "lightblue", alignSelf: "center" }}
-                                >
+                        <Text style={style.TextInput}>My Profile</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={style.inputView} onPress={() => setModalVisible(true)}>
+                        <Text style={style.TextInput}>Customer Service</Text>
+                      </TouchableOpacity>
+                      <Modal transparent={true} visible={modalVisible}>
+                        <View style={{ backgroundColor: "#000000aa", flex: 1, justifyContent: "center", alignItems: "center" }}>
+                          <View style={style.modal}>
+                            <Text style={{ fontSize: 25, alignSelf: "center" }}>Customer Service</Text>
+                            <Text style={{ fontSize: 15, alignSelf: "center" }}>Contact us if you have any questions or concerns</Text>
+                            <View style={{ flexDirection: "row", justifyContent: "space-between", marginLeft: 40, marginRight: 40 }}>
+                              <Text style={{ backgroundColor: "red" }}>Email</Text>
+                              <Pressable
+                                onPress={() => setModalVisible(!modalVisible)}
+                                style={{ backgroundColor: "lightblue", alignSelf: "center" }}
+                              >
 
-                                  <Text>Close</Text>
-                                </Pressable>
-
-                              </View>
+                                <Text>Close</Text>
+                              </Pressable>
 
                             </View>
-                          </View>
 
-                        </Modal>
-                        <TouchableOpacity style={style.inputView}> 
-                          <Text style={style.TextInput}>What Works</Text>
-                        </TouchableOpacity>
+                          </View>
+                        </View>
+
+                      </Modal>
+                      <TouchableOpacity style={style.inputView}> 
+                        <Text style={style.TextInput}>What Works</Text>
+                      </TouchableOpacity>
 
                         <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
                           <Text style={{color:"white" }}>LOGOUT</Text>

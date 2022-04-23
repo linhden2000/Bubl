@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions} from 'react-native';
+const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
     //Top header tab
     mainView: {
@@ -47,7 +48,18 @@ export default StyleSheet.create({
         color: '#fff',
         fontWeight: '600',
         padding: 20,
-    }
+    },
+    submitMsg: {
+        color: '#00e600',
+        fontSize: width/30,
+        alignSelf: 'center',
+    },
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: width/30,
+        alignSelf: 'center',
+        // animation: "fade"
+    },
 
 
 })

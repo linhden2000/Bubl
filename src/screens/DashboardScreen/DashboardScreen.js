@@ -31,6 +31,7 @@ import {
   PublicSans_400Regular,
 } from "@expo-google-fonts/public-sans";
 import moment from "moment";
+import * as Animatable from 'react-native-animatable';
 import AppLoading from "expo-app-loading";
 import { auth, firestore, firebase } from "../../firebase/config";
 import { cos, log } from "react-native-reanimated";
@@ -55,6 +56,11 @@ export default function DashboardScreen({ navigation }) {
   const [answer, setAnswer] = useState("");
   const [questionsList, setQuestionsList] = useState([]);
   const [topMatches, setTopMatches] = useState([]);
+  const [date, setDate] = useState(new Date("01/4/2022"));
+
+  //Notification system
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isValidInput, setValidInput] = useState(false);
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
   const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
@@ -132,7 +138,6 @@ export default function DashboardScreen({ navigation }) {
         questionType: doc.data().questionType,
       };
       currentQuestions.push(question)
-      // myQuestions.push(question);
     });
     setMyQuestions(currentQuestions)
   };
@@ -378,12 +383,28 @@ export default function DashboardScreen({ navigation }) {
       .doc(postedById)
       .collection("questions")
       .doc(questionId);
-    questionDoc.collection("answers").add({
-      replierId: currentUserUID,
-      content: answer,
-      postedTime: new Date(),
-      read: false,
-    });
+    // questionDoc.collection("answers").add({
+    //   replierId: postedById,
+    //   content: answer,
+    //   postedTime: new Date(),
+    //   read: false,
+    // });
+
+    //User cannot submit a blank answer
+    if(questionDoc.content == ''){
+      setValidInput(false);
+    }
+    //User successful submit question
+    else if (questionDoc.content != ''){
+      setSubmitSuccess(true);
+      setValidInput(true);
+      questionDoc.collection("answers").add({
+        replierId: postedById,
+        content: answer,
+        postedTime: new Date(),
+        read: false,
+      });
+    }
   };
 
   //** render suggested Questions **//
@@ -422,8 +443,23 @@ export default function DashboardScreen({ navigation }) {
                   >
                     <Text>Submit Answer</Text>
                   </Button>
+                  { !isValidInput ?
+                    <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
+                      Submit Answer unsuccessfully
+                    </Animatable.Text>
+                    : <></>
+                    // fadeOut();
+                  }
+                  { submitSuccess && isValidInput ?
+                    <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
+                      Submit Answer successfully
+                    </Animatable.Text>
+                    : <></>
+                    // fadeOut();
+                  }
                 </View>
               ) : null}
+              
             </Card>
           </View>
         </View>
@@ -494,32 +530,33 @@ export default function DashboardScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   //** render Top Matches **//
   const renderedTopMatches = () => {
-    return topMatches.length == 0 ? (
-      <Text>No one iteresting?</Text>
-    ) : (
-      topMatches.map((match) => {
-        return (
-          <View key={match.id} style={style.shadow}>
-            <Card style={style.matchCards}>
-              <View style={{ flexDirection: "row" }}>
-                <Avatar
-                  style={style.profilePic}
-                  source={{ uri: match.matchImg }}
+    return topMatches.length == 0 ? 
+    
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 20, alignSelf: "center" }}>No one iteresting?</Text> 
+    </View>
+    : topMatches.map(match => {
+      return (<View key={match.id} style={style.shadow}>
+        <Card style={style.matchCards}>
+          <View style={{ flexDirection: "row" }}>
+            <Avatar
+              style={style.profilePic}
+              source={{ uri: match.matchImg }}
+            />
+            <View>
+              <Text style={style.profileName}>{match.matchName}</Text>
+              <View style={{ flexDirection: "row", marginTop: -30 }}>
+                <Icon
+                  style={[style.chatBubbleIcon, style.matchIcons]}
+                  fill="#7f7aff"
+                  name="message-circle-outline"
+                  onPress={() => onChat(match.matchId)}
                 />
-                <View>
-                  <Text style={style.profileName}>{match.matchName}</Text>
-                  <View style={{ flexDirection: "row", marginTop: -30 }}>
-                    <Icon
-                      style={[style.chatBubbleIcon, style.matchIcons]}
-                      fill="#7f7aff"
-                      name="message-circle-outline"
-                      onPress={() => onChat(match.matchId)}
-                    />
-                    <Icon
-                      style={[style.deletePersonIcon, style.matchIcons]}
-                      fill="#7f7aff"
-                      name="person-delete-outline"
-                      onPress={() => deleteTopMatches(match.matchId)}
+                <Icon
+                  style={[style.deletePersonIcon, style.matchIcons]}
+                  fill="#7f7aff"
+                  name="person-delete-outline"
+                  onPress={() => deleteTopMatches(match.matchId)}
                     />
                     <Icon
                       style={[style.moreVerticalIcon, style.matchIcons]}
@@ -572,7 +609,6 @@ export default function DashboardScreen({ navigation }) {
           </View>
         );
       })
-    );
   };
 
   if (!fontsLoaded) {

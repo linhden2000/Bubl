@@ -8,7 +8,6 @@ import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 
 import { Formik } from 'formik';
 
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { NavigationContainer } from '@react-navigation/native'
