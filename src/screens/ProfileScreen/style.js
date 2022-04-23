@@ -102,6 +102,7 @@ export default StyleSheet.create({
     position: 'relative',
     alignSelf: "center",
   },
+  
   //Modal
   modal:{
     backgroundColor: "#ffffff", 
