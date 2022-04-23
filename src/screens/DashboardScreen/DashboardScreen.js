@@ -57,6 +57,7 @@ export default function DashboardScreen({ navigation }) {
   const [topMatches, setTopMatches] = useState([]);
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
+  const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
   const shouldLoadComponent = (index) => index === selectedIndex;
   const usersRef = firestore.collection("users");
   const currentUserUID = auth?.currentUser.uid;
@@ -120,6 +121,7 @@ export default function DashboardScreen({ navigation }) {
       .collection("users")
       .doc(uid)
       .collection("questions");
+    const currentQuestions = []
     const questionsSnapShot = await questions.get();
     questionsSnapShot.forEach((doc) => {
       let question = {
@@ -129,9 +131,10 @@ export default function DashboardScreen({ navigation }) {
         question: doc.data().question,
         questionType: doc.data().questionType,
       };
-       setMyQuestions(oldArray => [...oldArray, question]);
+      currentQuestions.push(question)
       // myQuestions.push(question);
     });
+    setMyQuestions(currentQuestions)
   };
 
   //Dynamically render the list of MyQuesitons

@@ -22,9 +22,10 @@ export default function MessageScreen({ navigation }) {
     const charoomsSnapshot = await chatroomsCollection
       .where("userslist", "array-contains", currentUserUID)
       .get();
+    let currentChatrooms = []
     for (let chatroom of charoomsSnapshot.docs) {
       // Get last message information
-      console.log(chatroom.data().lastMessageId);
+      
       if (chatroom.data().lastMessageId != null) {
         const lastMessageSnapshot = await messagesCollection
           .doc(chatroom.data().lastMessageId)
@@ -56,9 +57,10 @@ export default function MessageScreen({ navigation }) {
           lastMessageSentAt,
           partner,
         };
-        setChatroomsList((prevState) => [...prevState, chatroomData]);
+        currentChatrooms.push(chatroomData)
       }
     }
+    setChatroomsList(currentChatrooms)
   };
 
   useEffect(() => {
