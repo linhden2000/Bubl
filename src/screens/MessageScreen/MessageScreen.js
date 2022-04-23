@@ -1,48 +1,105 @@
-import React from 'react'
-import style from './style';
-import { StyleSheet, Text,SafeAreaView, View, TouchableOpacity } from 'react-native'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHome, faComment, faUser} from '@fortawesome/free-solid-svg-icons'
+import React from "react";
+import style from "./style";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { auth, firestore } from "../../firebase/config";
+import { useState, useEffect } from "react";
 
-export default function MessageScreen({navigation}) {
-    const onLogout = () => {
-        navigation.navigate('Login')
+export default function MessageScreen({ navigation }) {
+  const currentUserUID = auth?.currentUser.uid;
+  const [chatroomsList, setChatroomsList] = useState([]);
+  
+  const fetchChatrooms = async () => {
+    const chatroomsCollection = firestore.collection("chatrooms");
+    const messagesCollection = firestore.collection("messages");
+    const usersCollection = firestore.collection("users");
+    const charoomsSnapshot = await chatroomsCollection
+      .where("userslist", "array-contains", currentUserUID)
+      .get();
+    for (let chatroom of charoomsSnapshot.docs) {
+      // Get last message information
+      console.log(chatroom.data().lastMessageId);
+      if (chatroom.data().lastMessageId != null) {
+        const lastMessageSnapshot = await messagesCollection
+          .doc(chatroom.data().lastMessageId)
+          .get();
+        const lastMessageContent = lastMessageSnapshot.data().content;
+        const lastMessageSentAt = lastMessageSnapshot.data().sentAt.toDate().toLocaleDateString("en-US")
+                                + " " 
+                                + lastMessageSnapshot.data().sentAt.toDate().toLocaleTimeString("en-US");
+        // Get partner data
+        let partnerId = "";
+        const usersList = chatroom.data().userslist;
+        const filteredList = usersList.filter((uid) => uid != currentUserUID);
+        // If this is a chatroom with the same uid
+        if (!filteredList.length) {
+          partnerId = currentUserUID;
+        } else {
+          partnerId = filteredList[0];
+        }
+        const partnerRef = await usersCollection.doc(partnerId).get();
+        const partner = {
+          partnerId,
+          partnerProfilePic: partnerRef.data().profilePic,
+          partnerName: partnerRef.data().firstName,
+        };
+        // chatroom displayed data
+        let chatroomData = {
+          chatroomId: chatroom.id,
+          lastMessageContent,
+          lastMessageSentAt,
+          partner,
+        };
+        setChatroomsList((prevState) => [...prevState, chatroomData]);
+      }
     }
-    
-    const onMessage = () => {
-        navigation.navigate('Message')
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      fetchChatrooms();
+      console.log(chatroomsList);
     }
-
-    const onProfile = () => {
-        navigation.navigate('Profile')
-    }
-
-    const onDashBoard = () => {
-        navigation.navigate('Dashboard')
-    }
-    
-
-    return (
-        <View style={style.container}>
-            {/* Logo Img here
-             <Image style={styles.image} source={require("./assets/logo.png")} />*/}
-            <TouchableOpacity style={style.logoutBtn} onPress={onLogout}>
-              <Text>LOGOUT</Text>
-            </TouchableOpacity> 
-            
-            <View style={style.navbar}>
-              <TouchableOpacity style={style.messageBtn} onPress={onMessage}>
-                <FontAwesomeIcon icon={faComment} />
-              </TouchableOpacity> 
-
-              <TouchableOpacity style={style.homeBtn} onPress={onDashBoard}>
-                <FontAwesomeIcon icon={faHome} />
-              </TouchableOpacity> 
-
-              <TouchableOpacity style={style.profileBtn} onPress={onProfile}>
-                <FontAwesomeIcon icon={faUser} />
-              </TouchableOpacity> 
-            </View>       
-        </View>
-    )
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  const onChat = (chatroomId) => {
+    navigation.navigate("Chat", { chatroomId });
+  }
+  const renderedChatrooms = () => {
+      return chatroomsList.map(chatroom => {
+          return <TouchableOpacity key={chatroom.chatroomId} style={style.container} onPress={() => onChat(chatroom.chatroomId)}>
+          <Image
+            style={style.avatar}
+            source={{uri: chatroom.partner.partnerProfilePic}}
+          />
+          <View style={style.badgeContainer}>
+            <Text style={style.badgeText}>4</Text>
+          </View>
+          <View style={style.rightContainer}>
+            <View style={style.row}>
+              <Text style={style.name}> {chatroom.partner.partnerName}</Text>
+              <Text style={style.text}>{chatroom.lastMessageSentAt}</Text>
+            </View>
+            <Text numberOfLines={1} style={style.text}>
+              {" "}
+              {chatroom.lastMessageContent}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      })
+  }
+  return (
+    <View style={style.page}>
+      {renderedChatrooms()}
+    </View>
+  );
 }

@@ -1,74 +1,116 @@
 // Style for message goes here
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get("screen");
+
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#F4BCD9"
-    },
+  imageBG:{
+    flex: 1,
+    justifyContent:"center",
+    position: "absolute",
+    width:width,
+    height:height
+  },
+  // White box container
+  box:{
+    flex: 1,
+    backgroundColor:"#FFFFFF",
+    width: width * 0.9,
+    height: height * 0.8,
+    marginTop: width * 0.25,
+    borderRadius: 20,
+  },
+  avatar:{
+    flex: 1,
+    //marginTop: -width/10,
+    width: width * 0.9,
+    height: height * 0.3,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
 
-    navbar:{
-      flexDirection: 'row',
-      backgroundColor: "#F4BCD9",
-      height: 50,
-      marginTop: 50,
-    },
+  // Style of each choice
+  choice:{
+    backgroundColor: "#F4F5F7",
+    alignContent:"flex-end",
+    width: width * 0.9, 
+    height: height * 0.51,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+  },
 
-    image:{
-      position: "relative",
-      height: 150,
-    },
+  //Choice inputView
+  inputView: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    width: width * 0.8,
+    height: width/10,
+    marginTop: width/22,
+    alignSelf:"center",
+    flexDirection: "row",
+  },
 
-    profile:{
-      height: 100,
-      width: 100,
-      borderRadius: 50,
-      alignContent:"center",
-      position: "absolute",
-      left: 30,
-      bottom: 540
-    },
-
-    content: {
-      marginTop: 20,
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-
-    },
-
-    Btn: {
-      marginTop: 10,
-      width: 350,
-      borderRadius: 25,
-      height: 60,
-      textAlign: "left",
-      justifyContent: "center",
-      backgroundColor: "#FFFFFF",
+  //Choice textInput
+  TextInput: {
+    flex: 1,
+    alignSelf:"center",
+    fontSize: width/30,
+    textAlignVertical: "center",
+    textAlign: "center",
+    color:"#7e27ed",
   },
 
   text:{
-    left: 30, fontSize: 20
+    marginTop: width/30, 
+    alignSelf:"center",
+    textAlignVertical: "center",
+    textAlign: "center",
+    justifyContent: "center", 
+    fontSize: width/30, 
+    color:"#8898AA"
   },
 
-  messageBtn: {
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center'
+  logoutBtn: {
+    width: width/2,
+    borderRadius: 10,
+    height: width/10,
+    alignItems: "center",
+    alignSelf:"center",
+    justifyContent: "center",
+    marginTop: width/20,
+    backgroundColor: '#5E72E4',
   },
 
-  homeBtn: {
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center'
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: width/30,
   },
 
-  profileBtn: {
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center'
+  biobox: {
+    borderColor: '#FCBACB',
+    //borderTopWidth: 1,
+    //borderBottomWidth: 1,
+    alignItems:'center',
+    width: width/1.5,
+    position: 'relative',
+    alignSelf: "center",
+  },
+  //Modal
+  modal:{
+    backgroundColor: "#ffffff", 
+    borderRadius: 10, 
+    width:width,
+    height: height*0.5,
+    padding: height*0.1,
+    margin: height*0.1,
+    flex: 0.3, 
+    justifyContent: "space-evenly",
   },
 })

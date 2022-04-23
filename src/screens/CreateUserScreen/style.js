@@ -1,7 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+const { width, height } = Dimensions.get("screen");
+import { marginBottom } from 'styled-system';
 export default StyleSheet.create({
     form:{
         backgroundColor: "#FFC0CB",
+    },
+    imageBG:{
+        flex: 1,
+        justifyContent:"center",
+        position: "absolute",
+        width:width,
+        height:height
     },
     card:{
         marginTop: 150,
@@ -16,6 +25,7 @@ export default StyleSheet.create({
         position: "absolute",
         marginTop: 50,
         marginHorizontal: 80,
+        alignSelf: "center"
     },
     profilePic:{
         height: 200,
@@ -23,13 +33,13 @@ export default StyleSheet.create({
     },
     submitBtn: {
         width: "80%",
-        borderRadius: 25,
-        height: 50,
+        borderRadius: 10,
+        height: width/10,
         alignItems: "center",
+        alignSelf:"center",
         justifyContent: "center",
-        marginTop: 40,
-        backgroundColor: "#FF1493",
-        alignSelf: "center",
+        marginTop: width/30,
+        backgroundColor: '#5E72E4',
     },
     TextInput: {
         height: 50,
@@ -47,5 +57,20 @@ export default StyleSheet.create({
     select: {
         flex: 1,
         margin: 2,
+    },
+    editButton: {
+        position: "absolute",
+        marginTop: 150,
+        marginLeft: 20,
+        borderRadius: 20,
+        borderColor: "#bdbdbd",
+        width: 10,
+        height: 10,
+      },
+      errorMsg: {
+        color: '#FF0000',
+        fontSize: width/30,
+        padding: 10,
+        marginLeft: 20,
     },
 })
