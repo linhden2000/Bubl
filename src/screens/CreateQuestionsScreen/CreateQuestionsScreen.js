@@ -6,6 +6,8 @@ import { Button, Input, Text, Card, Icon, Select, SelectItem, IndexPath} from '@
 import {auth, firestore} from '../../firebase/config';
 import * as Animatable from 'react-native-animatable';
 
+// import Toast from 'react-native-simple-toast';
+
 //Icons
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back-outline'/>
@@ -95,6 +97,7 @@ export default function CreateQuestionsScreen({navigation}) {
       setQuestionState(false);
 
       setQuestion('');
+      // Toast.show('THIS IS TOAAAAAST!');
     }
   }
 
