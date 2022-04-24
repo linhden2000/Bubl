@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 export default function MessageScreen({ navigation }) {
   const currentUserUID = auth?.currentUser.uid;
   const [chatroomsList, setChatroomsList] = useState([]);
-  
+  const [inactiveChatrooms, setInactiveChatrooms] = useState([])
   const fetchChatrooms = async () => {
     const chatroomsCollection = firestore.collection("chatrooms");
     const messagesCollection = firestore.collection("messages");
@@ -22,7 +22,8 @@ export default function MessageScreen({ navigation }) {
     const charoomsSnapshot = await chatroomsCollection
       .where("userslist", "array-contains", currentUserUID)
       .get();
-    let currentChatrooms = []
+    let activeChatrooms = []
+    let inactiveChatrooms = []
     // Get users' top matches
     const userRef = await usersCollection.doc(currentUserUID).get()
     const userTopMatches = userRef.data().topMatches
@@ -65,10 +66,16 @@ export default function MessageScreen({ navigation }) {
           partner,
           active
         };
-        currentChatrooms.push(chatroomData)
+        if(active) {
+          activeChatrooms.push(chatroomData)
+        }
+        else {
+          inactiveChatrooms.push(chatroomData)
+        }
       }
     }
-    setChatroomsList(currentChatrooms)
+    setChatroomsList(activeChatrooms)
+    setInactiveChatrooms(inactiveChatrooms)
     console.log(currentChatrooms);
   };
 
@@ -114,9 +121,33 @@ export default function MessageScreen({ navigation }) {
         </TouchableOpacity>
       })
   }
+  const renderedInactive = () => {
+    return inactiveChatrooms.map(chatroom => {
+      return <TouchableOpacity  key={chatroom.chatroomId} style={style.inactiveContainer} onPress={() => onChat(chatroom.chatroomId, chatroom.active)}>
+      <Image
+        style={style.avatar}
+        source={{uri: chatroom.partner.partnerProfilePic}}
+      />
+      <View style={style.badgeContainer}>
+        <Text style={style.badgeText}>4</Text>
+      </View>
+      <View style={style.rightContainer}>
+        <View style={style.row}>
+          <Text style={style.name}> {chatroom.partner.partnerName}</Text>
+          <Text style={style.text}>{chatroom.lastMessageSentAt}</Text>
+        </View>
+        <Text numberOfLines={1} style={style.text}>
+          {" "}
+          {chatroom.lastMessageContent}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  })
+  }
   return (
     <View style={style.page}>
       {renderedChatrooms()}
+      {renderedInactive()}
     </View>
   );
 }

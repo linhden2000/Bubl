@@ -31,7 +31,7 @@ import {
   PublicSans_400Regular,
 } from "@expo-google-fonts/public-sans";
 import moment from "moment";
-import * as Animatable from 'react-native-animatable';
+import * as Animatable from "react-native-animatable";
 import AppLoading from "expo-app-loading";
 import { auth, firestore, firebase } from "../../firebase/config";
 import { cos, log } from "react-native-reanimated";
@@ -91,20 +91,21 @@ export default function DashboardScreen({ navigation }) {
   const fetchTopMatches = async () => {
     const usersCollection = firestore.collection("users");
     const userDoc = usersCollection.doc(currentUserUID);
-    const snapshot = await userDoc.get();
-    const topMatches = snapshot.data().topMatches;
-    // Get other users data in top matches array
-    let currentTopMatches = [];
-    for (const match of topMatches) {
-      const matchSnapshot = await usersCollection.doc(match).get();
-      const matchData = {
-        matchId: matchSnapshot.id,
-        matchName: matchSnapshot.data().firstName,
-        matchImg: matchSnapshot.data().profilePic,
-      };
-      currentTopMatches.push(matchData);
-    }
-    setTopMatches(currentTopMatches);
+    userDoc.onSnapshot(async (snapshot) => {
+      const topMatches = snapshot.data().topMatches;
+      // Get other users data in top matches array
+      let currentTopMatches = [];
+      for (const match of topMatches) {
+        const matchSnapshot = await usersCollection.doc(match).get();
+        const matchData = {
+          matchId: matchSnapshot.id,
+          matchName: matchSnapshot.data().firstName,
+          matchImg: matchSnapshot.data().profilePic,
+        };
+        currentTopMatches.push(matchData);
+      }
+      setTopMatches(currentTopMatches);
+    });
   };
   //** Delete user from Top Matches**/
   const deleteTopMatches = async (matchId) => {
@@ -127,7 +128,7 @@ export default function DashboardScreen({ navigation }) {
       .collection("users")
       .doc(uid)
       .collection("questions");
-    const currentQuestions = []
+    const currentQuestions = [];
     const questionsSnapShot = await questions.get();
     questionsSnapShot.forEach((doc) => {
       let question = {
@@ -137,9 +138,9 @@ export default function DashboardScreen({ navigation }) {
         question: doc.data().question,
         questionType: doc.data().questionType,
       };
-      currentQuestions.push(question)
+      currentQuestions.push(question);
     });
-    setMyQuestions(currentQuestions)
+    setMyQuestions(currentQuestions);
   };
 
   //Dynamically render the list of MyQuesitons
@@ -170,9 +171,9 @@ export default function DashboardScreen({ navigation }) {
 
   useEffect(() => {
     let mounted = true;
-      if (mounted) {
-        fetchTopMatches();
-      }
+    if (mounted) {
+      fetchTopMatches();
+    }
     return () => {
       mounted = false;
     };
@@ -180,9 +181,9 @@ export default function DashboardScreen({ navigation }) {
 
   useEffect(() => {
     let mounted = true;
-      if (mounted) {
-        fetchMyQuestions();
-      }
+    if (mounted) {
+      fetchMyQuestions();
+    }
     return () => {
       mounted = false;
     };
@@ -196,148 +197,150 @@ export default function DashboardScreen({ navigation }) {
   });
   // Listen to the change in category choice
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
     if (mounted) {
       let queryGender = "";
-    // Query for single sexual preference
-    if (sexualPref == "male" || sexualPref == "female") {
-      if (sexualPref == "male") {
-        queryGender = "man";
-      } else {
-        queryGender = "woman";
-      }
-      usersRef
-        .where("gender", "==", queryGender)
-        .get()
-        .then((snapshot) => {
-          if (snapshot.empty) {
-            console.log("There's no matching profile");
-          } else {
-            snapshot.docs.forEach((doc) => {
-              const selectedCategory =
-                dashboardCategoryProp[selectedCategoryIndex.row];
-              if (selectedCategory == "All") {
-                usersRef
-                  .doc(doc.data().id)
-                  .collection("questions")
-                  .get()
-                  .then((quesList) => {
-                    quesList.docs.forEach((ques) => {
-                      let epochMilliseconds =
-                        ques.data().postedTime.seconds * 1000;
-                      let postedTimeStamp = new Date(epochMilliseconds);
-                      let actualDate = postedTimeStamp.getDate();
-                      let actualMonth = postedTimeStamp.getMonth();
-                      let actualYear = postedTimeStamp.getFullYear();
-                      let postedTimeString =
-                        actualMonth + 1 + "/" + actualDate + "/" + actualYear;
-                      const data = {
-                        questionId: ques.id,
-                        question: ques.data().question,
-                        postedTime: postedTimeString,
-                        displayAnswerInputBox: false,
-                        postedBy: doc.data().id,
-                      };
-                      setQuestionsList((prevState) => [...prevState, data]);
+      // Query for single sexual preference
+      if (sexualPref == "male" || sexualPref == "female") {
+        if (sexualPref == "male") {
+          queryGender = "man";
+        } else {
+          queryGender = "woman";
+        }
+        usersRef
+          .where("gender", "==", queryGender)
+          .get()
+          .then((snapshot) => {
+            if (snapshot.empty) {
+              console.log("There's no matching profile");
+            } else {
+              snapshot.docs.forEach((doc) => {
+                const selectedCategory =
+                  dashboardCategoryProp[selectedCategoryIndex.row];
+                if (selectedCategory == "All") {
+                  usersRef
+                    .doc(doc.data().id)
+                    .collection("questions")
+                    .get()
+                    .then((quesList) => {
+                      quesList.docs.forEach((ques) => {
+                        let epochMilliseconds =
+                          ques.data().postedTime.seconds * 1000;
+                        let postedTimeStamp = new Date(epochMilliseconds);
+                        let actualDate = postedTimeStamp.getDate();
+                        let actualMonth = postedTimeStamp.getMonth();
+                        let actualYear = postedTimeStamp.getFullYear();
+                        let postedTimeString =
+                          actualMonth + 1 + "/" + actualDate + "/" + actualYear;
+                        const data = {
+                          questionId: ques.id,
+                          question: ques.data().question,
+                          postedTime: postedTimeString,
+                          displayAnswerInputBox: false,
+                          postedBy: doc.data().id,
+                        };
+                        setQuestionsList((prevState) => [...prevState, data]);
+                      });
                     });
-                  });
-              } else {
-                usersRef
-                  .doc(doc.data().id)
-                  .collection("questions")
-                  .where("category", "==", selectedCategory)
-                  .get()
-                  .then((quesList) => {
-                    quesList.docs.forEach((ques) => {
-                      let epochMilliseconds =
-                        ques.data().postedTime.seconds * 1000;
-                      let postedTimeStamp = new Date(epochMilliseconds);
-                      let actualDate = postedTimeStamp.getDate();
-                      let actualMonth = postedTimeStamp.getMonth();
-                      let actualYear = postedTimeStamp.getFullYear();
-                      let postedTimeString =
-                        actualMonth + 1 + "/" + actualDate + "/" + actualYear;
-                      const data = {
-                        questionId: ques.id,
-                        question: ques.data().question,
-                        postedTime: postedTimeString,
-                        displayAnswerInputBox: false,
-                        postedBy: doc.data().id,
-                      };
-                      setQuestionsList((prevState) => [...prevState, data]);
-                    });
-                  })
-                  .catch((err) => console.log(err));
-              }
-            });
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-    // Query for both sexual preferences
-    else {
-      usersRef.get().then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          const selectedCategory =
-            dashboardCategoryProp[selectedCategoryIndex.row];
-          if (selectedCategory == "All") {
-            usersRef
-              .doc(doc.data().id)
-              .collection("questions")
-              .get()
-              .then((quesList) => {
-                quesList.docs.forEach((ques) => {
-                  let epochMilliseconds = ques.data().postedTime.seconds * 1000;
-                  let postedTimeStamp = new Date(epochMilliseconds);
-                  let actualDate = postedTimeStamp.getDate();
-                  let actualMonth = postedTimeStamp.getMonth();
-                  let actualYear = postedTimeStamp.getFullYear();
-                  let postedTimeString =
-                    actualMonth + 1 + "/" + actualDate + "/" + actualYear;
-                  const data = {
-                    questionId: ques.id,
-                    question: ques.data().question,
-                    postedTime: postedTimeString,
-                    displayAnswerInputBox: false,
-                    postedBy: doc.data().id,
-                  };
-                  setQuestionsList((prevState) => [...prevState, data]);
-                });
+                } else {
+                  usersRef
+                    .doc(doc.data().id)
+                    .collection("questions")
+                    .where("category", "==", selectedCategory)
+                    .get()
+                    .then((quesList) => {
+                      quesList.docs.forEach((ques) => {
+                        let epochMilliseconds =
+                          ques.data().postedTime.seconds * 1000;
+                        let postedTimeStamp = new Date(epochMilliseconds);
+                        let actualDate = postedTimeStamp.getDate();
+                        let actualMonth = postedTimeStamp.getMonth();
+                        let actualYear = postedTimeStamp.getFullYear();
+                        let postedTimeString =
+                          actualMonth + 1 + "/" + actualDate + "/" + actualYear;
+                        const data = {
+                          questionId: ques.id,
+                          question: ques.data().question,
+                          postedTime: postedTimeString,
+                          displayAnswerInputBox: false,
+                          postedBy: doc.data().id,
+                        };
+                        setQuestionsList((prevState) => [...prevState, data]);
+                      });
+                    })
+                    .catch((err) => console.log(err));
+                }
               });
-          } else {
-            usersRef
-              .doc(doc.data().id)
-              .collection("questions")
-              .where("category", "==", selectedCategory)
-              .get()
-              .then((quesList) => {
-                quesList.docs.forEach((ques) => {
-                  let epochMilliseconds = ques.data().postedTime.seconds * 1000;
-                  let postedTimeStamp = new Date(epochMilliseconds);
-                  let actualDate = postedTimeStamp.getDate();
-                  let actualMonth = postedTimeStamp.getMonth();
-                  let actualYear = postedTimeStamp.getFullYear();
-                  let postedTimeString =
-                    actualMonth + 1 + "/" + actualDate + "/" + actualYear;
-                  const data = {
-                    questionId: ques.id,
-                    question: ques.data().question,
-                    postedTime: postedTimeString,
-                    displayAnswerInputBox: false,
-                    postedBy: doc.data().id,
-                  };
-                  setQuestionsList((prevState) => [...prevState, data]);
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+      // Query for both sexual preferences
+      else {
+        usersRef.get().then((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const selectedCategory =
+              dashboardCategoryProp[selectedCategoryIndex.row];
+            if (selectedCategory == "All") {
+              usersRef
+                .doc(doc.data().id)
+                .collection("questions")
+                .get()
+                .then((quesList) => {
+                  quesList.docs.forEach((ques) => {
+                    let epochMilliseconds =
+                      ques.data().postedTime.seconds * 1000;
+                    let postedTimeStamp = new Date(epochMilliseconds);
+                    let actualDate = postedTimeStamp.getDate();
+                    let actualMonth = postedTimeStamp.getMonth();
+                    let actualYear = postedTimeStamp.getFullYear();
+                    let postedTimeString =
+                      actualMonth + 1 + "/" + actualDate + "/" + actualYear;
+                    const data = {
+                      questionId: ques.id,
+                      question: ques.data().question,
+                      postedTime: postedTimeString,
+                      displayAnswerInputBox: false,
+                      postedBy: doc.data().id,
+                    };
+                    setQuestionsList((prevState) => [...prevState, data]);
+                  });
                 });
-              })
-              .catch((err) => console.log(err));
-          }
+            } else {
+              usersRef
+                .doc(doc.data().id)
+                .collection("questions")
+                .where("category", "==", selectedCategory)
+                .get()
+                .then((quesList) => {
+                  quesList.docs.forEach((ques) => {
+                    let epochMilliseconds =
+                      ques.data().postedTime.seconds * 1000;
+                    let postedTimeStamp = new Date(epochMilliseconds);
+                    let actualDate = postedTimeStamp.getDate();
+                    let actualMonth = postedTimeStamp.getMonth();
+                    let actualYear = postedTimeStamp.getFullYear();
+                    let postedTimeString =
+                      actualMonth + 1 + "/" + actualDate + "/" + actualYear;
+                    const data = {
+                      questionId: ques.id,
+                      question: ques.data().question,
+                      postedTime: postedTimeString,
+                      displayAnswerInputBox: false,
+                      postedBy: doc.data().id,
+                    };
+                    setQuestionsList((prevState) => [...prevState, data]);
+                  });
+                })
+                .catch((err) => console.log(err));
+            }
+          });
         });
-      });
+      }
     }
-    }
-  
+
     return () => {
-      mounted = false
+      mounted = false;
     };
   }, [selectedCategoryIndex]);
   //Show/hide tabs
@@ -391,11 +394,11 @@ export default function DashboardScreen({ navigation }) {
     // });
 
     //User cannot submit a blank answer
-    if(questionDoc.content == ''){
+    if (questionDoc.content == "") {
       setValidInput(false);
     }
     //User successful submit question
-    else if (questionDoc.content != ''){
+    else if (questionDoc.content != "") {
       setSubmitSuccess(true);
       setValidInput(true);
       questionDoc.collection("answers").add({
@@ -443,23 +446,36 @@ export default function DashboardScreen({ navigation }) {
                   >
                     <Text>Submit Answer</Text>
                   </Button>
-                  { !isValidInput ?
-                    <Animatable.Text easing="ease-in-out-expo" style={style.errorMsg} duration={1000}>
-                      Submit Answer unsuccessfully
-                    </Animatable.Text>
-                    : <></>
+                  {
+                    !isValidInput ? (
+                      <Animatable.Text
+                        easing="ease-in-out-expo"
+                        style={style.errorMsg}
+                        duration={1000}
+                      >
+                        Submit Answer unsuccessfully
+                      </Animatable.Text>
+                    ) : (
+                      <></>
+                    )
                     // fadeOut();
                   }
-                  { submitSuccess && isValidInput ?
-                    <Animatable.Text easing="ease-in-out-expo" style={style.submitMsg} duration={1000}>
-                      Submit Answer successfully
-                    </Animatable.Text>
-                    : <></>
+                  {
+                    submitSuccess && isValidInput ? (
+                      <Animatable.Text
+                        easing="ease-in-out-expo"
+                        style={style.submitMsg}
+                        duration={1000}
+                      >
+                        Submit Answer successfully
+                      </Animatable.Text>
+                    ) : (
+                      <></>
+                    )
                     // fadeOut();
                   }
                 </View>
               ) : null}
-              
             </Card>
           </View>
         </View>
@@ -530,33 +546,36 @@ export default function DashboardScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   //** render Top Matches **//
   const renderedTopMatches = () => {
-    return topMatches.length == 0 ? 
-    
-    <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 20, alignSelf: "center" }}>No one iteresting?</Text> 
-    </View>
-    : topMatches.map(match => {
-      return (<View key={match.id} style={style.shadow}>
-        <Card style={style.matchCards}>
-          <View style={{ flexDirection: "row" }}>
-            <Avatar
-              style={style.profilePic}
-              source={{ uri: match.matchImg }}
-            />
-            <View>
-              <Text style={style.profileName}>{match.matchName}</Text>
-              <View style={{ flexDirection: "row", marginTop: -30 }}>
-                <Icon
-                  style={[style.chatBubbleIcon, style.matchIcons]}
-                  fill="#7f7aff"
-                  name="message-circle-outline"
-                  onPress={() => onChat(match.matchId)}
+    return topMatches.length == 0 ? (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 20, alignSelf: "center" }}>
+          No one iteresting?
+        </Text>
+      </View>
+    ) : (
+      topMatches.map((match) => {
+        return (
+          <View key={match.id} style={style.shadow}>
+            <Card style={style.matchCards}>
+              <View style={{ flexDirection: "row" }}>
+                <Avatar
+                  style={style.profilePic}
+                  source={{ uri: match.matchImg }}
                 />
-                <Icon
-                  style={[style.deletePersonIcon, style.matchIcons]}
-                  fill="#7f7aff"
-                  name="person-delete-outline"
-                  onPress={() => deleteTopMatches(match.matchId)}
+                <View>
+                  <Text style={style.profileName}>{match.matchName}</Text>
+                  <View style={{ flexDirection: "row", marginTop: -30 }}>
+                    <Icon
+                      style={[style.chatBubbleIcon, style.matchIcons]}
+                      fill="#7f7aff"
+                      name="message-circle-outline"
+                      onPress={() => onChat(match.matchId)}
+                    />
+                    <Icon
+                      style={[style.deletePersonIcon, style.matchIcons]}
+                      fill="#7f7aff"
+                      name="person-delete-outline"
+                      onPress={() => deleteTopMatches(match.matchId)}
                     />
                     <Icon
                       style={[style.moreVerticalIcon, style.matchIcons]}
@@ -609,6 +628,7 @@ export default function DashboardScreen({ navigation }) {
           </View>
         );
       })
+    );
   };
 
   if (!fontsLoaded) {

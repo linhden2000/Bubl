@@ -11,6 +11,13 @@ export default StyleSheet.create({
         marginTop: width/25,
     },
 
+    inactiveContainer: {
+      flexDirection: 'row',
+      justifyContent: "center",
+      marginTop: width/25,
+      backgroundColor:"grey"
+  },
+
     page:{
       backgroundColor:'white',
       flex : 1,
