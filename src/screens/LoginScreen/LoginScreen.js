@@ -56,6 +56,7 @@ export default function LoginScreen({navigation}) {
         })
         .catch(error => {
             setAuthError(true)
+            alert(error)
         })        
     }
 
