@@ -43,6 +43,7 @@ import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 export default function DashboardScreen({ navigation }) {
   LogBox.ignoreLogs(["Setting a timer"]);
+  LogBox.ignoreLogs(["Each child in a list"]);
   //Load fonts
   //Source: https://github.com/expo/google-fonts
   let [fontsLoaded] = useFonts({
