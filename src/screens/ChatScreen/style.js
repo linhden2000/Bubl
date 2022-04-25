@@ -41,9 +41,15 @@ export default StyleSheet.create({
         marginRight: 'auto',
     },
     rightContainer:{
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#F5F5F5',
         marginRight: 15 + height / 20,
         marginLeft: 'auto'
+    },
+    rightText: {
+        color: "#3f3f3f",
+    },
+    leftText: {
+        color: "white",
     },
     rightAvar:{
         alignSelf: "center",

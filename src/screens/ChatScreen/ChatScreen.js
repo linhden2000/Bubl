@@ -128,7 +128,12 @@ export default function ChatScreen({ navigation, route }) {
                 : style.rightContainer,
             ]}
           >
-            <Text style={{ color: "white" }}>{mes.content}</Text>
+            <Text 
+            style={[mes.sentBy == currentUserUID
+                ? style.leftText
+                : style.rightText,
+
+              ] }>{mes.content}</Text>
           </View>
         </View>
       );
