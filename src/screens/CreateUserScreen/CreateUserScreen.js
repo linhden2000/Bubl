@@ -110,7 +110,8 @@ export default function CreateUserScreen({navigation}){
 
      //Boolean Entry Validation
      const hasRequiredFields = () => {
-        if(isEnteredFirstName && isEnteredLastName && isEnteredKUID && hasBirthdayEntry() === true) {
+        if(isEnteredFirstName && isEnteredLastName && isEnteredKUID && isEnteredBirthday === true) {
+            
             return(true)
         }
         else{
@@ -118,13 +119,9 @@ export default function CreateUserScreen({navigation}){
         }
     }
 
+    //setter for birthday entry
     const hasBirthdayEntry = (nextDate) => {
-        if(setDate(nextDate)){
-            return(true)
-        }
-        else{
-            return(false)
-        }
+        setDate(nextDate);
     }
 
     //** Submit User Information and Navigate to Dashboard **//
@@ -134,6 +131,11 @@ export default function CreateUserScreen({navigation}){
         // Convert Index Path to String
         const gender = selectedGenderIndex.toString() == "1"? "man" : "woman"
         let sexualPref = "both"
+
+            console.log(isEnteredFirstName);
+            console.log(isEnteredLastName);
+            console.log(isEnteredKUID);
+            console.log(isEnteredBirthday);
 
         if(hasRequiredFields() === true) {
             if(selectedSexualPrefIndex == "1,2") {
@@ -243,6 +245,10 @@ export default function CreateUserScreen({navigation}){
             setValidZipCode(false)
         }
     }
+    const handleBirthdayChange = (val) => {
+        hasBirthdayEntry(val);
+        setBirthdayEntry(true);
+    }
 
    
     // ******* Render input fields and drop downs ******///
@@ -331,7 +337,7 @@ export default function CreateUserScreen({navigation}){
                         min={minDatePicker}
                         max={maxDatePicker}
                         date={date}
-                        onSelect={nextDate => hasBirthdayEntry(nextDate)}
+                        onSelect={nextDate => handleBirthdayChange(nextDate)}
                         accessoryRight={CalendarIcon}
                     />
                 </View>
