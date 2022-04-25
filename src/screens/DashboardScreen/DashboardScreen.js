@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import style from "./style";
 import {
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  Animated
 } from "react-native";
 import { dashboardCategoryProp } from "../../properties";
 import {
@@ -61,6 +62,10 @@ export default function DashboardScreen({ navigation }) {
   //Notification system
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isValidInput, setValidInput] = useState(false);
+  const [determineQuestionState, setQuestionState] = useState(false);
+
+  const [isDeleteTop, setDeleteTop] = useState(false);
+
   //Store myQuestions
   const [myQuestions, setMyQuestions] = useState([]);
   const [firstClickMyQuestion, setFirstClickMyQuestion] = useState(false);
@@ -118,6 +123,9 @@ export default function DashboardScreen({ navigation }) {
       (match) => match.matchId !== matchId
     );
     setTopMatches(updatedTopMatches);
+    setDeleteTop(true);
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   };
 
   //** Fetch 'My Questions' **//
@@ -386,29 +394,43 @@ export default function DashboardScreen({ navigation }) {
       .doc(postedById)
       .collection("questions")
       .doc(questionId);
-    // questionDoc.collection("answers").add({
-    //   replierId: postedById,
-    //   content: answer,
-    //   postedTime: new Date(),
-    //   read: false,
-    // });
-
+    questionDoc.collection("answers").add({
+      replierId: currentUserUID,
+      content: answer,
+      postedTime: new Date(),
+      read: false,
+    });
     //User cannot submit a blank answer
-    if (questionDoc.content == "") {
+    if(answer == ""){
       setValidInput(false);
+      setQuestionState(true);
     }
     //User successful submit question
-    else if (questionDoc.content != "") {
+    else {
       setSubmitSuccess(true);
       setValidInput(true);
-      questionDoc.collection("answers").add({
-        replierId: postedById,
-        content: answer,
-        postedTime: new Date(),
-        read: false,
-      });
+      setQuestionState(false);
     }
+    fadeIn();
+    setTimeout(fadeOut, 2000);
   };
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn=()=>{
+    Animated.timing(fadeAnim, {
+        toValue:1,
+        duration:2000,
+        useNativeDriver: true,
+    }).start();
+}
+const fadeOut = () => {
+  Animated.timing(fadeAnim, {
+    toValue: 0,
+    duration: 4000,
+    useNativeDriver: true,
+  }).start();
+};
+
 
   //** render suggested Questions **//
   const renderedQuestions = () => {
@@ -446,34 +468,24 @@ export default function DashboardScreen({ navigation }) {
                   >
                     <Text>Submit Answer</Text>
                   </Button>
-                  {
-                    !isValidInput ? (
-                      <Animatable.Text
-                        easing="ease-in-out-expo"
-                        style={style.errorMsg}
-                        duration={1000}
-                      >
-                        Submit Answer unsuccessfully
-                      </Animatable.Text>
-                    ) : (
-                      <></>
-                    )
-                    // fadeOut();
-                  }
-                  {
-                    submitSuccess && isValidInput ? (
-                      <Animatable.Text
-                        easing="ease-in-out-expo"
-                        style={style.submitMsg}
-                        duration={1000}
-                      >
-                        Submit Answer successfully
-                      </Animatable.Text>
-                    ) : (
-                      <></>
-                    )
-                    // fadeOut();
-                  }
+                    { !isValidInput && determineQuestionState ?
+                      <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={50}>
+                        
+                        <Text style={style.errorMsg}>Submit Answer unsuccessfully
+                          </Text>
+                      </Animatable.View>
+                      : <></>
+                    }
+                    { isValidInput && !determineQuestionState ?
+                    <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}} duration={50}>
+                        
+                      <Text style={style.submitMsg}>Submit Answer successfully
+                        </Text>
+                    </Animatable.View>
+                      
+                      : <></>
+                      
+                    }
                 </View>
               ) : null}
             </Card>
@@ -542,47 +554,46 @@ export default function DashboardScreen({ navigation }) {
       }
     }
   };
+  
   //Modal
   const [modalVisible, setModalVisible] = useState(false);
   //** render Top Matches **//
   const renderedTopMatches = () => {
-    return topMatches.length == 0 ? (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 20, alignSelf: "center" }}>
-          No one iteresting?
-        </Text>
-      </View>
-    ) : (
-      topMatches.map((match) => {
-        return (
-          <View key={match.id} style={style.shadow}>
-            <Card style={style.matchCards}>
-              <View style={{ flexDirection: "row" }}>
-                <Avatar
-                  style={style.profilePic}
-                  source={{ uri: match.matchImg }}
-                />
-                <View>
-                  <Text style={style.profileName}>{match.matchName}</Text>
-                  <View style={{ flexDirection: "row", marginTop: -30 }}>
-                    <Icon
-                      style={[style.chatBubbleIcon, style.matchIcons]}
-                      fill="#7f7aff"
-                      name="message-circle-outline"
-                      onPress={() => onChat(match.matchId)}
-                    />
-                    <Icon
-                      style={[style.deletePersonIcon, style.matchIcons]}
-                      fill="#7f7aff"
-                      name="person-delete-outline"
-                      onPress={() => deleteTopMatches(match.matchId)}
-                    />
-                    <Icon
-                      style={[style.moreVerticalIcon, style.matchIcons]}
-                      fill="#7f7aff"
-                      name="more-vertical-outline"
-                      onPress={() => setModalVisible(true)}
-                    />
+    return topMatches.length == 0 ? 
+    
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 20, alignSelf: "center" }}>No one iteresting?</Text> 
+    </View>
+    : topMatches.map(match => {
+      return (
+      <View key={match.id} style={style.shadow}>
+        <Card style={style.matchCards}>
+          <View style={{ flexDirection: "row" }}>
+            <Avatar
+              style={style.profilePic}
+              source={{ uri: match.matchImg }}
+            />
+          <View>
+            <Text style={style.profileName}>{match.matchName}</Text>
+            <View style={{ flexDirection: "row", marginTop: -30 }}>
+              <Icon
+                style={[style.chatBubbleIcon, style.matchIcons]}
+                fill="#7f7aff"
+                name="message-circle-outline"
+                onPress={() => onChat(match.matchId)}
+              />
+              <Icon
+                style={[style.deletePersonIcon, style.matchIcons]}
+                fill="#7f7aff"
+                name="person-delete-outline"
+                onPress={() => deleteTopMatches(match.matchId)}
+              />
+              <Icon
+                style={[style.moreVerticalIcon, style.matchIcons]}
+                fill="#7f7aff"
+                name="more-vertical-outline"
+                onPress={() => setModalVisible(true)}
+              />
                     <Modal transparent={true} visible={modalVisible}>
                       <View
                         style={{
@@ -621,18 +632,18 @@ export default function DashboardScreen({ navigation }) {
                         </View>
                       </View>
                     </Modal>
+                    
                   </View>
                 </View>
               </View>
             </Card>
-          </View>
+        </View>
         );
       })
-    );
   };
 
   if (!fontsLoaded) {
-    // return <AppLoading />;
+    // return <AppLoading />
   }
   return (
     <ScrollView style={style.mainView}>
@@ -645,6 +656,13 @@ export default function DashboardScreen({ navigation }) {
         </Text>
 
         {renderedTopMatches()}
+        { isDeleteTop ?
+            <Animatable.View easing="ease-in-out-expo" style={{opacity:fadeAnim}}  duration={1000}>
+              <Text style={style.submitMsg}>Top Match is deleted successfully</Text>
+              
+            </Animatable.View>
+            : <></>
+          }
 
         <Card style={style.questionHeaderContainer}>
           <TabBar

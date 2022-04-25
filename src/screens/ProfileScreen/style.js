@@ -102,7 +102,10 @@ export default StyleSheet.create({
     position: 'relative',
     alignSelf: "center",
   },
+<<<<<<< HEAD
   
+=======
+>>>>>>> Linh
   //Modal
   modal:{
     backgroundColor: "#ffffff", 
