@@ -20,6 +20,8 @@ import { faUserGraduate } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProfileScreen({navigation}) {
     const [firstName, setFirstName] = useState('');
+    // const [lastName, setLastName] = useState('');
+    const [zipCode, setZipCode] = useState('');
     const [city, setCity] = useState('');
     const [USState, setUSState] = useState('');
     const [fromValue, setFromValue] = useState(0);
@@ -53,6 +55,7 @@ export default function ProfileScreen({navigation}) {
       navigation.navigate('Preference')
     }
 
+
     const fetchUserData = async() => {
       const currentUser = auth?.currentUser
       const uid = currentUser.uid
@@ -62,6 +65,7 @@ export default function ProfileScreen({navigation}) {
                    .onSnapshot(documentSnapshot => {
                     const userData = documentSnapshot.data()
                     setFirstName(userData.firstName)
+                    // setLastName(userData.lastName)
                     setCity(userData.city)
                     setBio(userData.bio)
                     if(userData.birthday) {
@@ -72,13 +76,13 @@ export default function ProfileScreen({navigation}) {
                       let actualYear = birthdayTimeStamp.getFullYear()
                       let birthdayString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
                       setBirthday(birthdayString)
+                      console.log(birthdayString)
 
                       //converting to age
                       let month_diff =  Date.now() - birthdayTimeStamp.getTime();
                       let age_dt = new Date(month_diff);
                       let year = age_dt.getUTCFullYear(); 
                       let age = Math.abs(year - 1970);  
-
                       setAge(age);
                     }
                     setUSState(userData.state)

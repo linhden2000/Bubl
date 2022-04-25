@@ -111,7 +111,6 @@ export default function CreateUserScreen({navigation}){
      //Boolean Entry Validation
      const hasRequiredFields = () => {
         if(isEnteredFirstName && isEnteredLastName && isEnteredKUID && isEnteredBirthday === true) {
-            
             return(true)
         }
         else{
