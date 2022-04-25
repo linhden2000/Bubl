@@ -129,18 +129,18 @@ export default function DashboardScreen({ navigation }) {
       .doc(uid)
       .collection("questions");
     const currentQuestions = [];
-    const questionsSnapShot = await questions.get();
-    questionsSnapShot.forEach((doc) => {
-      let question = {
-        questionId: doc.id,
-        category: doc.data().category,
-        postedTime: doc.data().postedTime,
-        question: doc.data().question,
-        questionType: doc.data().questionType,
-      };
-      currentQuestions.push(question);
+    questions.onSnapshot(questionsSnapshot => {
+      const currentQuestions = questionsSnapshot.docs.map(question => {
+        return {
+          questionId: question.id,
+          category: question.data().category,
+          postedTime: question.data().postedTime,
+          question: question.data().question,
+          questionType: question.data().questionType,
+        }
+      })
+      setMyQuestions(currentQuestions);
     });
-    setMyQuestions(currentQuestions);
   };
 
   //Dynamically render the list of MyQuesitons
