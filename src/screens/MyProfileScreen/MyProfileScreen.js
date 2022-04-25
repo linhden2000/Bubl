@@ -93,7 +93,7 @@ export default function ProfileScreen({navigation}) {
             <Image style={{width: height/6, height: height/6, borderRadius: 100, marginTop: width/20}} source={{uri: profilePic}} />
             <Button style={style.editButton} accessoryLeft={editIcon} status="control" />  
           </View>
-          <Text style={style.customerServiceMsg}>Contact Customer Service for changes in your Name, KUID or Birthday</Text>
+          <Text style={style.customerServiceMsg}>Contact Customer Service for changes in your Name, KUID, Birthday or Email</Text>
         </View>
 
         <ScrollView style={style.content}>
@@ -127,7 +127,7 @@ export default function ProfileScreen({navigation}) {
 
           <View style={style.Btn}>
             <Text  style={{color:"#570CBC"}}> Email</Text>
-            <TextInput> {email} </TextInput>
+            <Text  style={{color:"#8898AA"}}> {email}</Text>
           </View>
 
           <View style={style.Btn}>

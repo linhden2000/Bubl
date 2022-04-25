@@ -58,7 +58,7 @@ export default StyleSheet.create({
       height: height/15,
       textAlign: "left",
       justifyContent: "center",
-      fontSize: 11,
+      fontSize: 10,
       color:"#570CBC",
     },
 
