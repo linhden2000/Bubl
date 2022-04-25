@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarnpkg add expo-linear-gradient@~9.2.0
+  /usr/local/bin/node /usr/local/bin/yarnpkg add expo-blur@~9.0.3
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, mkdir '/Users/l747n970_a/Bubl/node_modules/@expo/metro-config/node_modules/has-flag'
+  Error: EACCES: permission denied, mkdir '/Users/l747n970_a/Bubl/node_modules/@expo/metro-config/node_modules/chalk'
 
 npm manifest: 
   {
@@ -38,9 +38,9 @@ npm manifest:
       "@fortawesome/free-solid-svg-icons": "^5.15.4",
       "@fortawesome/react-fontawesome": "^0.1.17",
       "@fortawesome/react-native-fontawesome": "^0.2.7",
-      "@ptomasroos/react-native-multi-slider": "^2.2.2",
       "@react-native-community/masked-view": "0.1.10",
       "@react-navigation/bottom-tabs": "^6.0.9",
+      "@ptomasroos/react-native-multi-slider": "^2.2.2",
       "@react-navigation/material-bottom-tabs": "^6.0.9",
       "@react-navigation/native": "^6.0.6",
       "@react-navigation/stack": "^6.0.11",
@@ -51,6 +51,7 @@ npm manifest:
       "expo-app-loading": "1.1.2",
       "expo-font": "~9.2.1",
       "expo-image-picker": "~10.2.2",
+      "expo-linear-gradient": "~9.2.0",
       "expo-status-bar": "~1.0.4",
       "firebase": "^8.2.3",
       "formik": "^2.2.9",
@@ -73,7 +74,7 @@ npm manifest:
       "react-native-safe-area-context": "^3.2.0",
       "react-native-screens": "~3.4.0",
       "react-native-svg": "^12.1.1",
-      "react-native-vector-icons": "^9.0.0",
+      "react-native-vector-icons": "^9.1.0",
       "react-native-web": "^0.17.5",
       "react-navigation": "^4.4.4",
       "react-navigation-stack": "^2.10.4",
@@ -4575,6 +4576,11 @@ Lockfile:
     "resolved" "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-9.2.0.tgz"
     "version" "9.2.0"
   
+  "expo-linear-gradient@~9.2.0":
+    "integrity" "sha512-LnW2u9OT6GeyC6T8qEGjFYfNSk4KIBAwU0aRSjM4Y8hckWqhtKngGDz46DqGmJBzvZMSKuZZvj5xKn794r54ag=="
+    "resolved" "https://registry.npmjs.org/expo-linear-gradient/-/expo-linear-gradient-9.2.0.tgz"
+    "version" "9.2.0"
+  
   "expo-modules-autolinking@^0.0.3":
     "integrity" "sha512-azkCRYj/DxbK4udDuDxA9beYzQTwpJ5a9QA0bBgha2jHtWdFGF4ZZWSY+zNA5mtU3KqzYt8jWHfoqgSvKyu1Aw=="
     "resolved" "https://registry.npmjs.org/expo-modules-autolinking/-/expo-modules-autolinking-0.0.3.tgz"
@@ -7562,6 +7568,13 @@ Lockfile:
     "integrity" "sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw=="
     "resolved" "https://registry.npmjs.org/sax/-/sax-1.2.4.tgz"
     "version" "1.2.4"
+  
+  "schedule@^0.3.0":
+    "integrity" "sha512-20+1KVo517sR7Nt+bYBN8a+bEJDKLPEx7Ohtts1kX05E4/HY53YUNuhfkVNItmWAnBYHcpG9vsd2/CJxG+aPCQ=="
+    "resolved" "https://registry.npmjs.org/schedule/-/schedule-0.3.0.tgz"
+    "version" "0.3.0"
+    dependencies:
+      "object-assign" "^4.1.1"
   
   "scheduler@^0.19.1", "scheduler@0.19.1":
     "integrity" "sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA=="

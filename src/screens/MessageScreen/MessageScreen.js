@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { auth, firestore } from "../../firebase/config";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 
 export default function MessageScreen({ navigation }) {
   const currentUserUID = auth?.currentUser.uid;
@@ -126,6 +126,7 @@ export default function MessageScreen({ navigation }) {
       <Image
         style={style.avatar}
         source={{uri: chatroom.partner.partnerProfilePic}}
+        blurRadius={10}
       />
       <View style={style.badgeContainer}>
         <Text style={style.badgeText}>4</Text>
@@ -139,13 +140,20 @@ export default function MessageScreen({ navigation }) {
           {" "}
           {chatroom.lastMessageContent}
         </Text>
-      </View>
+      </View>     
     </TouchableOpacity>
   })
   }
   return (
     <View style={style.page}>
+      {/* <ImageBackground style={style.imageBG} resizeMode="cover" source={require("../../../assets/gradientBackground.png")} /> */}
+      <View style={{alignItems: "center", backgroundColor: "#9795ef", padding: 10}}>
+        <Text style={{fontSize: 15, color:"white"}}>Active Chatrooms</Text>
+      </View>
       {renderedChatrooms()}
+      <View style={{marginTop: 10, alignItems: "center", backgroundColor: "#6DA1FC", padding: 10}}>
+        <Text style={{fontSize: 15, color:"white"}}>Inactive Chatrooms</Text>
+      </View>
       {renderedInactive()}
     </View>
   );

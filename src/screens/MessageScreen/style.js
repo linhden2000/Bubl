@@ -15,7 +15,7 @@ export default StyleSheet.create({
       flexDirection: 'row',
       justifyContent: "center",
       marginTop: width/25,
-      backgroundColor:"grey"
+      backgroundColor:"lightgrey",
   },
 
     page:{
@@ -102,5 +102,11 @@ export default StyleSheet.create({
   text:{
     color: 'grey',
     fontSize: width/25,
+  },
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: width/30,
+    alignSelf: 'center',
+    // animation: "fade"
   },
 })
