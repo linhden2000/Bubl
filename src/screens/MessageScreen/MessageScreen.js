@@ -76,7 +76,6 @@ export default function MessageScreen({ navigation }) {
     }
     setChatroomsList(activeChatrooms)
     setInactiveChatrooms(inactiveChatrooms)
-    console.log(currentChatrooms);
   };
 
   useEffect(() => {
