@@ -26,6 +26,7 @@ export default function ProfileScreen({navigation}) {
     const [USState, setUSState] = useState('');
     const [fromValue, setFromValue] = useState(0);
     const [birthday, setBirthday] = useState('');
+    const [birthdayStr, setBirthdayStr] = useState('');
     const [age, setAge] = useState('');
     const [bio, setBio] = useState('');
 
@@ -68,6 +69,7 @@ export default function ProfileScreen({navigation}) {
                     // setLastName(userData.lastName)
                     setCity(userData.city)
                     setBio(userData.bio)
+                    console.log("USER BIRTHDAY: ", userData.birthday);
                     if(userData.birthday) {
                       let epochMilliseconds = userData.birthday.seconds * 1000
                       let birthdayTimeStamp = new Date(epochMilliseconds)
@@ -75,8 +77,8 @@ export default function ProfileScreen({navigation}) {
                       let actualMonth = birthdayTimeStamp.getMonth()
                       let actualYear = birthdayTimeStamp.getFullYear()
                       let birthdayString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
-                      setBirthday(birthdayString)
-                      console.log(birthdayString)
+                      setBirthdayStr(birthdayString)
+                      console.log("BIRTHDAY STRING:",birthdayStr)
 
                       //converting to age
                       let month_diff =  Date.now() - birthdayTimeStamp.getTime();

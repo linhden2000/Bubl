@@ -46,6 +46,7 @@ export default function ProfileScreen({navigation}) {
     const [kuId, setKUID] = useState('')
     const [email, setEmail] = useState('')
     const [birthday, setBirthday] = useState('')
+    const [birthdayStr, setBirthdayStr] = useState('');
     const [address, setAddress] = useState('')
     const [zipCode, setZipCode] = useState('')
     const [fromValue, setFromValue] = useState(0);
@@ -56,6 +57,7 @@ export default function ProfileScreen({navigation}) {
     const [city, setCity] = useState('')
     const [USState, setUSState] = useState('')
     const [bio, setBio] = useState('');
+    const [age, setAge] = useState('');
 
     const currentUser = auth?.currentUser;
     const usersRef = firestore.collection('users');
@@ -92,7 +94,7 @@ export default function ProfileScreen({navigation}) {
 
       usersRef
         .doc(uid)
-        .set(userData)
+        .update(userData)
         .then(() => {
             navigation.navigate('DashboardNavigation');
         })
@@ -126,8 +128,9 @@ export default function ProfileScreen({navigation}) {
                     setToValue(userData.toAge)
                     setSexualPref(userData.sexualPref)
                     setGender(userData.gender)
-                    // setBirthday(userData.birthday)
+                    setBirthday(userData.birthday)
 
+                    // console.log("BIRTHDAY: ", birthday);
                     if(userData.birthday) {
                       let epochMilliseconds = userData.birthday.seconds * 1000
                       let birthdayTimeStamp = new Date(epochMilliseconds)
@@ -135,10 +138,17 @@ export default function ProfileScreen({navigation}) {
                       let actualMonth = birthdayTimeStamp.getMonth()
                       let actualYear = birthdayTimeStamp.getFullYear()
                       let birthdayString = (actualMonth + 1) + '/' + actualDate + '/' + actualYear
-                      setBirthday(birthdayString)
+                      setBirthdayStr(birthdayString)
+                      console.log("BIRTHDAY STRING:",birthdayStr)
+
+                      //converting to age
+                      let month_diff =  Date.now() - birthdayTimeStamp.getTime();
+                      let age_dt = new Date(month_diff);
+                      let year = age_dt.getUTCFullYear(); 
+                      let age = Math.abs(year - 1970);  
+                      setAge(age);
                     }
 
-                    console.log("BIRTHDAY: ", birthday);
                     setProfilePic(userData.profilePic)
                     setUSState(userData.state)
                     setBio(userData.bio)
@@ -202,7 +212,7 @@ export default function ProfileScreen({navigation}) {
 
           <View style={style.Btn}>
             <Text  style={{color:"#570CBC"}}> Birthday</Text>
-            {/* <Text  style={{color:"#8898AA"}}> {birthday}</Text> */}
+            <Text  style={{color:"#8898AA"}}> {birthdayStr}</Text>
           </View>
 
           <View style={style.Btn}>
